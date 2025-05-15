@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>홈페이지</title>
+    </head>
+    <body>
+
+        <div th:if="${isLogin}"><!-- 로그인한 유저의 경우 보이는 부분 -->
+            <span><th:block th:text="${user.name}"></th:block>님 환영합니다!</span><br/><!-- 유저의 이름 또는 닉네임을 표시하는 부분 -->
+            <span th:unless="${oauth2}"><a href="/modify">회원정보 수정</a></span>
+            <a href="/logout">로그아웃</a>
+        </div>
+
+        <div th:unless="${isLogin}"><!-- 로그인하지 않은 유저의 경우 보이는 부분 -->
+            <a href="/signin">로그인</a>
+            <a href="/join">회원가입</a>
+        </div>
+
+    </body>
+</html>
