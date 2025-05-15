@@ -60,7 +60,7 @@ public class userDetailsServiceCustom extends DefaultOAuth2UserService implement
         User newuser=new User(
                 null,
                 String.valueOf(response.get(getid)),
-                new BCryptPasswordEncoder().encode(RandomUtil.getRandomString(30)),/* OAuth2 유저의 경우 임의의 문자열을 생성해서 암호화 한 후 DB에 저장하게 함 */
+                new BCryptPasswordEncoder().encode(RandomUtil.getRandomString(RandomUtil.getRandomInteger(15,25))),/* OAuth2 유저의 경우 임의의 문자열을 생성해서 암호화 한 후 DB에 저장하게 함 */
                 name,
                 null,
                 null,
