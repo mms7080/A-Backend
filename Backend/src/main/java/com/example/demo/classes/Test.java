@@ -21,7 +21,7 @@ public class Test implements CommandLineRunner{
         daoUser.Insert(/* 테스트를 위한 유저 정보 입력 1 */
             new User(
                 null,
-                "root1234",
+                "root",
                 new BCryptPasswordEncoder().encode("1234"),
                 "홍길동",
                 "01011223344",
