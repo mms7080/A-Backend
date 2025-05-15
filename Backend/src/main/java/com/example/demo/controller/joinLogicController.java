@@ -1,25 +1,27 @@
 package com.example.demo.controller;
 
-import com.example.demo.classes.User;
-import com.example.demo.dao.DAOUser;
-
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+import com.example.demo.classes.User;
+import com.example.demo.dao.DAOUser;
+
+@RestController
 public class joinLogicController{
 
     @Autowired
     DAOUser daoUser;
 
     @PostMapping("/join/logic")
-    public String join_logic(/* 회원가입 로직 작성 */
+    public Map<String, Object> join_logic(/* 회원가입 로직 작성 */
         @RequestParam("id") String username,
         @RequestParam("pw") String password,
         @RequestParam("name") String name,
@@ -33,11 +35,14 @@ public class joinLogicController{
         @RequestParam("zipcode") String zipcode,
         @RequestParam("address") String address,
         @RequestParam("address_detail") String address_detail,
-        Model model){
+        ){
+        
+        Map<String, Object> response = new HashMap<>();
 
         if(daoUser.usernameExists(username)){/* 중복되는 ID가 존재하면 다시 회원가입 홈페이지로 돌려보내고, idexists=true 대입 */
-            model.addAttribute("idexists",true);
-            return "join";/* 회원가입 페이지로 돌아감 */
+            response.put("success", false);/* 로그인 실패 */
+            response.put("reason", "idexists");/* 아이디가 이미 존재한다는 이유를 포함 */
+            return response;
         }
         else{/* 중복되는 ID가 존재하지 않으면 DB에 회원정보 입력 */
             daoUser.Insert(
@@ -57,9 +62,9 @@ public class joinLogicController{
                     null
                 )
             );
+            response.put("success", true);/* 로그인 성공 */
+            return response;
         }            
-
-        return "signin";/* 회원가입 성공시 로그인 페이지로 자동 이동 */
     }
 
 }
