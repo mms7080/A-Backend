@@ -1,4 +1,4 @@
-package com.example.demo.configuration;
+package com.example.demo.Configuration;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -16,11 +16,11 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import com.example.demo.classes.UserInfo;
-import com.example.demo.filter.JwtAuthorizationFilter;
-import com.example.demo.service.userDetailsServiceCustom;
-import com.example.demo.util.CookieUtil;
-import com.example.demo.util.JwtUtil;
+import com.example.demo.JWT.CookieUtil;
+import com.example.demo.JWT.JwtAuthorizationFilter;
+import com.example.demo.JWT.JwtUtil;
+import com.example.demo.OAuthLogin.userDetailsServiceCustom;
+import com.example.demo.User.UserInfo;
 
 import jakarta.servlet.DispatcherType;
 
