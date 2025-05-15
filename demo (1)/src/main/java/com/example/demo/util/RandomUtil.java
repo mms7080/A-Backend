@@ -4,7 +4,7 @@ public class RandomUtil {
     
     private RandomUtil(){}
 
-    public static Integer getRandomInteger(Integer min,Integer max){
+    public static Integer getRandomInteger(Integer min,Integer max){/* 랜덤하게 숫자를 뽑는 함수 */
         return min+(int)(Math.random()*((max-min)+1L));
     }
 
