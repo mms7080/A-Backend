@@ -6,7 +6,6 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -34,7 +33,7 @@ public class joinLogicController{
         @RequestParam(name="gender",required=false) String gender,
         @RequestParam("zipcode") String zipcode,
         @RequestParam("address") String address,
-        @RequestParam("address_detail") String address_detail,
+        @RequestParam("address_detail") String address_detail
         ){
         
         Map<String, Object> response = new HashMap<>();
