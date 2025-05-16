@@ -2,7 +2,7 @@ package com.example.demo.Event;
 
 import jakarta.persistence.*;
 import lombok.*;
-
+//대소문자 구별
 @Entity
 @Getter
 @Setter
