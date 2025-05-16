@@ -5,7 +5,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.example.demo.Annotations.Auth;
+import com.example.demo.annotations.Auth;
 import com.example.demo.JWT.CookieUtil;
 import com.example.demo.User.DAOUser;
 import com.example.demo.User.User;
