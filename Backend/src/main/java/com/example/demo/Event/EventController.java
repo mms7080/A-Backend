@@ -20,7 +20,7 @@ public class EventController {
 
     @GetMapping("/raw")
 public List<Event> getAllEvents() {
-    return service.getRawEvents(); // ← 이 메서드는 아래에 만들자
+    return service.getRawEvents(); 
 }
 }
 
