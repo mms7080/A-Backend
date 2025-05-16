@@ -1,5 +1,6 @@
 package com.example.demo.User;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -8,7 +9,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
-    public Optional<User> findByUsername(String username);/* 유저 ID 기반으로 찾는 함수 */
+    public List<User> findByUsername(String username);/* 유저 ID 기반으로 찾는 함수 */
     
     public Optional<User> findByUsernameAndNameAndEmail(String username,String name,String email);/* 유저 ID, 이름, 이메일 기반으로 찾는 함수 */
 

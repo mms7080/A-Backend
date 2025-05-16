@@ -19,70 +19,68 @@ import com.example.demo.User.User;
 import com.example.demo.User.UserInfo;
 
 @Service
-public class userDetailsServiceCustom extends DefaultOAuth2UserService implements UserDetailsService{
+public class userDetailsServiceCustom extends DefaultOAuth2UserService implements UserDetailsService {
 
     @Autowired
     DAOUser daoUser;
-    
-    @Override
-    public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException{/* OAuth 로그인을 위한 파트 */
-        OAuth2User oauth2user=super.loadUser(userRequest);
-        String provider=userRequest.getClientRegistration().getClientName();
-        String getid="id";
-        String name="";
-        String platform=null;
-        Map<String,Object> response=null;
 
-        switch(provider){
-            case "naver":/* 네이버 로그인의 경우를 처리 */
-                response=oauth2user.getAttribute("response");
-                getid="id";
-                name = (String)response.get("name");/* 네이버 로그인의 경우 본명을 가져옴 */
-                platform="naver";
+    @Override
+    public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+        OAuth2User oauth2user = super.loadUser(userRequest);
+        String provider = userRequest.getClientRegistration().getClientName();
+        String getid = "id";
+        String name = "";
+        String platform = null;
+        Map<String, Object> response = null;
+
+        switch (provider) {
+            case "naver":
+                response = oauth2user.getAttribute("response");
+                getid = "id";
+                name = (String) response.get("name");
+                platform = "naver";
                 break;
-            case "kakao":/* 카카오 로그인의 경우를 처리 */
-                response=oauth2user.getAttributes();
-                getid="id";
+            case "kakao":
+                response = oauth2user.getAttributes();
+                getid = "id";
                 Map<String, Object> kakao_account = (Map<String, Object>) response.get("kakao_account");
                 Map<String, Object> profile = (Map<String, Object>) kakao_account.get("profile");
-                name = (String) profile.get("nickname");/* 카카오 로그인의 경우 닉네임을 가져옴(본명을 가져오는 건 불가능) */
-                platform="kakao";
+                name = (String) profile.get("nickname");
+                platform = "kakao";
                 break;
-            case "Google":/* 구글 로그인의 경우를 처리 */
-                response=oauth2user.getAttributes();
-                getid="sub";
-                name = (String) response.get("name");/* 구글 로그인의 경우 본명을 가져옴 */
-                platform="google";
+            case "Google":
+                response = oauth2user.getAttributes();
+                getid = "sub";
+                name = (String) response.get("name");
+                platform = "google";
                 break;
         }
 
-        User newuser=new User(
+        String username = String.valueOf(response.get(getid));
+
+        User user = daoUser.findUsername(username); // 중복 처리된 안전한 조회
+
+        if (user == null) {
+            User newuser = new User(
                 null,
-                String.valueOf(response.get(getid)),
-                new BCryptPasswordEncoder().encode(RandomUtil.getRandomString(RandomUtil.getRandomInteger(15,25))),/* OAuth2 유저의 경우 임의의 문자열을 생성해서 암호화 한 후 DB에 저장하게 함 */
+                username,
+                new BCryptPasswordEncoder().encode(RandomUtil.getRandomString(RandomUtil.getRandomInteger(15, 25))),
                 name,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
-                null,
+                null, null, null, null, null, null, null,
                 List.of("USER"),
                 platform
-        );
-        
-        User user = daoUser.findUsername(newuser.getUsername());/* OAuth로 로그인한 사용자 정보가 DB에 있는지 확인 */
-        if(user==null)daoUser.Insert(newuser);/* DB에 OAuth로 로그인한 유저정보가 없을 경우 새로 삽입 */
+            );
+            daoUser.Insert(newuser);
+            user = newuser;
+        }
 
-        return new UserInfo(newuser);/* 소셜 로그인을 통해 로그인한 사용자의 정보를 처리 */
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException{/* 스프링 security에서 ID를 조회하고 UserInfo로 변환 */
-        User user = daoUser.findUsername(username);
-        if(user==null) throw new UsernameNotFoundException(username);
         return new UserInfo(user);
     }
 
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = daoUser.findUsername(username);
+        if (user == null) throw new UsernameNotFoundException(username);
+        return new UserInfo(user);
+    }
 }
