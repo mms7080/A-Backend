@@ -1,6 +1,6 @@
 package com.example.demo.Modify;
 
-import com.example.demo.annotations.Auth;
+import com.example.demo.Annotations.Auth;
 import com.example.demo.User.DAOUser;
 import com.example.demo.User.User;
 

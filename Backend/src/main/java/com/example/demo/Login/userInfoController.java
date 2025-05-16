@@ -4,7 +4,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.annotations.Auth;
+import com.example.demo.Annotations.Auth;
 import com.example.demo.User.User;
 
 @RestController
