@@ -48,4 +48,13 @@ public class NoticeService {
             repo.save(notice2);
         }
     }
+    //공지삭제
+    public boolean deleteById(Long id) {
+    if (repo.existsById(id)) {
+        repo.deleteById(id);
+        return true;
+    }
+    return false;
+}
+
 }
