@@ -1,4 +1,4 @@
-package com.example.demo.Booking.entity;
+package com.example.demo.booking.entity;
 
 // 좌석 상태를 나타내는 열거형(enum)
 public enum SeatStatus {

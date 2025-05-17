@@ -1,6 +1,6 @@
-package com.example.demo.Booking.service;
+package com.example.demo.booking.service;
 
-import java.time.Clock;
+
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -8,19 +8,19 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import com.example.demo.Booking.dao.ScreeningDao;
-import com.example.demo.Booking.entity.Screening;
+import com.example.demo.booking.dao.ScreeningDao;
+import com.example.demo.booking.entity.Screening;
 
 @Service
 // Screening 관련 서비스 로직을 처리하는 Service
 public class ScreeningService {
     
     private final ScreeningDao screeningDao; // DAO 주입
-    private final Clock clock; // 시간 제어용 Clock 빈 주입
+    
 
-    public ScreeningService(ScreeningDao screeningDao, Clock clock){
+    public ScreeningService(ScreeningDao screeningDao){
         this.screeningDao = screeningDao;
-        this.clock = clock;
+        
     }
 
     // 모든 상영회차 조회(읽지 전용)
@@ -81,7 +81,7 @@ public class ScreeningService {
         }
 
         // 2. 상영 시간 검증 : 현재 시각(Clock 기준 )이전 일때 예외처리
-        LocalDateTime now = LocalDateTime.now(clock);
+        LocalDateTime now = LocalDateTime.now();
         if(screening.getStartTime() == null || screening.getStartTime().isBefore(now)){
             throw new IllegalArgumentException("상영 시작 시간은 현재 시간 이후여야 합니다.");
         }

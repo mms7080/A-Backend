@@ -1,4 +1,4 @@
-package com.example.demo.Booking.repository;
+package com.example.demo.booking.repository;
 
 public class ReservationRepository {
     

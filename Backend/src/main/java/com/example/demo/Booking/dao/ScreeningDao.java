@@ -1,4 +1,4 @@
-package com.example.demo.Booking.dao;
+package com.example.demo.booking.dao;
 
 
 import java.time.LocalDateTime;
@@ -6,8 +6,8 @@ import java.util.List;
 
 import org.springframework.stereotype.Component;
 
-import com.example.demo.Booking.entity.Screening;
-import com.example.demo.Booking.repository.ScreeningRepository;
+import com.example.demo.booking.entity.Screening;
+import com.example.demo.booking.repository.ScreeningRepository;
 
 @Component
 public class ScreeningDao {

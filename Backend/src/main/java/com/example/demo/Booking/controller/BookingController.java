@@ -1,14 +1,16 @@
-package com.example.demo.Booking.controller;
+package com.example.demo.booking.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.Booking.dto.ScreeningDto;
-import com.example.demo.Booking.entity.Screening;
-import com.example.demo.Booking.service.ScreeningService;
 import com.example.demo.Login.signinController;
+import com.example.demo.booking.dto.ScreeningDto;
+import com.example.demo.booking.entity.Screening;
+import com.example.demo.booking.service.ScreeningService;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import org.springframework.http.HttpStatus;
@@ -30,7 +32,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 public class BookingController {
 
     private final ScreeningService screeningService;
-
+    
     public BookingController(ScreeningService screeningService){
         this.screeningService = screeningService;
     }
@@ -104,7 +106,6 @@ public class BookingController {
         s.setStartTime(dto.getStarTime());
         return s;
     }
-    
-    
+   
     
 }

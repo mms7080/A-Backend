@@ -1,4 +1,4 @@
-package com.example.demo.Booking.dto;
+package com.example.demo.booking.dto;
 
 public class SeatSelectionDto {
     
