@@ -39,7 +39,7 @@ public class Seat {
 
     private String row; // 좌석 행(row)
 
-    private Integer number; // 좌석 번호
+    private Integer seat_number; // 좌석 번호
 
     @Enumerated(EnumType.STRING)
     private SeatStatus status; // 좌석 상태 (예약 가능 좌석, 임시예약 좌석, 결제 완료 좌석)
