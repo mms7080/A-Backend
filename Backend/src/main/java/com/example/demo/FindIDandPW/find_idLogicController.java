@@ -20,7 +20,7 @@ public class find_idLogicController {
     DAOUser daoUser;
 
     @PostMapping("/find_id/logic")
-    public Map<String, String> find_id_logic(@RequestBody Map<String, String> data)/* ID 찾기 로직 작성 */
+    public Map<String, String> find_id_logic(@RequestBody Map<String, String> data)/* 아이디 찾기 로직 작성 */
     {
         String name = data.get("name");
         String email = data.get("email");
