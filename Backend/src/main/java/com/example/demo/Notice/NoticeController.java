@@ -1,7 +1,6 @@
 package com.example.demo.Notice;
 
 import java.util.List;
-
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,12 +34,11 @@ public class NoticeController {
         return ResponseEntity.ok(saved);
     }
 
-    // 공지 상세 조회
+    // ✅ 공지 상세 조회 (조회수 증가 포함)
     @GetMapping("/{id}")
     public ResponseEntity<Notice> getNotice(@PathVariable Long id) {
-        return service.getById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        Notice notice = service.getByIdWithViewIncrease(id);
+        return notice != null ? ResponseEntity.ok(notice) : ResponseEntity.notFound().build();
     }
 
     // 공지 수정

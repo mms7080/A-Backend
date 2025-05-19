@@ -3,8 +3,6 @@ package com.example.demo.Notice;
 import java.time.LocalDateTime;
 
 import jakarta.persistence.Id;
-
-
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -37,4 +35,8 @@ public class Notice {
 
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
+
+    // ✅ 조회수 필드 추가
+    @Column(name = "views", nullable = false)
+    private int views = 0;
 }
