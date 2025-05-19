@@ -1,12 +1,12 @@
-package com.example.demo.Booking.controller;
+package com.example.demo.booking.controller;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.Login.signinController;
-import com.example.demo.Booking.dto.ScreeningDto;
-import com.example.demo.Booking.entity.Screening;
-import com.example.demo.Booking.service.ScreeningService;
+import com.example.demo.booking.dto.ScreeningDto;
+import com.example.demo.booking.entity.Screening;
+import com.example.demo.booking.service.ScreeningService;
 
 import java.time.LocalDateTime;
 import java.util.List;

@@ -1,10 +1,10 @@
-package com.example.demo.Booking.repository;
+package com.example.demo.booking.repository;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.example.demo.Booking.entity.Screening;
+import com.example.demo.booking.entity.Screening;
 
 import java.util.List;
 import java.time.LocalDateTime;

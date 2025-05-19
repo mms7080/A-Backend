@@ -1,9 +1,9 @@
-package com.example.demo.Booking.repository;
+package com.example.demo.booking.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 
-import com.example.demo.Booking.entity.Seat;
-import com.example.demo.Booking.entity.SeatStatus;
+import com.example.demo.booking.entity.Seat;
+import com.example.demo.booking.entity.SeatStatus;
 
 import java.util.List;
 

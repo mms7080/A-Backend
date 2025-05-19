@@ -1,4 +1,4 @@
-package com.example.demo.Booking.service;
+package com.example.demo.booking.service;
 
 
 import java.time.LocalDateTime;
@@ -8,8 +8,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
-import com.example.demo.Booking.dao.ScreeningDao;
-import com.example.demo.Booking.entity.Screening;
+import com.example.demo.booking.dao.ScreeningDao;
+import com.example.demo.booking.entity.Screening;
 
 @Service  // 스프링의 서비스 빈으로 등록
 public class ScreeningService {

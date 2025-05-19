@@ -1,4 +1,4 @@
-package com.example.demo.Booking.entity;
+package com.example.demo.booking.entity;
 
 import java.time.LocalDateTime;
 import java.util.List;
