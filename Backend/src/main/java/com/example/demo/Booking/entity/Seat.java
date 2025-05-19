@@ -20,24 +20,24 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "seat")
+@Table(name = "seats")
 @Entity
 @SequenceGenerator(
     name = "seq_seats",
-    sequenceName = "seq_seat",
+    sequenceName = "seq_seats",
     allocationSize = 1
 )
 public class Seat {
     
     @Id
     @GeneratedValue(
-        generator = "seq_seat",
+        generator = "seq_seats",
         strategy = GenerationType.SEQUENCE
     )
 
     private Long id; // 좌석 고유 ID
 
-    private String row; // 좌석 행(row)
+    private String seat_row; // 좌석 행(row)
 
     private Integer seat_number; // 좌석 번호
 
@@ -45,6 +45,6 @@ public class Seat {
     private SeatStatus status; // 좌석 상태 (예약 가능 좌석, 임시예약 좌석, 결제 완료 좌석)
 
     @ManyToOne(fetch = FetchType.LAZY) // N:1관계, 지연 로딩
-    @JoinColumn(name = "SCREENING_ID") // 외래 키 컬럼 이름
+    @JoinColumn(name = "screening_id") // 외래 키 컬럼 이름
     private Screening screening;  // 이 좌석이 속한 Screeing
 }

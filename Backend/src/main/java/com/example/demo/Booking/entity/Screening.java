@@ -20,11 +20,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
-@Table(name = "screening")
+@Table(name = "screenings")
 @SequenceGenerator(
-    name = "seq_screening",
+    name = "seq_screenings",
     allocationSize = 1,
-    sequenceName = "seq_screening"
+    sequenceName = "seq_screenings"
 )
 
 // 상영회차 정보
@@ -32,7 +32,7 @@ public class Screening {
 
     @Id
     @GeneratedValue(
-        generator = "seq_screening",
+        generator = "seq_screenings",
         strategy = GenerationType.SEQUENCE
     )
     private Long id; // 상영회차 고유 식별자

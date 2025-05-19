@@ -17,5 +17,5 @@ public class ScreeningDto {
 
     private String theaterName; // 상영관 이름
 
-    private LocalDateTime starTime; // 상영 시작 시간
+    private LocalDateTime startTime; // 상영 시작 시간
 }

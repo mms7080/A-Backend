@@ -103,7 +103,7 @@ public class BookingController {
         //ID는 생성 시 무시하고, 수정 시 서비스에서 id로 구분
         s.setMovieTitle(dto.getMovieTitle());
         s.setTheaterName(dto.getTheaterName());
-        s.setStartTime(dto.getStarTime());
+        s.setStartTime(dto.getStartTime());
         return s;
     }
    
