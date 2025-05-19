@@ -2,7 +2,8 @@ package com.example.demo.Event;
 
 import jakarta.persistence.*;
 import lombok.*;
-//대소문자 구별
+import java.util.*;
+
 @Entity
 @Getter
 @Setter
@@ -10,6 +11,7 @@ import lombok.*;
 @AllArgsConstructor
 @Table(name = "event")
 public class Event {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -19,8 +21,10 @@ public class Event {
     @Column(name = "date_range")
     private String date;
 
-    @Column(name = "image_url")
-    private String image;
-
     private String category;
+
+    @ElementCollection
+    @CollectionTable(name = "event_images", joinColumns = @JoinColumn(name = "event_id"))
+    @Column(name = "image_url")
+    private List<String> images = new ArrayList<>();
 }

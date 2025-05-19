@@ -37,27 +37,22 @@ public class EventController {
             @RequestParam("title") String title,
             @RequestParam("date") String date,
             @RequestParam("category") String category,
-            @RequestParam("image") MultipartFile image
+            @RequestParam("images") List<MultipartFile> images
     ) {
         try {
-            // 1. 파일명 설정
-            String filename = UUID.randomUUID() + "_" + StringUtils.cleanPath(image.getOriginalFilename());
-
-            // 2. 저장할 위치: 프로젝트 루트 기준 uploads/event 폴더
+            List<String> imageUrls = new ArrayList<>();
             Path uploadPath = Paths.get("uploads/event").toAbsolutePath().normalize();
-            if (!Files.exists(uploadPath)) {
-                Files.createDirectories(uploadPath);
+            if (!Files.exists(uploadPath)) Files.createDirectories(uploadPath);
+
+            for (MultipartFile image : images) {
+                String filename = UUID.randomUUID() + "_" + StringUtils.cleanPath(image.getOriginalFilename());
+                Path filePath = uploadPath.resolve(filename);
+                image.transferTo(filePath.toFile());
+
+                imageUrls.add("/images/event/" + filename);
             }
 
-            // 3. 파일 저장
-            Path filePath = uploadPath.resolve(filename);
-            image.transferTo(filePath.toFile());
-
-            // 4. 이미지 URL 설정 → 프론트에서 접근할 수 있는 경로로
-            String imageUrl = "/images/event/" + filename;
-
-            // 5. DB에 저장
-            Event event = new Event(null, title, date, imageUrl, category);
+            Event event = new Event(null, title, date, category, imageUrls);
             repository.save(event);
 
             return ResponseEntity.ok("업로드 성공");
@@ -67,13 +62,11 @@ public class EventController {
         }
     }
 
-    //이벤트 상세페이지
     @GetMapping("/view/{id}")
     public ResponseEntity<?> getEventById(@PathVariable Long id) {
         Optional<Event> optionalEvent = repository.findById(id);
-            return optionalEvent
-            .<ResponseEntity<?>>map(ResponseEntity::ok)
-            .orElseGet(() -> ResponseEntity.notFound().build());
-}
-
+        return optionalEvent
+                .<ResponseEntity<?>>map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
 }
