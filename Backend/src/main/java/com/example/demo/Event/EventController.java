@@ -22,16 +22,31 @@ public class EventController {
         this.repository = repository;
     }
 
+ 
+    // 이벤트 조회 
+    // 카테고리별로 그룹화된 이벤트 리스트 반환 (프론트 메인용)
     @GetMapping
     public Map<String, List<Map<String, String>>> getEvents() {
         return service.getEventsGroupedByCategory();
     }
 
+    // 모든 이벤트 Raw 데이터 반환 (상세 페이지, 수정용)
     @GetMapping("/raw")
     public List<Event> getAllEvents() {
         return service.getRawEvents();
     }
 
+    // 특정 ID의 이벤트 상세 조회
+    @GetMapping("/view/{id}")
+    public ResponseEntity<?> getEventById(@PathVariable Long id) {
+        Optional<Event> optionalEvent = repository.findById(id);
+        return optionalEvent
+                .<ResponseEntity<?>>map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+
+    //  이벤트 업로드 API
     @PostMapping("/upload")
     public ResponseEntity<?> uploadEvent(
             @RequestParam("title") String title,
@@ -41,9 +56,14 @@ public class EventController {
     ) {
         try {
             List<String> imageUrls = new ArrayList<>();
-            Path uploadPath = Paths.get("uploads/event").toAbsolutePath().normalize();
-            if (!Files.exists(uploadPath)) Files.createDirectories(uploadPath);
 
+            // 이미지 저장 폴더 생성
+            Path uploadPath = Paths.get("uploads/event").toAbsolutePath().normalize();
+            if (!Files.exists(uploadPath)) {
+                Files.createDirectories(uploadPath);
+            }
+
+            // 이미지 저장 및 URL 리스트 구성
             for (MultipartFile image : images) {
                 String filename = UUID.randomUUID() + "_" + StringUtils.cleanPath(image.getOriginalFilename());
                 Path filePath = uploadPath.resolve(filename);
@@ -52,6 +72,7 @@ public class EventController {
                 imageUrls.add("/images/event/" + filename);
             }
 
+            // DB 저장
             Event event = new Event(null, title, date, category, imageUrls);
             repository.save(event);
 
@@ -61,23 +82,16 @@ public class EventController {
             return ResponseEntity.internalServerError().body("저장 실패: " + e.getMessage());
         }
     }
-    //이벤트 상세페이지
-    @GetMapping("/view/{id}")
-    public ResponseEntity<?> getEventById(@PathVariable Long id) {
-        Optional<Event> optionalEvent = repository.findById(id);
-        return optionalEvent
-                .<ResponseEntity<?>>map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
 
-    //이벤트 삭제
+
+    // 이벤트 삭제 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteEvent(@PathVariable Long id) {
         if (!repository.existsById(id)) {
             return ResponseEntity.notFound().build();
         }
+
         repository.deleteById(id);
         return ResponseEntity.ok("삭제 완료");
     }
-
 }
