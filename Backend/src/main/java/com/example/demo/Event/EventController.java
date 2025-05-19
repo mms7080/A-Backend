@@ -61,7 +61,7 @@ public class EventController {
             return ResponseEntity.internalServerError().body("저장 실패: " + e.getMessage());
         }
     }
-
+    //이벤트 상세페이지
     @GetMapping("/view/{id}")
     public ResponseEntity<?> getEventById(@PathVariable Long id) {
         Optional<Event> optionalEvent = repository.findById(id);
@@ -69,4 +69,15 @@ public class EventController {
                 .<ResponseEntity<?>>map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
+
+    //이벤트 삭제
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteEvent(@PathVariable Long id) {
+        if (!repository.existsById(id)) {
+            return ResponseEntity.notFound().build();
+        }
+        repository.deleteById(id);
+        return ResponseEntity.ok("삭제 완료");
+    }
+
 }
