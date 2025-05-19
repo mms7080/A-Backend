@@ -1,12 +1,12 @@
-package com.example.demo.booking.dao;
+package com.example.demo.Booking.dao;
 
 import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
-import com.example.demo.booking.entity.Seat;
-import com.example.demo.booking.entity.SeatStatus;
-import com.example.demo.booking.repository.SeatRepository;
+import com.example.demo.Booking.entity.Seat;
+import com.example.demo.Booking.entity.SeatStatus;
+import com.example.demo.Booking.repository.SeatRepository;
 
 @Repository
 public class SeatDao {

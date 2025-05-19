@@ -6,10 +6,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 
+import com.example.demo.Booking.dao.ScreeningDao;
 import com.example.demo.Booking.dao.SeatDao;
 import com.example.demo.Booking.entity.Seat;
 import com.example.demo.Booking.entity.SeatStatus;
-import com.example.demo.Booking.dao.ScreeningDao;
 
 
 @Service

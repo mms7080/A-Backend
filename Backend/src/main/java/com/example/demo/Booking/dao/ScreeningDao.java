@@ -1,4 +1,4 @@
-package com.example.demo.booking.dao;
+package com.example.demo.Booking.dao;
 
 
 import java.time.LocalDateTime;
@@ -8,8 +8,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Repository;
 
-import com.example.demo.booking.entity.Screening;
-import com.example.demo.booking.repository.ScreeningRepository;
+import com.example.demo.Booking.entity.Screening;
+import com.example.demo.Booking.repository.ScreeningRepository;
 
 @Repository  // 데이터 접근 전용 빈임을 명시합니다.
 public class ScreeningDao {
