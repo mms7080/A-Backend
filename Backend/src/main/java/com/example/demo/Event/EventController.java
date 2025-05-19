@@ -66,4 +66,14 @@ public class EventController {
             return ResponseEntity.internalServerError().body("저장 실패: " + e.getMessage());
         }
     }
+
+    //이벤트 상세페이지
+    @GetMapping("/view/{id}")
+    public ResponseEntity<?> getEventById(@PathVariable Long id) {
+        Optional<Event> optionalEvent = repository.findById(id);
+            return optionalEvent
+            .<ResponseEntity<?>>map(ResponseEntity::ok)
+            .orElseGet(() -> ResponseEntity.notFound().build());
+}
+
 }

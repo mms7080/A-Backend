@@ -47,30 +47,34 @@ public class NoticeService {
         repo.save(notice);
     }
 
-    @PostConstruct
-    public void initDefaultNotices() {
-        if (repo.count() == 0) {
-            Notice notice1 = new Notice();
-            notice1.setTitle("사이트 점검 안내");
-            notice1.setContent("2025년 6월 1일(토) 새벽 2시부터 4시까지 서버 점검이 진행됩니다.");
-            notice1.setWriter("관리자");
-            notice1.setCreatedAt(LocalDateTime.now());
+@PostConstruct
+public void initDefaultNotices() {
+    if (repo.count() == 0) {
+        LocalDateTime now = LocalDateTime.now();
 
-            Notice notice2 = new Notice();
-            notice2.setTitle("신규 기능 출시");
-            notice2.setContent("공지사항 기능이 추가되었습니다. 자유롭게 이용해주세요.");
-            notice2.setWriter("관리자");
-            notice2.setCreatedAt(LocalDateTime.now());
+        List<Notice> notices = List.of(
+            createNotice("극장 리뉴얼 안내", "2025년 6월부터 필모라 강남점 리뉴얼 공사를 진행합니다. 관람에 불편을 드려 죄송합니다.", now),
+            createNotice("팝콘 무료 제공 이벤트", "6월 10일부터 16일까지 영화 관람 고객 전원에게 미니 팝콘을 무료로 드립니다.", now),
+            createNotice("조조 할인 변경 안내", "2025년 6월 1일부터 조조 할인 시간이 오전 11시까지로 조정됩니다.", now),
+            createNotice("4DX 상영관 오픈", "필모라 잠실점에 4DX 전용 상영관이 새롭게 오픈했습니다.", now),
+            createNotice("영화 예매 시스템 점검", "6월 5일(수) 오전 2시~4시까지 시스템 점검으로 예매 서비스가 중단됩니다.", now),
+            createNotice("멤버십 혜택 안내", "필모라 멤버십 등급별 혜택이 6월부터 일부 변경됩니다. 자세한 내용은 공지사항 참조.", now),
+            createNotice("분실물 보관 정책 변경", "2025년 6월부터 분실물 보관 기간이 30일에서 15일로 단축됩니다.", now),
+            createNotice("청소년 관람가 유의사항", "영화 관람 시 나이 확인을 위해 신분증 지참을 권장드립니다.", now),
+            createNotice("스낵코너 리뉴얼", "더욱 다양한 메뉴로 새단장한 스낵코너가 곧 오픈합니다. 많은 기대 부탁드립니다!", now)
+        );
 
-            Notice notice3 = new Notice();
-            notice3.setTitle("공지 작성 삭제 수정 테스트");
-            notice3.setContent("공지사항 기능이 추가되었습니다. 자유롭게 이용해주세요.");
-            notice3.setWriter("관리자");
-            notice3.setCreatedAt(LocalDateTime.now());
-
-            repo.save(notice1);
-            repo.save(notice2);
-            repo.save(notice3);
-        }
+        repo.saveAll(notices);
     }
+}
+
+private Notice createNotice(String title, String content, LocalDateTime createdAt) {
+    Notice notice = new Notice();
+    notice.setTitle(title);
+    notice.setContent(content);
+    notice.setWriter("관리자");
+    notice.setCreatedAt(createdAt);
+    return notice;
+}
+
 }
