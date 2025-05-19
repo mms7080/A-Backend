@@ -4,42 +4,81 @@ import java.util.List;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import com.example.demo.Booking.dao.SeatDao;
 import com.example.demo.Booking.entity.Seat;
+import com.example.demo.Booking.entity.SeatStatus;
+import com.example.demo.Booking.dao.ScreeningDao;
+
 
 @Service
 public class SeatService {
 	private final SeatDao seatDao;
+	private final ScreeningDao screeningDao;
 
-    public SeatService(SeatDao seatDao) {
+    public SeatService(SeatDao seatDao, ScreeningDao screeningDao) {
         this.seatDao = seatDao;
+		this.screeningDao = screeningDao;
     }
 
-    /** 좌석 생성 */
-    @Transactional
-    public Seat createSeat(Seat seat) {
-        validateSeat(seat);
-        return seatDao.save(seat);
-    }
+	// 모든 좌석 조회
+	@Transactional(readOnly = true)
+	public List<Seat> getAllSeats(){
+		return seatDao.findAll();
+	}
 
-    /** 연속된 사용 가능한 좌석 조회 */
-    @Transactional(readOnly = true)
-    public List<Seat> findContiguousAvailableSeats(Long screeningId, int count) {
-        return seatDao.findContiguousAvailableSeats(screeningId, count);
-    }
+	// 특정 상영회차에 속한 좌석 목록 조회
+	@Transactional(readOnly = true)
+	public List<Seat> getSeatsByScreening(Long screeningId){
+		return seatDao.findByScreeningId(screeningId);
+	}
 
-    /** 사용 가능한 좌석 수 반환 */
-    @Transactional(readOnly = true)
-    public long countAvailableSeats(Long screeningId) {
-        return seatDao.countAvailableSeats(screeningId);
-    }
+	// 특정 상영회차의 사용 가능한 좌석 수 반환
+	@Transactional(readOnly = true)
+	public long countAvailableSeats(Long screeingId){
+		return seatDao.countAvailable(screeingId);
+	}
 
-    /** 좌석 입력 검증 */
-    private void validateSeat(Seat seat) {
-        if (seat.getScreening() == null) {
-            throw new IllegalArgumentException("좌석은 반드시 상영회차와 연관되어야 합니다.");
+	// 연속된 사용 가능한 좌석 조회
+	@Transactional(readOnly = true)
+	public List<Seat> findContiguousSeats(Long screeningId, int count){
+		return seatDao.findContiguous(screeningId, count);
+	}
+
+	// 좌석 생성
+	@Transactional
+	public Seat createOrUpdateSeat(Seat seat){
+		return seatDao.save(seat);
+	}
+
+	// 저장 전 검증 메서드
+	private void validateSeat(Seat seat) {
+        // 1) row(행)와 number(번호) 필수 체크
+        if (!StringUtils.hasText(seat.getSeat_row())) {
+            throw new IllegalArgumentException("좌석 행(row)은 반드시 입력해야 합니다.");
         }
-        // row, number, status 등 추가 검증 가능
+        if (seat.getSeat_number() == null || seat.getSeat_number() < 1) {
+            throw new IllegalArgumentException("좌석 번호는 1 이상의 값이어야 합니다.");
+        }
+
+        // 2) status(상태) 필수 체크
+        if (seat.getStatus() == null) {
+            throw new IllegalArgumentException("좌석 상태(status)는 반드시 입력해야 합니다.");
+        }
+
+        // 3) 연관된 Screening(상영회차) 유효성 검사
+        if (seat.getScreening() == null || seat.getScreening().getId() == null) {
+            throw new IllegalArgumentException("유효한 상영회차(screening)가 설정되어야 합니다.");
+        }
+        // (DAO를 통해 실제 존재 여부 확인)
+        screeningDao.findById(seat.getScreening().getId());
     }
+
+	// 좌석 삭제
+	@Transactional
+	public void deleteSeat(Long id){
+		seatDao.deleteById(id);
+	}
+    
 }
