@@ -83,7 +83,7 @@ public class SeatController {
 		seatService.deleteSeat(id);
 	}
 
-
+	
 	/**
      * GET /booking/seats/seed/{screeningId}
      * 지정된 상영회차(screeningId)에 대한 샘플 좌석을 생성하고,

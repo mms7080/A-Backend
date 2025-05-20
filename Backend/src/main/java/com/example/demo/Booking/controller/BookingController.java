@@ -107,7 +107,7 @@ public class BookingController {
         return s;
     }
    
-    // BookingController.java 에 추가
+    //  테스트용
 @GetMapping("/seed")
 @ResponseStatus(HttpStatus.CREATED)
 public List<ScreeningDto> seedScreenings() {
