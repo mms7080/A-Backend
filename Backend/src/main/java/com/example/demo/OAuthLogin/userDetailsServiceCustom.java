@@ -1,6 +1,5 @@
 package com.example.demo.OAuthLogin;
 
-import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -67,7 +66,7 @@ public class userDetailsServiceCustom extends DefaultOAuth2UserService implement
                 new BCryptPasswordEncoder().encode(RandomUtil.getRandomString(RandomUtil.getRandomInteger(15, 25))),
                 name,
                 null, null, null, null, null, null, null,
-                List.of("USER"),
+                "USER",
                 platform
             );
             daoUser.Insert(newuser);

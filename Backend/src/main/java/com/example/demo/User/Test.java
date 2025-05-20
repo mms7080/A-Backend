@@ -1,7 +1,5 @@
 package com.example.demo.User;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -28,7 +26,7 @@ public class Test implements CommandLineRunner{
                 "21176",
                 "서울시 은평구",
                 "문새로72번길 13",
-                List.of("ADMIN", "USER"),
+                "ADMIN",
                 null
             )
         );
@@ -45,7 +43,7 @@ public class Test implements CommandLineRunner{
                 "36569",
                 "경기도 남양주시",
                 "조화로14번길 26",
-                List.of("USER"),
+                "USER",
                 null
             )
         );        

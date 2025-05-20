@@ -1,22 +1,14 @@
 package com.example.demo.User;
 
-import java.util.List;
-
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import jakarta.persistence.CollectionTable;
-import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Table(name="users")
 @SequenceGenerator(initialValue=1,allocationSize=1,name="seq_users",sequenceName="seq_users")
@@ -44,15 +36,7 @@ public class User{
     private String zipcode;/* 유저의 우편번호 ( 예 : "33556" ) */
     private String address;/* 유저의 기본주소 ( 예 : "경기도 파주시" ) */
     private String address_detail;/* 유저의 상세주소 ( 예 : "충현로 38번길 25" ) */
-
-    @ElementCollection(fetch = FetchType.EAGER)/* 즉시 로딩으로 설정 */
-    @CollectionTable(
-        name = "user_authorities", 
-        joinColumns = @JoinColumn(name = "user_id") 
-    )
-    @Column(name = "authority_name")
-    private List<String> auth;/* 유저의 권한 목록 ( 예 : "USER" ) */
-
+    private String auth;/* 유저의 권한 ( 예 : "USER" ) */
     private String platform;/* OAuth2 유저의 경우, 로그인한 플랫폼 */
 
 }

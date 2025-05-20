@@ -24,9 +24,7 @@ public class UserInfo implements UserDetails,OAuth2User{
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities(){/* 유저의 권한을 get */
         List<SimpleGrantedAuthority> auth=new ArrayList<>();
-        for(String authority:user.getAuth()){
-            auth.add(new SimpleGrantedAuthority("ROLE_"+authority));
-        }
+        auth.add(new SimpleGrantedAuthority("ROLE_"+user.getAuth()));
         return auth;
     }
 

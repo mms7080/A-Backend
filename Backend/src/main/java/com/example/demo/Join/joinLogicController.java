@@ -1,7 +1,5 @@
 package com.example.demo.Join;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -50,7 +48,7 @@ public class joinLogicController{
                 zipcode,
                 address,
                 address_detail,
-                List.of("USER"),
+                "USER",
                 null
             )
         );
