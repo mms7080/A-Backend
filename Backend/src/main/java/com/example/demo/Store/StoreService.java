@@ -50,7 +50,7 @@ public class StoreService {
                 new Store(null, "티켓", "더 부티크 관람권", "더 부티크 전용 관람권", "15,000원", "16,000원", null, null, "/images/ticket.png"),
                 new Store(null, "티켓", "더 부티크 스위트 관람권", "더 부티크 스위트 전용관람권", "40,000원", null, "추천", "#1e88e5", "/images/ticket.png"),
                 new Store(null, "팝콘/음료/콤보", "더블콤보", "팝콘(R) 2 + 탄산음료(R) 2", "13,900원", null, "추천", "#1e88e5", "/images/corn.png"),
-                new Store(null, "팝콘/음료/콤보", "러브콤보", "팝콘(L) 1 + 탄산음료(R) 2", "10,900원", null, "추천", "#1e88e5", "/images/lovecorn.png")
+                new Store(null, "팝콘/음료/콤보", "러브콤보", "팝콘(L) 1 + 탄산음료(R) 2", "10,900원", "11,900원", "추천", "#1e88e5", "/images/lovecorn.png")
             );
             repo.saveAll(items);
         }
