@@ -1,11 +1,15 @@
 package com.example.demo.Store;
 
 import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
+import java.io.IOException;
+import java.nio.file.*;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -13,34 +17,73 @@ public class StoreService {
 
     private final StoreRepository repo;
 
+    @Value("${event.upload.dir}")
+    private String uploadDir;
+
     public StoreService(StoreRepository repo) {
         this.repo = repo;
     }
 
-    public List<Store> getAll() {
-        return repo.findAll();
-    }
-
     public Map<String, List<Store>> getGroupedByCategory() {
         return repo.findAll().stream()
-                .collect(Collectors.groupingBy(Store::getCategory));
+                   .collect(Collectors.groupingBy(Store::getCategory));
     }
 
-    public Store save(Store s) {
-        return repo.save(s);
+    public Store findById(Long id) {
+        return repo.findById(id)
+                   .orElseThrow(() -> new NoSuchElementException("해당 상품이 존재하지 않습니다. id=" + id));
     }
 
     public void delete(Long id) {
         repo.deleteById(id);
     }
 
-    // ✅ 상품 상세 조회 (React에서 사용)
-    public Store findById(Long id) {
-        return repo.findById(id)
-                .orElseThrow(() -> new NoSuchElementException("해당 상품이 존재하지 않습니다."));
+    @Transactional
+    public Store saveWithImage(
+        String category,
+        String title,
+        String subtitle,
+        String price,
+        String originalPrice,
+        String badge,
+        String badgeColor,
+        MultipartFile image
+    ) throws IOException {
+        System.out.println("🔥 [StoreService] saveWithImage() 호출됨");
+
+        // 1. 확장자 및 파일명
+        String ext = StringUtils.getFilenameExtension(image.getOriginalFilename());
+        String filename = UUID.randomUUID().toString() + "." + ext;
+
+        // 2. 경로 보장
+        Path dirPath = Paths.get(uploadDir);
+        if (!Files.exists(dirPath)) {
+            Files.createDirectories(dirPath);
+            System.out.println("📁 디렉토리 생성됨: " + dirPath.toAbsolutePath());
+        }
+
+        // 3. 파일 저장
+        Path filePath = dirPath.resolve(filename);
+        Files.copy(image.getInputStream(), filePath, StandardCopyOption.REPLACE_EXISTING);
+        System.out.println("✅ 이미지 저장 완료: " + filePath.toAbsolutePath());
+
+        // 4. 객체 생성 및 저장
+        Store s = new Store();
+        s.setCategory(category);
+        s.setTitle(title);
+        s.setSubtitle(subtitle);
+        s.setPrice(price);
+        s.setOriginalPrice(originalPrice);
+        s.setBadge(badge);
+        s.setBadgeColor(badgeColor);
+        s.setImgUrl("/images/event/" + filename);
+
+        Store saved = repo.save(s);
+        System.out.println("✅ DB 저장 완료: id = " + saved.getId());
+
+        return saved;
     }
 
-    // ✅ 초기 더미 스토어 상품 등록
     @PostConstruct
     public void initDummyStoreItems() {
         if (repo.count() == 0) {
@@ -53,6 +96,7 @@ public class StoreService {
                 new Store(null, "팝콘/음료/콤보", "러브콤보", "팝콘(L) 1 + 탄산음료(R) 2", "10,900원", "11,900원", "추천", "#1e88e5", "/images/lovecorn.png")
             );
             repo.saveAll(items);
+            System.out.println("🎯 더미 데이터 초기화 완료");
         }
     }
 }

@@ -11,7 +11,8 @@ import lombok.*;
 public class Store {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "store_seq")
+    @SequenceGenerator(name = "store_seq", sequenceName = "store_seq", allocationSize = 1)
     private Long id;
 
     private String category;      // 예: 메가티켓, 콤보, 포인트몰

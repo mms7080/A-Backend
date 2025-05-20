@@ -1,5 +1,6 @@
 package com.example.demo.Event;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
@@ -17,14 +18,15 @@ public class EventController {
     private final EventService service;
     private final EventRepository repository;
 
+    @Value("${event.upload.dir}")
+    private String uploadDir;
+
     public EventController(EventService service, EventRepository repository) {
         this.service = service;
         this.repository = repository;
     }
 
- 
     // 이벤트 조회 
-    // 카테고리별로 그룹화된 이벤트 리스트 반환 (프론트 메인용)
     @GetMapping
     public Map<String, List<Map<String, String>>> getEvents() {
         return service.getEventsGroupedByCategory();
@@ -45,7 +47,6 @@ public class EventController {
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-
     //  이벤트 업로드 API
     @PostMapping("/upload")
     public ResponseEntity<?> uploadEvent(
@@ -57,32 +58,27 @@ public class EventController {
         try {
             List<String> imageUrls = new ArrayList<>();
 
-            // 이미지 저장 폴더 생성
-            Path uploadPath = Paths.get("uploads/event").toAbsolutePath().normalize();
+            // 이미지 저장 경로
+            Path uploadPath = Paths.get(uploadDir);
             if (!Files.exists(uploadPath)) {
                 Files.createDirectories(uploadPath);
             }
 
-            // 이미지 저장 및 URL 리스트 구성
+            // 이미지 저장 및 URL 구성
             for (MultipartFile image : images) {
                 String filename = UUID.randomUUID() + "_" + StringUtils.cleanPath(image.getOriginalFilename());
                 Path filePath = uploadPath.resolve(filename);
                 image.transferTo(filePath.toFile());
-
                 imageUrls.add("/images/event/" + filename);
             }
 
-            // DB 저장
             Event event = new Event(null, title, date, category, imageUrls);
             repository.save(event);
-
             return ResponseEntity.ok("업로드 성공");
-
         } catch (IOException e) {
             return ResponseEntity.internalServerError().body("저장 실패: " + e.getMessage());
         }
     }
-
 
     // 이벤트 삭제 
     @DeleteMapping("/{id}")
