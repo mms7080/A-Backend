@@ -107,5 +107,21 @@ public class BookingController {
         return s;
     }
    
+    // BookingController.java 에 추가
+@GetMapping("/seed")
+@ResponseStatus(HttpStatus.CREATED)
+public List<ScreeningDto> seedScreenings() {
+    List<Screening> samples = List.of(
+        new Screening(null, "매트릭스", "IMAX관", LocalDateTime.now().plusDays(1), null),
+        new Screening(null, "인셉션", "2관", LocalDateTime.now().plusDays(2), null),
+        new Screening(null, "어벤져스", "3관", LocalDateTime.now().plusDays(3), null)
+    );
+    return screeningService
+        .createMultiple(samples)   // 서비스에 bulk-create 메서드 만들어 두면 편해요
+        .stream()
+        .map(this::toDto)
+        .toList();
+}
+
     
 }

@@ -1,5 +1,6 @@
 package com.example.demo.Booking.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -8,6 +9,7 @@ import org.springframework.util.StringUtils;
 
 import com.example.demo.Booking.dao.ScreeningDao;
 import com.example.demo.Booking.dao.SeatDao;
+import com.example.demo.Booking.entity.Screening;
 import com.example.demo.Booking.entity.Seat;
 import com.example.demo.Booking.entity.SeatStatus;
 
@@ -82,4 +84,28 @@ public class SeatService {
 		seatDao.deleteById(id);
 	}
     
+	/**
+     * screeningId에 속한 샘플 좌석을 행 A~E, 번호 1~10 으로 생성해서 저장한 뒤,
+     * 생성된 좌석 목록을 반환합니다.
+     */
+    @Transactional
+    public List<Seat> seedSeats(Long screeningId) {
+        // 1) 상영회차가 유효한지 확인
+        Screening screening = screeningDao.findById(screeningId);
+
+        // 2) A~E(5행), 각 행당 1~10번 좌석 생성
+        List<Seat> created = new ArrayList<>();
+        for (int r = 1; r <= 5; r++) {
+            char rowChar = (char)('A' + r - 1);
+            for (int num = 1; num <= 10; num++) {
+                Seat seat = new Seat();
+                seat.setSeatRow(String.valueOf(rowChar));
+                seat.setSeatNumber(num);
+                seat.setStatus(SeatStatus.AVAILABLE);
+                seat.setScreening(screening);
+                created.add(seatDao.save(seat));
+            }
+        }
+        return created;
+    }
 }

@@ -2,6 +2,7 @@ package com.example.demo.Booking.service;
 
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -90,4 +91,24 @@ public class ScreeningService {
             throw new IllegalArgumentException("상영 시작 시간은 현재 시간 이후여야 합니다.");
         }
     }
+
+     /**
+     * 여러 개의 Screening을 한 번에 저장하는 메서드
+     * - 각 엔티티에 대해 validateScreening을 호출
+     * - 검증을 통과하면 모두 저장 후 저장된 엔티티 리스트를 반환
+     */
+    @Transactional
+    public List<Screening> createMultiple(List<Screening> screenings) {
+        // 검증
+        for (Screening s : screenings) {
+            validateScreening(s);
+        }
+        // 일괄 저장
+        List<Screening> result = new ArrayList<>();
+        for (Screening s : screenings) {
+            result.add(screeningDao.save(s));
+        }
+        return result;
+    }
+
 }

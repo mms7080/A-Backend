@@ -46,4 +46,11 @@ public class SeatDao {
     public long countAvailable(Long screeningId) {
         return repo.countByScreeningIdAndStatus(screeningId, SeatStatus.AVAILABLE);
     }
+
+    /**
+     * 여러 좌석을 한 번에 저장
+     */
+    public List<Seat> saveAll(List<Seat> seats) {
+        return repo.saveAll(seats);
+    }
 }
