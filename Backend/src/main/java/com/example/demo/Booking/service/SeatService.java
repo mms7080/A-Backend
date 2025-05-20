@@ -49,16 +49,17 @@ public class SeatService {
 	// 좌석 생성
 	@Transactional
 	public Seat createOrUpdateSeat(Seat seat){
+		validateSeat(seat);
 		return seatDao.save(seat);
 	}
 
 	// 저장 전 검증 메서드
 	private void validateSeat(Seat seat) {
         // 1) row(행)와 number(번호) 필수 체크
-        if (!StringUtils.hasText(seat.getSeat_row())) {
+        if (!StringUtils.hasText(seat.getSeatRow())) {
             throw new IllegalArgumentException("좌석 행(row)은 반드시 입력해야 합니다.");
         }
-        if (seat.getSeat_number() == null || seat.getSeat_number() < 1) {
+        if (seat.getSeatNumber() == null || seat.getSeatNumber() < 1) {
             throw new IllegalArgumentException("좌석 번호는 1 이상의 값이어야 합니다.");
         }
 

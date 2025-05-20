@@ -2,6 +2,7 @@ package com.example.demo.Booking.entity;
 
 
 import jakarta.persistence.Id;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -37,11 +38,14 @@ public class Seat {
 
     private Long id; // 좌석 고유 ID
 
-    private String seat_row; // 좌석 행(row)
+    @Column(name = "seat_row", nullable = false)
+    private String seatRow; // 좌석 행(row)
 
-    private Integer seat_number; // 좌석 번호
+    @Column(name = "seat_number", nullable = false)
+    private Integer seatNumber; // 좌석 번호
 
     @Enumerated(EnumType.STRING)
+    @Column(name = "status", nullable = false)
     private SeatStatus status; // 좌석 상태 (예약 가능 좌석, 임시예약 좌석, 결제 완료 좌석)
 
     @ManyToOne(fetch = FetchType.LAZY) // N:1관계, 지연 로딩
