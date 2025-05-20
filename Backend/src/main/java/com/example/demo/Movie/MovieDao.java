@@ -11,20 +11,24 @@ import jakarta.annotation.PostConstruct;
 @Component
 public class MovieDao {
     @Autowired
-    private MovieRepository movieRep;
+    private MovieRepository repo;
 
     public List<Movie> findAll() {
-        return movieRep.findAll();
+        return repo.findAll();
+    }
+
+    public Movie findById(Long id) {
+        return repo.findFirstById(id);
     }
 
     public void save(Movie movie) {
-        movieRep.save(movie);
+        repo.save(movie);
     }
 
     @PostConstruct
     @Transactional
     public void insertTestMovies() {
-        if(movieRep.count() > 0) return;
+        if(repo.count() > 0) return;
         save(new Movie(null, "Fields of Destiny", "", "0000.00.00", 5300L, "https://res.cloudinary.com/upwork-cloud/image/upload/c_scale,w_1000/v1700795880/catalog/1600659718750367744/xiry6ufbjttckqxpfzrw.jpg"));
         save(new Movie(null, "Killer Advice", "", "0000.00.00", 2100L, "https://res.cloudinary.com/upwork-cloud/image/upload/c_scale,w_1000/v1700796426/catalog/1600659718750367744/iqmiudmmo6s7zcofwmpf.jpg"));
         save(new Movie(null, "InterStella", "12", "2014.11.06", 1500L, "https://rukminim2.flixcart.com/image/850/1000/l2dmky80/poster/y/f/b/small-poster-interstellar-sl407-wall-poster-13x19-inches-matte-original-imagdqezkfchjkhz.jpeg?q=20&crop=false"));
