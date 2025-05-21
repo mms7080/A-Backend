@@ -30,16 +30,24 @@ public class Movie {
     )
     private Long id;
 
+    private Integer rank;
+    private String description;
+    private Double score;
+    private String label;
+    
+    
     private String title;
-
+    
     private String rate;
-
+    
     @Column(name = "release_date")
     private String releaseDate;
-
+    
     @Column(name = "like_number")
     private Long likeNumber;
-
+    
     @Column(name = "image_url", length = 300)
     private String image;
+
+    
 }

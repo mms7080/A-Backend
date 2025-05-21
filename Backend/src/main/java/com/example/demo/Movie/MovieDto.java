@@ -24,4 +24,14 @@ public class MovieDto {
 
     public String getImage() { return movie.getImage(); }
     public void setImage(String image) { movie.setImage(image); }
+
+
+    public Integer getRank() {return movie.getRank();}
+    public void setRank(Integer rank) {movie.setRank(rank);}
+    public String getDescription() {return movie.getDescription();}
+    public void setDescription(String description) {movie.setDescription(description);}
+    public Double getScore() {return movie.getScore();}
+    public void setScore(Double score) {movie.setScore(score);}
+    public String getLabel() {return movie.getLabel();}
+    public void setLabel(String label) {movie.setLabel(label);}
 }
