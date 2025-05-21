@@ -12,7 +12,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/store")
-// @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class StoreController {
 
     private final StoreService service;
