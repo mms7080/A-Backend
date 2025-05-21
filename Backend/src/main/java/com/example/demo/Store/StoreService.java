@@ -17,7 +17,7 @@ public class StoreService {
 
     private final StoreRepository repo;
 
-    @Value("${event.upload.dir}")
+    @Value("${store.upload.dir}")
     private String uploadDir;
 
     public StoreService(StoreRepository repo) {
@@ -56,7 +56,7 @@ public class StoreService {
         String filename = UUID.randomUUID().toString() + "." + ext;
 
         // 2. 경로 보장
-        Path dirPath = Paths.get(uploadDir);
+        Path dirPath = Paths.get("src/main").toAbsolutePath().getParent().getParent().resolve(uploadDir);
         if (!Files.exists(dirPath)) {
             Files.createDirectories(dirPath);
             System.out.println("📁 디렉토리 생성됨: " + dirPath.toAbsolutePath());
@@ -76,7 +76,7 @@ public class StoreService {
         s.setOriginalPrice(originalPrice);
         s.setBadge(badge);
         s.setBadgeColor(badgeColor);
-        s.setImgUrl("/images/event/" + filename);
+        s.setImgUrl("/images/store/" + filename);
 
         Store saved = repo.save(s);
         System.out.println("✅ DB 저장 완료: id = " + saved.getId());

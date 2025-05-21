@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.nio.file.*;
 import java.util.*;
 
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+// @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
 @RequestMapping("/event")
 public class EventController {
@@ -59,7 +59,8 @@ public class EventController {
             List<String> imageUrls = new ArrayList<>();
 
             // 이미지 저장 경로
-            Path uploadPath = Paths.get(uploadDir);
+            Path uploadPath = Paths.get("src/main").toAbsolutePath().getParent().getParent().resolve(uploadDir);
+            System.out.println(uploadPath.toString());
             if (!Files.exists(uploadPath)) {
                 Files.createDirectories(uploadPath);
             }

@@ -61,6 +61,7 @@ public class ConfigSecurity{/* 로그인 로직 */
     @Bean
     public SecurityFilterChain security(HttpSecurity http) throws Exception{
         return http
+        .cors(cors->cors.configurationSource(cors()))
         .csrf(csrf->csrf.disable())/* CSRF 비활성화 */
         /* .ignoringRequestMatchers("/public","/private","/signin/logic","/logout","/join/logic","/modify/logic","/find_id/logic","/find_pw/logic","/set_pw/logic"))// JWT 토큰을 사용하면서 더 이상 사용하지 않게 된 부분 */
         .authorizeHttpRequests(auth->auth.dispatcherTypeMatchers(DispatcherType.FORWARD)/* JSP forward는 허용 */
