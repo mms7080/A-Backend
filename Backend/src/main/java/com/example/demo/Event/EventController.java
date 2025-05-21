@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.nio.file.*;
 import java.util.*;
 
-// @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
 @RequestMapping("/event")
 public class EventController {
