@@ -1,6 +1,7 @@
 package com.example.demo.Booking.dao;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
 
@@ -20,6 +21,19 @@ public class SeatDao {
 	public List<Seat> findAll(){
 		return repo.findAll();
 	}
+
+    // 단일 좌석 조회
+    public Optional<Seat> findById(Long id){
+        return repo.findById(id);
+    }
+
+    /**
+     * 또는 바로 Seat 을 반환하고, 없으면 예외 던지기
+     */
+    public Seat getById(Long id) {
+        return repo.findById(id)
+                   .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 좌석 ID: " + id));
+    }
 
 	// 좌석 저장
     public Seat save(Seat seat) {

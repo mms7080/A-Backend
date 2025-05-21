@@ -3,6 +3,7 @@ package com.example.demo.Booking.service;
 import java.util.ArrayList;
 import java.util.List;
 
+
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
@@ -29,6 +30,15 @@ public class SeatService {
 	public List<Seat> getAllSeats(){
 		return seatDao.findAll();
 	}
+    
+    // 단일 좌석 조회(ID로 조회)
+    @Transactional(readOnly = true)
+    public Seat getById(Long id){
+        return seatDao.findById(id)
+            .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 좌석 ID: " + id));
+        
+    }
+    
 
 	// 특정 상영회차에 속한 좌석 목록 조회
 	@Transactional(readOnly = true)
@@ -85,27 +95,36 @@ public class SeatService {
 	}
     
 	/**
-     * screeningId에 속한 샘플 좌석을 행 A~E, 번호 1~10 으로 생성해서 저장한 뒤,
-     * 생성된 좌석 목록을 반환합니다.
+     * screeningId에 속한 샘플 좌석을 행 A~L, 번호 1~9번 열로 자동 생성(seed)
+     * 이미 좌석이 존재하면 그대로 반환(중복 시드 방지)
+     * 일괄 저장(saveAll) 처리로 성능 최적화
      */
+    
     @Transactional
     public List<Seat> seedSeats(Long screeningId) {
         // 1) 상영회차가 유효한지 확인
         Screening screening = screeningDao.findById(screeningId);
 
-        // 2) A~E(5행), 각 행당 1~10번 좌석 생성
+        // 2) 이미 시드된 좌석이 있으면 재사용
+        List<Seat> exisiting = seatDao.findByScreeningId(screeningId);
+        if(!exisiting.isEmpty()){
+            return exisiting;
+        }
+            
+
+        // 3) A~L(5행), 각 행당 1~9번 좌석 생성
         List<Seat> created = new ArrayList<>();
-        for (int r = 1; r <= 5; r++) {
-            char rowChar = (char)('A' + r - 1);
-            for (int num = 1; num <= 10; num++) {
+        for(char row = 'A'; row <='L'; row++){
+            for(int num = 1; num <=9; num++){
                 Seat seat = new Seat();
-                seat.setSeatRow(String.valueOf(rowChar));
-                seat.setSeatNumber(num);
-                seat.setStatus(SeatStatus.AVAILABLE);
-                seat.setScreening(screening);
-                created.add(seatDao.save(seat));
+                seat.setSeatRow(String.valueOf(row)); // 행 설정(문자)
+                seat.setSeatNumber(num); // 열 설정(숫자)
+                seat.setStatus(SeatStatus.AVAILABLE); // 초기 상태: 사용 가능
+                seat.setScreening(screening); // 상영회차 연관
+                created.add(seat);
             }
         }
-        return created;
+        // 4) 일괄 저장 후 반환
+        return seatDao.saveAll(created);
     }
 }
