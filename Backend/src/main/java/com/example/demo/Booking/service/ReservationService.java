@@ -24,6 +24,16 @@ public class ReservationService {
         this.seatService = seatService;
     }
 
+    /**
+     * 모든 예약 목록을 조회합니다.
+     * 읽기 전용 트랜잭션으로 설정하여 데이터 변경 없이 조회만 수행함을 명시합니다.
+     * @return 모든 예약 엔티티 목록
+     */
+    @Transactional(readOnly = true)
+    public List<Reservation> findAll(){ // 추가된 findAll() 메서드
+        return dao.findAll();
+    }
+
     // ID로 예약 조회
     @Transactional(readOnly = true)
     public Reservation getById(Long id){
