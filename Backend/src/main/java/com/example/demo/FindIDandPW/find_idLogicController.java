@@ -36,7 +36,7 @@ public class find_idLogicController {
 
         Map<String, String> response = new HashMap<>();
         if(user==null)response.put("foundID", "");
-        else response.put("foundID",user.getUsername().substring(0, user.getUsername().length() - 3)+"***");
+        else response.put("foundID",user.getUsername().substring(0, user.getUsername().length() - 2)+"**");
 
         return response;
     }
