@@ -76,7 +76,7 @@ public class ScreeningService {
     }
 
     /**
-     * [검증 메서드]
+     * - 상영회차 데이터의 유효성을 검사하는 내부 메서드
      * - 영화 제목(movieTitle)이 null 또는 빈 문자열일 경우 예외
      * - 상영 시작 시간(startTime)이 현재 시간 이전일 경우 예외
      */
@@ -86,7 +86,7 @@ public class ScreeningService {
             throw new IllegalArgumentException("영화 제목은 반드시 입력해야 합니다.");
         }
         // 2. 상영 시작 시간이 현재 시간 이전이면 예외
-        LocalDateTime now = LocalDateTime.now();  // Clock 없이 직접 현재 시각 조회
+        LocalDateTime now = LocalDateTime.now();  // 현재 시각 조회
         if (screening.getStartTime() == null || screening.getStartTime().isBefore(now)) {
             throw new IllegalArgumentException("상영 시작 시간은 현재 시간 이후여야 합니다.");
         }
@@ -103,12 +103,8 @@ public class ScreeningService {
         for (Screening s : screenings) {
             validateScreening(s);
         }
-        // 일괄 저장
-        List<Screening> result = new ArrayList<>();
-        for (Screening s : screenings) {
-            result.add(screeningDao.save(s));
-        }
-        return result;
+        // 모든 상영회차를 일괄 저장
+        return screeningDao.saveAll(screenings); 
     }
 
 }

@@ -28,7 +28,7 @@ public class SeatDao {
     }
 
     /**
-     * 또는 바로 Seat 을 반환하고, 없으면 예외 던지기
+     * 특정 ID로 단일 좌석 조회 / 없으면 예외 던짐
      */
     public Seat getById(Long id) {
         return repo.findById(id)
@@ -50,11 +50,6 @@ public class SeatDao {
         return repo.findByScreeningId(screeningId);
     }
 
-	// 연속된 사용 가능 좌석 조회
-    public List<Seat> findContiguous(Long screeningId, int count) {
-        // 실제 로직에서 count 파라미터 활용해 슬라이딩 윈도우 구현 필요
-        return repo.findContiguousByScreeningIdAndStatus(screeningId, SeatStatus.AVAILABLE);
-    }
 
 	// 사용 가능한 좌석 개수 계산
     public long countAvailable(Long screeningId) {

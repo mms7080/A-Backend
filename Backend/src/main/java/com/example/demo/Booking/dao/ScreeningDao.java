@@ -36,6 +36,11 @@ public class ScreeningDao {
         return repo.save(screening);
     }
 
+    // 여러 상영회차를 한번에 저장
+    public List<Screening> saveAll(List<Screening> screenings){
+        return repo.saveAll(screenings);
+    }
+
     /** 특정 상영관(theaterName)에 해당하는 회차만 조회 */
     public List<Screening> findByTheaterName(String theaterName) {
         return repo.findByTheaterName(theaterName);

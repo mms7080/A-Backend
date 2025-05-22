@@ -1,8 +1,9 @@
 package com.example.demo.Booking.service;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
-
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -52,10 +53,48 @@ public class SeatService {
 		return seatDao.countAvailable(screeingId);
 	}
 
-	// 연속된 사용 가능한 좌석 조회
-	@Transactional(readOnly = true)
+	// 특정 상영회차에서 지정된 개수(count)만큼 연속된 사용 가능한 좌석을 찾음
+	@Transactional(readOnly = true) // 읽기 전용 트랜잭션 설정
 	public List<Seat> findContiguousSeats(Long screeningId, int count){
-		return seatDao.findContiguous(screeningId, count);
+		// 1. 해당 상영회차의 모든 사용 가능한 좌석을 가져와서 행(row)과 번호(number) 순으로 정렬합니다.
+		List<Seat> availableSeats = seatDao.findByScreeningId(screeningId).stream()
+				.filter(seat -> seat.getStatus() == SeatStatus.AVAILABLE) // 사용 가능한 좌석만 필터링
+				.sorted(Comparator
+						.comparing(Seat::getSeatRow) // 행(row) 기준으로 먼저 정렬 (예: "A", "B")
+						.thenComparing(Seat::getSeatNumber)) // 그 다음 좌석 번호(number) 기준으로 정렬 (예: 1, 2)
+				.collect(Collectors.toList());
+        // 2. 슬라이딩 윈도우 방식으로 연속된 좌석 그룹을 탐색
+        // 'i'는 현재 윈도우의 시작 인덱스를 나타냄
+        // 'availableSeats.size() - count'는 윈도우가 끝까지 이동할 수 있는 최대 시작 인덱스
+        for (int i =0; i <=availableSeats.size() - count; i++){
+            boolean isContiguous = true; 
+            List<Seat> currenContiguousSeats = new ArrayList<>();
+            currenContiguousSeats.add(availableSeats.get(i)); // 첫번째 좌석 추가
+
+            // 나머지 좌석들을 확인하며 연속성을 검사
+            for(int j =1; j<count; j++){
+                Seat prevSeat = availableSeats.get(i + j -1); // 이전 좌석
+                Seat currentSeat = availableSeats.get(i + j);  // 현재 좌석
+
+                // 같은 행인지 확인, 행이 다르면 연속적이지 않음
+                if (!prevSeat.getSeatRow().equals(currentSeat.getSeatRow())){
+                    isContiguous = false;
+                    break;
+                }
+                // 좌석 번호가 이전 좌석 번호 + 1인지 확인, 연속적이지 않으면 중단
+                if(currentSeat.getSeatNumber() != prevSeat.getSeatNumber() +1) {
+                    isContiguous = false;
+                    break;
+                }
+                currenContiguousSeats.add(currentSeat); // 연속적이면 현재 좌석을 리스트에 추가
+            }
+            // 3. 만약 현재 윈도우의 모든 좌석이 연속적이라면, 해당 좌석 리스트를 반환
+            if(isContiguous){
+                return currenContiguousSeats;
+            }
+        }
+        // 4. 모든 윈도우를 탐색했지만 연속된 좌석을 찾지 못했으면 빈 리스트를 반환
+            return List.of();
 	}
 
 	// 좌석 생성
