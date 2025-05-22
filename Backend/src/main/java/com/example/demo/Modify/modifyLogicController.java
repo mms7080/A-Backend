@@ -18,9 +18,7 @@ public class modifyLogicController{
 
     @PostMapping("/modify/logic")
     public String modify_logic(
-        @RequestParam("id") String username,
         @RequestParam("pw") String password,
-        @RequestParam("name") String name,
         @RequestParam("phone_number") String phone,
         @RequestParam("email") String email,
         @RequestParam("birthdate") String birthdate,
@@ -31,13 +29,15 @@ public class modifyLogicController{
         @Auth User user){
 
         
-        /* 마이페이지에서 수정할 수 있는 정보들인 비밀번호, address_detail, phone, email, birthdate, gender 수정사항 반영 */
+        /* 마이페이지에서 수정할 수 있는 정보들인 비밀번호, phone, email, birthdate, gender, zipcode, address, address_detail 수정사항 반영 */
         if(!password.isEmpty())user.setPassword(new BCryptPasswordEncoder().encode(password));
-        user.setAddress_detail(address_detail);
         user.setPhone(phone);
         user.setEmail(email);
         user.setBirthdate(birthdate);
         user.setGender(gender);
+        user.setZipcode(zipcode);
+        user.setAddress(address);
+        user.setAddress_detail(address_detail);
         daoUser.Modify(user);/* 수정사항을 Modify 함수로 적용 */
 
         return "redirect:http://localhost:3000/mypage";
