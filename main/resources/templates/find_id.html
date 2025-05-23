@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>아이디 찾기 페이지</title>
+        <style>
+            .find_box{
+                display:none;
+            }
+            input{
+                width:500px;
+            }
+            input[type=radio]{
+                width:20px;
+            }
+        </style>
+        <script>
+
+            window.onload = function() {
+                toggleContent();
+            };
+
+            function toggleContent() {
+                const selected = document.querySelector('input[name="method"]:checked').value;
+                
+                const emailField = document.getElementById('find_email');
+                const phoneField = document.getElementById('find_phone_number');
+
+                if (selected === 'email') {/* ID 찾기 방법에 따라 무슨 입력란이 보일지를 설정하는 단계 */
+                    emailField.style.display = 'block';
+                    phoneField.style.display = 'none';
+        
+                    document.querySelector('#email').setAttribute('required', 'required');
+                    document.querySelector('#phone_number').removeAttribute('required');
+                } else if(selected === 'phone_number') {
+                    emailField.style.display = 'none';
+                    phoneField.style.display = 'block';
+
+                    document.querySelector('#phone_number').setAttribute('required', 'required');
+                    document.querySelector('#email').removeAttribute('required');
+                }     
+            }
+
+        </script>
+    </head>
+    <body>
+
+        <div th:unless="${foundID}"><!-- 아이디 찾기 이전에 보이는 부분 -->
+
+            <div th:if="${noInfo}">
+                <span>해당하는 사용자 정보가 없습니다.</span>
+            </div>
+
+            <form action="/find_id/logic" method="post"><!-- ID를 찾기 위한 정보를 입력하는 단계 -->
+
+                <label for="method_email">찾기 방법</label><br/><!-- ID 찾기 방법을 선택하는 단계 -->
+                <input id="method_email" name="method" type="radio" value="email" onclick="toggleContent()" checked/><label for="method_email">이메일</label>
+                <input id="method_phone_number" name="method" type="radio" value="phone_number" onclick="toggleContent()"/><label for="method_phone_number">휴대폰 번호</label>
+
+                <label for="name">이름</label><br/>
+                <input id="name" name="name" placeholder="이름" required/><br/>
+
+                <div id="find_email" class="find_box">
+                    <label for="email">이메일</label><br/>
+                    <input id="email" name="email" placeholder="example@email.com" required/><br/>
+                </div>
+
+                <div id="find_phone_number" class="find_box">
+                    <label for="phone_number">휴대폰 번호</label><br/>
+                    <input id="phone_number" name="phone_number" placeholder="01012345678" required/><br/>
+                </div>
+
+                <button type="submit">아이디 찾기</button>
+
+            </form>
+
+        </div>
+
+        <div th:if="${foundID}"><!-- 아이디 찾은 이후에 보이는 부분 -->
+            <span> 아이디 : <th:block th:text="${resultID}"></th:block></span>
+        </div>
+
+        <a href="/home">홈으로</a>
+        <a href="/signin">로그인</a>
+        <a href="/join">회원가입</a>
+
+    </body>
+</html>
