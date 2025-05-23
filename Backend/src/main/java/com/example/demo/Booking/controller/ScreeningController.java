@@ -29,11 +29,11 @@ import org.springframework.web.bind.annotation.PutMapping;
 // 상영회차(Booking) REST API 컨트롤러
 @RestController
 @RequestMapping("/booking")
-public class BookingController {
+public class ScreeningController {
 
     private final ScreeningService screeningService;
     
-    public BookingController(ScreeningService screeningService){
+    public ScreeningController(ScreeningService screeningService){
         this.screeningService = screeningService;
     }
 
