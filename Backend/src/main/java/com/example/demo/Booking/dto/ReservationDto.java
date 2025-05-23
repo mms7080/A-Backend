@@ -18,7 +18,7 @@ public class ReservationDto {
 
     private Long id; // 예약 고유 식별자
     private String customerName; // 예약자 이름
-    private String customerCatagory; // 고객분류 (성인/청소년/경로/장애인 등)
+    private String customerCategory; // 고객분류 (성인/청소년/경로/장애인 등)
     private LocalDateTime reservedAt; // 예약 시간
     private List<Long> seatIds; // 예약된 좌석 ID 등록
 
@@ -43,7 +43,7 @@ public class ReservationDto {
         Reservation reservation = new Reservation();
         reservation.setId(this.id);
         reservation.setCustomerName(this.customerName);
-        reservation.setCustomerCategory(this.customerCatagory);
+        reservation.setCustomerCategory(this.customerCategory);
         reservation.setReservedAt(this.reservedAt);
         // DTO에 담긴 seatId로 Seat 엔티티를 생성하여 설정
         if(this.seatIds != null){
