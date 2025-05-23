@@ -38,6 +38,7 @@ public class Reservation {
 
     private Long id;
 
+    
     private String customerName; //예약자 이름
  
     private String customerCategory; // 성인/ 청소년/ 경로 / 장애인
