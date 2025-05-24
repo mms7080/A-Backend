@@ -1,6 +1,7 @@
 package com.example.demo.Join;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -16,6 +17,9 @@ public class joinLogicController{
 
     @Autowired
     DAOUser daoUser;
+
+    @Value("${spring.security.cors.site}")
+    String corsOrigin;
 
     @PostMapping("/join/logic")
     public String join_logic(/* 회원가입 로직 작성 */
@@ -53,7 +57,7 @@ public class joinLogicController{
             )
         );
 
-        return "redirect:http://localhost:3000/signin";
+        return "redirect:"+corsOrigin+"/signin";
     }
 
 }

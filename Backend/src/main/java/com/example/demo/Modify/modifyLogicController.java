@@ -1,6 +1,7 @@
 package com.example.demo.Modify;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,6 +16,9 @@ public class modifyLogicController{
 
     @Autowired
     DAOUser daoUser;
+
+    @Value("${spring.security.cors.site}")
+    String corsOrigin;
 
     @PostMapping("/modify/logic")
     public String modify_logic(
@@ -40,7 +44,7 @@ public class modifyLogicController{
         user.setAddress_detail(address_detail);
         daoUser.Modify(user);/* 수정사항을 Modify 함수로 적용 */
 
-        return "redirect:http://localhost:3000/mypage";
+        return "redirect:"+corsOrigin+"/mypage";
     }
     
 }
