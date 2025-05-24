@@ -62,7 +62,7 @@ public class EventService {
 
             new Event(null, "<소주전쟁> 100% 당첨 스낵전쟁 이벤트", "2025.05.24 ~ 2025.06.08", "Pick", List.of("/images/pick1.jpg", "/images/pick1.jpg")),
             new Event(null, "포스터 증정 이벤트", "2025.06.01 ~ 2025.06.15", "Pick", List.of("/images/pick2.jpg")),
-            new Event(null, "코엑스 그랜드 리뉴얼얼", "2025.06.10 ~ 2025.07.01", "Pick", List.of("/images/pick3.jpg")),
+            new Event(null, "코엑스 그랜드 리뉴얼", "2025.06.10 ~ 2025.07.01", "Pick", List.of("/images/pick3.jpg")),
             new Event(null, "<그리드맨 유니버스> 포스터 증정 이벤트", "2025.06.15 ~ 2025.06.30", "Pick", List.of("/images/pick4.jpg")),
 
             new Event(null, "[목동] MOVIE 콘서트", "2025.06.15 ~ 2025.06.30", "극장", List.of("/images/m1.jpg")),
