@@ -90,8 +90,8 @@ public class SeatService {
             if (seat.getShowtime().getId().equals(showtimeId) && seat.getStatus() == SeatStatus.HELD) { //
                 seat.setStatus(SeatStatus.AVAILABLE); 
             }
-            // 'RESERVED' 상태의 좌석은 이 메서드에서 변경하지 않습니다. (별도의 '예매 취소' 로직 필요)
-            // 'AVAILABLE' 상태의 좌석도 변경할 필요가 없습니다.
+            // 'RESERVED' 상태의 좌석은 이 메서드에서 변경하지 않음 (별도의 '예매 취소' 로직 필요)
+            // 'AVAILABLE' 상태의 좌석도 변경할 필요가 없음
         }
         if (!seatsToRelease.isEmpty()) { 
             seatRepository.saveAll(seatsToRelease); 
@@ -101,7 +101,7 @@ public class SeatService {
     // 특정 좌석 ID(seatId)에 해당하는 좌석(Seat) 엔티티를 조회
     @Transactional(readOnly = true)
     public Seat getSeatById(Long seatId) { 
-        return seatRepository.findById(seatId) // SeatRepository를 사용하여 ID로 좌석을 찾습니다.
+        return seatRepository.findById(seatId) 
                 .orElseThrow(() -> new RuntimeException("Seat not found with id: " + seatId));
     }
 }

@@ -35,11 +35,7 @@ public class BookingResponseDto {
     private LocalDateTime bookingTime; // 예매 시도/확정 시간
     private PaymentDto paymentInfo; // 관련된 결제 정보 DTO (결제가 완료된 경우)
 
-    /**
-     * Booking 엔티티 객체를 BookingResponseDto 객체로 변환하는 정적 팩토리 메서드.
-     * @param booking 변환할 Booking 엔티티 객체
-     * @return 변환된 BookingResponseDto 객체
-     */
+    
     public static BookingResponseDto fromEntity(Booking booking) { //
         if (booking == null) {
             return null;
@@ -47,11 +43,11 @@ public class BookingResponseDto {
 
         // 선택된 좌석 정보를 "A1", "B2" 와 같은 문자열 리스트로 변환
         List<String> seatInfo = booking.getSelectedSeats().stream()
-                .map(seat -> seat.getSeatRow() + seat.getSeatNumber()) // 각 Seat 엔티티에서 행과 번호를 조합
+                .map(seat -> seat.getSeatRow() + seat.getSeatNumber()) 
                 .collect(Collectors.toList());
 
-        // User, Showtime, Movie, Theater 엔티티가 null일 경우를 대비한 Null-Safe 처리
-        Long userIdResult = (booking.getUser() != null) ? booking.getUser().getId() : null; //
+        
+        Long userIdResult = (booking.getUser() != null) ? booking.getUser().getId() : null; 
         String movieTitleResult = "정보 없음";
         String theaterNameResult = "정보 없음";
         String auditoriumNameResult = "정보 없음";
@@ -77,11 +73,10 @@ public class BookingResponseDto {
                 auditoriumNameResult,
                 showtimeStartTimeResult,
                 seatInfo,
-                booking.getPassengerCounts(), //
+                booking.getPassengerCounts(), 
                 booking.getTotalPrice(),
-                booking.getStatus().name(), // BookingStatus Enum 값을 문자열로 변환
+                booking.getStatus().name(), 
                 booking.getBookingTime(),
-                // Payment 엔티티가 존재하면 PaymentDto로 변환, 없으면 null
                 booking.getPayment() != null ? PaymentDto.fromEntity(booking.getPayment()) : null
         );
     }

@@ -63,16 +63,16 @@ public class ShowtimeService {
     public List<MovieFilterDto> getMoviesForTheaterAndDate(Long theaterId, LocalDate date) { //
         LocalDateTime startOfDay = date.atStartOfDay();
         LocalDateTime endOfDay = date.plusDays(1).atStartOfDay();
-        // 해당 영화관, 해당 날짜에 있는 모든 상영시간 정보를 데이터베이스에서 가져옵니다.
+        
         List<Showtime> showtimes = showtimeRepository.findByTheaterIdAndStartTimeBetween(theaterId, startOfDay, endOfDay); //
-        if (showtimes.isEmpty()) { // 만약 해당 조건의 상영시간이 없다면, 빈 리스트를 반환합니다.
+        if (showtimes.isEmpty()) { 
             return Collections.emptyList();
         }
-        // 조회된 상영시간 목록에서 중복되지 않는 영화(Movie) 정보만을 추출하여 MovieFilterDto로 변환합니다.
+        
         return showtimes.stream()
-                .map(Showtime::getMovie) // 각 Showtime 엔티티에서 연관된 Movie 엔티티를 가져옵니다.
-                .distinct() // Stream 내에서 중복된 Movie 엔티티를 제거합니다 (Movie 엔티티의 equals/hashCode 구현 기반).
-                .map(MovieFilterDto::fromEntity) // 각 고유한 Movie 엔티티를 MovieFilterDto로 변환합니다.
+                .map(Showtime::getMovie) 
+                .distinct() 
+                .map(MovieFilterDto::fromEntity) 
                 .collect(Collectors.toList());
     }
 
@@ -83,26 +83,26 @@ public class ShowtimeService {
         LocalDateTime endOfDay = date.plusDays(1).atStartOfDay();
         
         List<Showtime> showtimes = showtimeRepository.findByMovieIdAndStartTimeBetween(movieId, startOfDay, endOfDay); //
-        if (showtimes.isEmpty()) { // 상영시간이 없으면 빈 목록을 반환합니다.
+        if (showtimes.isEmpty()) { 
             return Collections.emptyList();
         }
         
         return showtimes.stream()
-                .map(Showtime::getTheater) // 각 Showtime 엔티티에서 연관된 Theater 엔티티를 가져옵니다.
-                .distinct() // Stream 내에서 중복된 Theater 엔티티를 제거합니다 (Theater 엔티티의 equals/hashCode 구현 기반).
-                .map(TheaterFilterDto::fromEntity) // 각 고유한 Theater 엔티티를 TheaterFilterDto로 변환합니다.
+                .map(Showtime::getTheater) 
+                .distinct() 
+                .map(TheaterFilterDto::fromEntity) 
                 .collect(Collectors.toList());
     }
 
     // 특정 ID에 해당하는 상영시간(Showtime) 엔티티를 조회
     @Transactional(readOnly = true)
-    public Showtime getShowtimeById(Long showtimeId) { //
-        return showtimeRepository.findById(showtimeId) // ShowtimeRepository를 사용하여 ID로 상영시간을 찾습니다.
+    public Showtime getShowtimeById(Long showtimeId) { 
+        return showtimeRepository.findById(showtimeId) 
                 .orElseThrow(() -> new RuntimeException("Showtime not found with id: " + showtimeId));
     }
 
     // 애플리케이션 시작 시점에 초기 상영시간 및 관련 좌석 데이터를 생성
-    // 개발 및 테스트 환경에서 초기 데이터를 편리하게 설정하기 위해 사용\
+    // 개발 및 테스트 환경에서 초기 데이터를 편리하게 설정하기 위해 사용
     @PostConstruct
     @Transactional
     public void initShowtimesAndSeats() {
@@ -113,7 +113,7 @@ public class ShowtimeService {
 
             if (movies.isEmpty() || theaters.isEmpty()) { 
                 System.err.println("초기 상영시간 데이터 생성을 위해 영화(Movie) 및 영화관(Theater) 데이터가 먼저 등록되어야 합니다.");
-                return; // 메서드 실행 중단
+                return; 
             }
 
             LocalDate today = LocalDate.now(); 
@@ -148,8 +148,8 @@ public class ShowtimeService {
     public void generateSeatsForShowtime(Showtime showtime, int rows, int numbersPerRow) { 
         List<Seat> seats = new ArrayList<>(); 
         for (int i = 0; i < rows; i++) { 
-            String seatRow = String.valueOf((char) ('A' + i)); // 좌석 행 이름을 알파벳으로 생성합니다 (A, B, C, ...).
-            for (int j = 1; j <= numbersPerRow; j++) { // 각 행당 지정된 좌석 번호 수만큼 반복합니다 (1부터 시작).
+            String seatRow = String.valueOf((char) ('A' + i)); 
+            for (int j = 1; j <= numbersPerRow; j++) { 
                 Seat seat = new Seat(); 
                 seat.setSeatRow(seatRow); 
                 seat.setSeatNumber(j); 
@@ -158,10 +158,9 @@ public class ShowtimeService {
                 seats.add(seat); 
             }
         }
-        seatRepository.saveAll(seats); // 생성된 모든 좌석 엔티티를 데이터베이스에 한 번의 배치 작업으로 저장 (성능에 효율적)
-        // Showtime 엔티티의 seats 필드에도 생성된 좌석 목록을 명시적으로 설정하여,
-        // JPA 컨텍스트 내에서 Showtime 객체가 최신 좌석 정보를 가지도록 합니다 (양방향 관계 관리).
-        showtime.setSeats(seats); //
-        showtimeRepository.save(showtime); // 변경된 Showtime 정보(좌석 목록 포함)를 데이터베이스에 저장합니다.
+        seatRepository.saveAll(seats); // 생성된 모든 좌석 엔티티를 데이터베이스에 한 번의 배치 작업으로 저장 
+        
+        showtime.setSeats(seats); 
+        showtimeRepository.save(showtime); 
     }
 }

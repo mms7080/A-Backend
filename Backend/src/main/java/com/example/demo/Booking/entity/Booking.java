@@ -68,9 +68,9 @@ public class Booking {
     // 고객 유형(CustomerCategory)별로 선택한 인원수를 저장하는 맵(Map)
     @ElementCollection(fetch = FetchType.LAZY)
     @CollectionTable(name = "booking_passenger_counts", joinColumns = @JoinColumn(name = "booking_id"))
-    @MapKeyColumn(name = "customer_category") // Map의 Key를 저장할 컬럼 이름
-    @MapKeyEnumerated(EnumType.STRING) // Map의 Key 타입(CustomerCategory Enum)을 문자열로 저장
-    @Column(name = "count") // Map의 Value(인원수)를 저장할 컬럼 이름
+    @MapKeyColumn(name = "customer_category") 
+    @MapKeyEnumerated(EnumType.STRING) 
+    @Column(name = "count") 
     private Map<CustomerCategory, Integer> passengerCounts = new HashMap<>();
 
     // 예매의 총 결제 금액
