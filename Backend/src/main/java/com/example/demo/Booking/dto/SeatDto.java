@@ -1,8 +1,6 @@
 package com.example.demo.Booking.dto;
 
-import com.example.demo.Booking.entity.Screening;
 import com.example.demo.Booking.entity.Seat;
-import com.example.demo.Booking.entity.SeatStatus;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,37 +11,25 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SeatDto {
     
-	private Long id; // 좌석 고유 식별자
-	private String seatRow; // 좌석 행
-	private Integer seatNumber; // 좌석 번호
-	private SeatStatus status; // 좌석 상태
-	private Long screeningId; // 연관된 상영회차 ID
+    private Long id;
+    private String seatRow;
+    private Integer seatNumber;
+    private String status;
+    private Long showtimeId;
 
-	// 엔티티 -> DTO 변환
-	public static SeatDto fromEntity(Seat seat){
-		return new SeatDto(
-			seat.getId(),
-			seat.getSeatRow(),
-			seat.getSeatNumber(),
-			seat.getStatus(),
-			seat.getScreening() !=null
-				? seat.getScreening().getId() : null
-		);
-	}
-		// DTo-> 엔티티 변환
-		public Seat toEntity(){
-			Seat seat = new Seat();
-			seat.setId(this.id);
-			seat.setSeatRow(this.seatRow);
-			seat.setSeatNumber(this.seatNumber);
-			seat.setStatus(this.status);
+    public static SeatDto fromEntity(Seat seat){
+        if (seat == null){
+            return null;
+        }
 
-			if(this.screeningId !=null){
-				Screening scr = new Screening();
-				scr.setId(this.screeningId);
-				seat.setScreening(scr);
-			}
-			return seat;
-		}
-	
+        Long showtimeIdResult = (seat.getShowtime() != null) ? seat.getShowtime().getId() : null;
+
+        return new SeatDto(
+            seat.getId(),
+            seat.getSeatRow(),
+            seat.getSeatNumber(),
+            seat.getStatus().name(),
+            showtimeIdResult
+        );
+    }
 }

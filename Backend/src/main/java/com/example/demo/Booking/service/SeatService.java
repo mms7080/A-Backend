@@ -1,169 +1,107 @@
 package com.example.demo.Booking.service;
 
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.StringUtils;
 
-import com.example.demo.Booking.dao.ScreeningDao;
-import com.example.demo.Booking.dao.SeatDao;
-import com.example.demo.Booking.entity.Screening;
+import com.example.demo.Booking.dto.SeatDto;
 import com.example.demo.Booking.entity.Seat;
 import com.example.demo.Booking.entity.SeatStatus;
+import com.example.demo.Booking.repository.SeatRepository;
 
-
+// 특정 상영시간의 좌석 조회, 좌석 상태 변경(임시 선택, 확정, 해제) 등의 기능을 제공
 @Service
 public class SeatService {
-	private final SeatDao seatDao;
-	private final ScreeningDao screeningDao;
 
-    public SeatService(SeatDao seatDao, ScreeningDao screeningDao) {
-        this.seatDao = seatDao;
-		this.screeningDao = screeningDao;
+    private final SeatRepository seatRepository;
+
+    public SeatService(SeatRepository seatRepository){
+        this.seatRepository = seatRepository;
     }
 
-	// 모든 좌석 조회
-	@Transactional(readOnly = true)
-	public List<Seat> getAllSeats(){
-		return seatDao.findAll();
-	}
-    
-    // 단일 좌석 조회(ID로 조회)
+    // 특정 상영시간(showtimeId)에 해당하는 모든 좌석 정보를 SeatDto 형태로 조회
     @Transactional(readOnly = true)
-    public Seat getById(Long id){
-        return seatDao.findById(id)
-            .orElseThrow(() -> new IllegalArgumentException("유효하지 않은 좌석 ID: " + id));
+    public List<SeatDto> getSeatsForShowtime(Long showtimeId) { //
         
-    }
-    
-
-	// 특정 상영회차에 속한 좌석 목록 조회
-	@Transactional(readOnly = true)
-	public List<Seat> getSeatsByScreening(Long screeningId){
-		return seatDao.findByScreeningId(screeningId);
-	}
-
-	// 특정 상영회차의 사용 가능한 좌석 수 반환
-	@Transactional(readOnly = true)
-	public long countAvailableSeats(Long screeingId){
-		return seatDao.countAvailable(screeingId);
-	}
-
-	// 특정 상영회차에서 지정된 개수(count)만큼 연속된 사용 가능한 좌석을 찾음
-	@Transactional(readOnly = true) // 읽기 전용 트랜잭션 설정
-	public List<Seat> findContiguousSeats(Long screeningId, int count){
-		// 1. 해당 상영회차의 모든 사용 가능한 좌석을 가져와서 행(row)과 번호(number) 순으로 정렬합니다.
-		List<Seat> availableSeats = seatDao.findByScreeningId(screeningId).stream()
-				.filter(seat -> seat.getStatus() == SeatStatus.AVAILABLE) // 사용 가능한 좌석만 필터링
-				.sorted(Comparator
-						.comparing(Seat::getSeatRow) // 행(row) 기준으로 먼저 정렬 (예: "A", "B")
-						.thenComparing(Seat::getSeatNumber)) // 그 다음 좌석 번호(number) 기준으로 정렬 (예: 1, 2)
-				.collect(Collectors.toList());
-        // 2. 슬라이딩 윈도우 방식으로 연속된 좌석 그룹을 탐색
-        // 'i'는 현재 윈도우의 시작 인덱스를 나타냄
-        // 'availableSeats.size() - count'는 윈도우가 끝까지 이동할 수 있는 최대 시작 인덱스
-        for (int i =0; i <=availableSeats.size() - count; i++){
-            boolean isContiguous = true; 
-            List<Seat> currenContiguousSeats = new ArrayList<>();
-            currenContiguousSeats.add(availableSeats.get(i)); // 첫번째 좌석 추가
-
-            // 나머지 좌석들을 확인하며 연속성을 검사
-            for(int j =1; j<count; j++){
-                Seat prevSeat = availableSeats.get(i + j -1); // 이전 좌석
-                Seat currentSeat = availableSeats.get(i + j);  // 현재 좌석
-
-                // 같은 행인지 확인, 행이 다르면 연속적이지 않음
-                if (!prevSeat.getSeatRow().equals(currentSeat.getSeatRow())){
-                    isContiguous = false;
-                    break;
-                }
-                // 좌석 번호가 이전 좌석 번호 + 1인지 확인, 연속적이지 않으면 중단
-                if(currentSeat.getSeatNumber() != prevSeat.getSeatNumber() +1) {
-                    isContiguous = false;
-                    break;
-                }
-                currenContiguousSeats.add(currentSeat); // 연속적이면 현재 좌석을 리스트에 추가
-            }
-            // 3. 만약 현재 윈도우의 모든 좌석이 연속적이라면, 해당 좌석 리스트를 반환
-            if(isContiguous){
-                return currenContiguousSeats;
-            }
-        }
-        // 4. 모든 윈도우를 탐색했지만 연속된 좌석을 찾지 못했으면 빈 리스트를 반환
-            return List.of();
-	}
-
-	// 좌석 생성
-	@Transactional
-	public Seat createOrUpdateSeat(Seat seat){
-		validateSeat(seat);
-		return seatDao.save(seat);
-	}
-
-	// 저장 전 검증 메서드
-	private void validateSeat(Seat seat) {
-        // 1) row(행)와 number(번호) 필수 체크
-        if (!StringUtils.hasText(seat.getSeatRow())) {
-            throw new IllegalArgumentException("좌석 행(row)은 반드시 입력해야 합니다.");
-        }
-        if (seat.getSeatNumber() == null || seat.getSeatNumber() < 1) {
-            throw new IllegalArgumentException("좌석 번호는 1 이상의 값이어야 합니다.");
-        }
-
-        // 2) status(상태) 필수 체크
-        if (seat.getStatus() == null) {
-            throw new IllegalArgumentException("좌석 상태(status)는 반드시 입력해야 합니다.");
-        }
-
-        // 3) 연관된 Screening(상영회차) 유효성 검사
-        if (seat.getScreening() == null || seat.getScreening().getId() == null) {
-            throw new IllegalArgumentException("유효한 상영회차(screening)가 설정되어야 합니다.");
-        }
-        // (DAO를 통해 실제 존재 여부 확인)
-        screeningDao.findById(seat.getScreening().getId());
+        return seatRepository.findByShowtimeId(showtimeId).stream() //
+                .map(SeatDto::fromEntity) 
+                .collect(Collectors.toList()); 
     }
 
-	// 좌석 삭제
-	@Transactional
-	public void deleteSeat(Long id){
-		seatDao.deleteById(id);
-	}
-    
-	/**
-     * screeningId에 속한 샘플 좌석을 행 A~L, 번호 1~9번 열로 자동 생성(seed)
-     * 이미 좌석이 존재하면 그대로 반환(중복 시드 방지)
-     * 일괄 저장(saveAll) 처리로 성능 최적화
-     */
-    
+    // 주어진 좌석 ID 목록(seatIds)에 해당하는 좌석들의 상태를 'HELD'(임시 선택)로 변경
+    @Transactional 
+    public boolean holdSeats(List<Long> seatIds, Long showtimeId) {
+        
+        List<Seat> seatsToHold = seatRepository.findByIdIn(seatIds); //
+        
+        if (seatsToHold.size() != seatIds.size()) {
+            throw new RuntimeException("일부 좌석을 찾을 수 없습니다. (요청된 ID 개수: " + seatIds.size() + ", 조회된 좌석 개수: " + seatsToHold.size() + ")");
+        }
+
+        for (Seat seat : seatsToHold) { //
+            // 각 좌석에 대해 다음 조건들을 검증
+            // 1. 좌석이 올바른 상영시간(showtimeId)에 속하는가? (showtimeId를 통해 상영시간 일치 여부 확인)
+            // 2. 좌석의 현재 상태가 'AVAILABLE'(예약 가능)인가?
+            if (seat.getShowtime().getId().equals(showtimeId) && seat.getStatus() == SeatStatus.AVAILABLE) { //
+                seat.setStatus(SeatStatus.HELD); 
+            } else {
+                throw new RuntimeException("좌석 " + seat.getSeatRow() + seat.getSeatNumber() + "(ID:" + seat.getId() + ")는 현재 선택할 수 없는 상태입니다. (현재 상태: " + seat.getStatus() + ", 요청된 상영시간 ID: " + showtimeId + ", 좌석의 상영시간 ID: " + seat.getShowtime().getId() + ")");
+            }
+        }
+        seatRepository.saveAll(seatsToHold); 
+        return true; 
+    }
+
+
+    // 주어진 좌석 ID 목록(seatIds)에 해당하는 좌석들의 상태를 'RESERVED'(예약 완료)로 변경
+     @Transactional
+    public void confirmSeats(List<Long> seatIds, Long showtimeId) {
+        List<Seat> seatsToConfirm = seatRepository.findByIdIn(seatIds); //
+        if (seatsToConfirm.size() != seatIds.size()) { // 요청된 ID 수와 실제 조회된 좌석 수가 다르면 예외 발생
+            throw new RuntimeException("예약 확정 처리 중 일부 좌석을 찾을 수 없습니다.");
+        }
+        for (Seat seat : seatsToConfirm) { //
+            // 각 좌석에 대해 다음 조건들을 검증
+            // 1. 좌석이 올바른 상영시간(showtimeId)에 속하는가?
+            // 2. 좌석의 현재 상태가 'HELD'(임시 선택)인가?
+            if (seat.getShowtime().getId().equals(showtimeId) && seat.getStatus() == SeatStatus.HELD) { //
+                seat.setStatus(SeatStatus.RESERVED);
+            } else {
+                throw new RuntimeException("좌석 " + seat.getSeatRow() + seat.getSeatNumber() + "(ID:" + seat.getId() + ")는 예약 확정할 수 없는 상태입니다. (현재 상태: " + seat.getStatus() + ", 기대 상태: HELD)");
+            }
+        }
+        seatRepository.saveAll(seatsToConfirm); 
+    }
+
+    // 주어진 좌석 ID 목록(seatIds)에 해당하는 'HELD' 상태의 좌석들을 다시 'AVAILABLE'(예약 가능)로 되돌림
     @Transactional
-    public List<Seat> seedSeats(Long screeningId) {
-        // 1) 상영회차가 유효한지 확인
-        Screening screening = screeningDao.findById(screeningId);
-
-        // 2) 이미 시드된 좌석이 있으면 재사용
-        List<Seat> exisiting = seatDao.findByScreeningId(screeningId);
-        if(!exisiting.isEmpty()){
-            return exisiting;
+    public void releaseSeats(List<Long> seatIds, Long showtimeId) {
+        List<Seat> seatsToRelease = seatRepository.findByIdIn(seatIds); 
+        
+        if (seatsToRelease.size() != seatIds.size()) {
+            // 실제 운영 환경에서는 이 상황에 대한 로깅이 중요할 수 있음
+            System.err.println("좌석 해제(release) 처리 중 일부 좌석 ID를 찾을 수 없거나 유효하지 않습니다. 요청된 ID 개수: " + seatIds.size() + ", 실제 처리 대상 좌석 개수: " + seatsToRelease.size());
         }
-            
 
-        // 3) A~L(5행), 각 행당 1~9번 좌석 생성
-        List<Seat> created = new ArrayList<>();
-        for(char row = 'A'; row <='L'; row++){
-            for(int num = 1; num <=9; num++){
-                Seat seat = new Seat();
-                seat.setSeatRow(String.valueOf(row)); // 행 설정(문자)
-                seat.setSeatNumber(num); // 열 설정(숫자)
-                seat.setStatus(SeatStatus.AVAILABLE); // 초기 상태: 사용 가능
-                seat.setScreening(screening); // 상영회차 연관
-                created.add(seat);
+        for (Seat seat : seatsToRelease) { //
+           
+            if (seat.getShowtime().getId().equals(showtimeId) && seat.getStatus() == SeatStatus.HELD) { //
+                seat.setStatus(SeatStatus.AVAILABLE); 
             }
+            // 'RESERVED' 상태의 좌석은 이 메서드에서 변경하지 않습니다. (별도의 '예매 취소' 로직 필요)
+            // 'AVAILABLE' 상태의 좌석도 변경할 필요가 없습니다.
         }
-        // 4) 일괄 저장 후 반환
-        return seatDao.saveAll(created);
+        if (!seatsToRelease.isEmpty()) { 
+            seatRepository.saveAll(seatsToRelease); 
+        }
+    }
+
+    // 특정 좌석 ID(seatId)에 해당하는 좌석(Seat) 엔티티를 조회
+    @Transactional(readOnly = true)
+    public Seat getSeatById(Long seatId) { 
+        return seatRepository.findById(seatId) // SeatRepository를 사용하여 ID로 좌석을 찾습니다.
+                .orElseThrow(() -> new RuntimeException("Seat not found with id: " + seatId));
     }
 }
