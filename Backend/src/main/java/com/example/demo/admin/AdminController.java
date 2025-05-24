@@ -5,6 +5,8 @@ import com.example.demo.Event.Event;
 import com.example.demo.Event.EventRepository;
 import com.example.demo.Movie.Movie;
 import com.example.demo.Movie.MovieRepository;
+import com.example.demo.Payment.Payment;
+import com.example.demo.Payment.PaymentRepository;
 import com.example.demo.Store.StoreRepository;
 
 import java.util.List;
@@ -24,13 +26,18 @@ public class AdminController {
     private final StoreRepository storeRepository;
     private final MovieRepository movieRepository;
     private final EventRepository eventRepository;
+    private final PaymentRepository paymentRepository;
 
-    public AdminController(UserRepository userRepository, StoreRepository storeRepository,
-            MovieRepository movieRepository,EventRepository eventRepository) {
+    public AdminController(UserRepository userRepository,
+            StoreRepository storeRepository,
+            MovieRepository movieRepository,
+            EventRepository eventRepository,
+            PaymentRepository paymentRepository) {
         this.userRepository = userRepository;
         this.storeRepository = storeRepository;
         this.movieRepository = movieRepository;
         this.eventRepository = eventRepository;
+        this.paymentRepository = paymentRepository;
     }
 
     // 총 회원 수
@@ -79,6 +86,12 @@ public class AdminController {
     @GetMapping("/event-count")
     public long getEventCount() {
         return eventRepository.count();
+    }
+
+    // 스토어 매출 전체 조회
+    @GetMapping("/payments")
+    public List<Payment> getAllPayments() {
+        return paymentRepository.findAll(Sort.by(Sort.Direction.DESC, "approvedAt"));
     }
 
 }
