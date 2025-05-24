@@ -26,6 +26,12 @@ public class MovieDao {
     }
 
 
+    public List<Movie> findForMoviePage() {
+        return repo.findIdAndRankAndDescriptionAndScoreAndTitleAndRateAndLabelAndReleaseDateAndLikeNumberAndPosterByOrderByIdAsc();
+    }
+
+
+
     // 초기 데이터 입력
     @PostConstruct
     @Transactional
