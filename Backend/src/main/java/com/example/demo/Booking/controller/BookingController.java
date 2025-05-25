@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @RestController
 @RequestMapping("/api/booking")
-@CrossOrigin(origins = "http:/localhost:3000", allowCredentials = "true")
+@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 public class BookingController {
     private final TheaterService theaterService;
     private final ShowtimeService showtimeService;

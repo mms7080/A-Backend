@@ -1,18 +1,19 @@
 package com.example.demo.Booking.service;
 
-import com.example.demo.Booking.dto.BookingRequestDto; 
-import com.example.demo.Booking.dto.BookingResponseDto; 
+import com.example.demo.Booking.dto.BookingRequestDto;
+import com.example.demo.Booking.dto.BookingResponseDto;
 import com.example.demo.Booking.entity.*;
-import com.example.demo.Booking.exeception.InvalidRequestException;
-import com.example.demo.Booking.exeception.ResourceNotFoundException;
-import com.example.demo.Booking.repository.BookingRepository; 
-import com.example.demo.User.User; 
-import com.example.demo.User.UserRepository; 
-import com.example.demo.Payment.Payment; 
-import com.example.demo.Payment.PaymentRepository; 
+import com.example.demo.Booking.repository.BookingRepository;
+import com.example.demo.User.User;
+import com.example.demo.User.UserRepository;
+import com.example.demo.Payment.Payment;
+import com.example.demo.Payment.PaymentRepository;
+
+import com.example.demo.Booking.exception.ResourceNotFoundException; 
+import com.example.demo.Booking.exception.InvalidRequestException; // 권한 없음 등을 위해 사용 가능
 
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional; 
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -47,7 +48,7 @@ public class BookingService {
     public BookingResponseDto createBookingAttempt(BookingRequestDto requestDto){
         // 1. 사용자 정보 조회 
         User user = userRepository.findById(requestDto.getUserId())
-                    .orElseThrow(()-> new RuntimeException("User not foung with id:" + requestDto.getUserId()));
+                    .orElseThrow(()-> new RuntimeException("User not found with id:" + requestDto.getUserId()));
         
         // 2. 상영시간 정보 조회
         Showtime showtime = showtimeService.getShowtimeById(requestDto.getShowtimeId());
