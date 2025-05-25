@@ -18,5 +18,5 @@ public class BookingRequestDto {
 
     private Long showtimeId;
     private Map<CustomerCategory, Integer> passengerCounts;
-    private List<Long> setaIds;
+    private List<Long> seatIds;
 }

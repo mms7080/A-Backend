@@ -50,7 +50,7 @@ public class ShowtimeService {
         LocalDateTime startOfDay = date.atStartOfDay();
         LocalDateTime endOfDay = date.plusDays(1).atStartOfDay();
 
-        List<Showtime> showtimes = showtimeRepository.findShowtimes(theaterId, movieId, startOfDay, startOfDay);
+        List<Showtime> showtimes = showtimeRepository.findShowtimes(theaterId, movieId, startOfDay, endOfDay);
 
         return showtimes.stream().map(showtime -> {
             long availableSeats = seatRepository.findByShowtimeIdAndStatus(showtime.getId(), SeatStatus.AVAILABLE).size();
