@@ -1,10 +1,12 @@
 package com.example.demo.Join;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -12,7 +14,6 @@ import com.example.demo.User.DAOUser;
 import com.example.demo.User.User;
 
 @Controller
-@CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")/* 프론트주소 바뀌면 같이 바꾸어 줘어야 함. */
 public class joinLogicController{
 
     @Autowired
@@ -38,6 +39,15 @@ public class joinLogicController{
         @RequestParam("address_detail") String address_detail
         ){
 
+        /* 포맷터 정의 (yyyy-MM-dd) */
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        /* 오늘 날짜 가져오기 */
+        LocalDate today = LocalDate.now();
+
+        /* 포맷 적용 */
+        String formattedDate = today.format(formatter);
+
         /* ID 중복여부는 프론트엔드에서 확인하므로 즉시 DB에 회원정보 입력 */
         daoUser.Insert(
             new User(
@@ -53,7 +63,9 @@ public class joinLogicController{
                 address,
                 address_detail,
                 "USER",
-                null
+                null,
+                formattedDate
+
             )
         );
 

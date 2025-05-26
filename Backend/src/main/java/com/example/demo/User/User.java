@@ -38,5 +38,6 @@ public class User{
     private String address_detail;/* 유저의 상세주소 ( 예 : "충현로 38번길 25" ) */
     private String auth;/* 유저의 권한 ( 예 : "USER" ) */
     private String platform;/* OAuth2 유저의 경우, 로그인한 플랫폼 */
+    private String createdate;/* 계정 생성 날짜 */
 
 }

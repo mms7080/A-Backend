@@ -27,7 +27,8 @@ public class Test implements CommandLineRunner{
                 "서울시 은평구",
                 "문새로72번길 13",
                 "ADMIN",
-                null
+                null,
+                "2025-05-16"
             )
         );
         daoUser.Insert(/* 테스트를 위한 유저 정보 입력 2 */
@@ -44,7 +45,8 @@ public class Test implements CommandLineRunner{
                 "경기도 남양주시",
                 "조화로14번길 26",
                 "USER",
-                null
+                null,
+                "2025-05-23"
             )
         );        
     }    

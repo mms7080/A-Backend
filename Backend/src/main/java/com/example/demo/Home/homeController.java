@@ -10,7 +10,6 @@ import java.nio.file.Paths;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.http.RequestEntity.BodyBuilder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,8 +18,6 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.example.demo.Annotations.Auth;
 import com.example.demo.User.User;
-import org.springframework.web.bind.annotation.RequestParam;
-
 
 @Controller
 public class homeController{

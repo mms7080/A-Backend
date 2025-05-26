@@ -1,5 +1,8 @@
 package com.example.demo.OAuthLogin;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,6 +62,15 @@ public class userDetailsServiceCustom extends DefaultOAuth2UserService implement
 
         User user = daoUser.findUsername(username); // 중복 처리된 안전한 조회
 
+        /* 포맷터 정의 (yyyy-MM-dd) */
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+        /* 오늘 날짜 가져오기 */
+        LocalDate today = LocalDate.now();
+
+        /* 포맷 적용 */
+        String formattedDate = today.format(formatter);
+
         if (user == null) {
             User newuser = new User(
                 null,
@@ -67,7 +79,9 @@ public class userDetailsServiceCustom extends DefaultOAuth2UserService implement
                 name,
                 null, null, null, null, null, null, null,
                 "USER",
-                platform
+                platform,
+                formattedDate
+
             );
             daoUser.Insert(newuser);
             user = newuser;
