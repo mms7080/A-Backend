@@ -22,4 +22,7 @@ public interface SeatRepository extends JpaRepository<Seat, Long> {
      * 주어진 좌석 ID 목록(seatIds)에 해당하는 모든 좌석(Seat) 엔티티를 조회
      */
     List<Seat> findByIdIn(List<Long> seatIds);
+
+    long countByShowtimeIdAndStatus(Long showtimeId, SeatStatus status);
+    
 }

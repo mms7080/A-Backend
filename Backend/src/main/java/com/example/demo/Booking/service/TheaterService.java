@@ -60,7 +60,8 @@ public class TheaterService {
                     new Theater(null, "수원역점", "경기/인천"), 
                     new Theater(null, "인천터미널점", "경기/인천"), 
                     new Theater(null, "대전중앙로점", "충청/대전"), 
-                    new Theater(null, "광주상무점", "전라/광주") 
+                    new Theater(null, "광주상무점", "전라/광주")
+                
             );
             theaterRepository.saveAll(theaters);
             System.out.println("초기 영화관 데이터가 "+ theaters.size() +"개 생성되었습니다.");

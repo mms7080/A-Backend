@@ -22,6 +22,7 @@ import com.example.demo.Booking.service.BookingService;
 import com.example.demo.Booking.service.SeatService;
 import com.example.demo.Booking.service.ShowtimeService;
 import com.example.demo.Booking.service.TheaterService;
+import com.example.demo.Movie.MovieRepository;
 import com.example.demo.Payment.Payment;
 import com.example.demo.User.User;
 
@@ -40,21 +41,24 @@ public class BookingController {
     private final ShowtimeService showtimeService;
     private final SeatService seatService;
     private final BookingService bookingService;
+    private final MovieRepository movieRepository;
 
     public BookingController (TheaterService theaterService,
                               ShowtimeService showtimeService,
                               SeatService seatService,
-                              BookingService bookingService){
+                              BookingService bookingService,
+                              MovieRepository movieRepository) {
     this.theaterService =theaterService;
     this.showtimeService = showtimeService;
     this.seatService = seatService;
     this.bookingService = bookingService;
+    this.movieRepository = movieRepository;
                               }
 
     // 1. 상영시간 선택 페이지
     // 등록된 모든 영화관 지역 목록을 조회
     @GetMapping("/regions")
-    public ResponseEntity<List<String>> getAllRegions() {
+    public ResponseEntity<List<String>> getAllRegions() { 
         List<String> regions = theaterService.getAllRegions();
         return ResponseEntity.ok(regions);
     }
@@ -176,5 +180,7 @@ public class BookingController {
         BookingResponseDto bookingDetails = bookingService.getBookingDetails(bookingId, user.getId()); 
         return ResponseEntity.ok(bookingDetails);
     }
+
+    // 4.
 
 }
