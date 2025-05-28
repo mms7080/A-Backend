@@ -94,7 +94,7 @@ public class StoreService {
                 new Store(null, "티켓", "더 부티크 스위트 관람권", "더 부티크 스위트 전용관람권", "40000", null, "추천", "#1e88e5", "/images/ticket2.png"),
                 new Store(null, "팝콘/음료/콤보", "더블콤보", "팝콘(R) 2 + 탄산음료(R) 2", "13900", null, "BEST", "red", "/images/corn.png"),
                 new Store(null, "팝콘/음료/콤보", "러브콤보", "팝콘(L) 1 + 탄산음료(R) 2", "10900", "11900", "BEST", "red", "/images/lovecorn.png"),
-                new Store(null, "포인트몰", "1천원 할인쿠폰", "일반/VIP 사용가능", "1000", null, null, null, "/images/coupon.png")
+                new Store(null, "포인트몰", "1천원 할인쿠폰", "일반/VIP 사용가능", "900", "1000", null, null, "/images/coupon.png")
             );
         
             repo.saveAll(items);
