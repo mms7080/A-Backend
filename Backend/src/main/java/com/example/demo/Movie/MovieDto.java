@@ -39,7 +39,9 @@ public class MovieDto {
 
     // public String[] getUrls() { return movie.getUrls(); }
 
-    public String getLabel() { return movie.getLabel(); }
+    // public String getLabel() { return movie.getLabel(); }
+    public Boolean getImax() { return movie.getImax();}
+    public Boolean get_4dx() { return movie.get_4dx();}
 
     public Double getReserveRate() { return movie.getReserveRate(); }
 
@@ -78,7 +80,9 @@ public class MovieDto {
 
     // public void setUrls(String[] urls) { movie.setUrls(urls); }
 
-    public void setLabel(String label) { movie.setLabel(label); }
+    // public void setLabel(String label) { movie.setLabel(label); }
+    public void setImax(Boolean imax) {movie.setImax(imax);}
+    public void set_4dx(Boolean _4dx) {movie.set_4dx(_4dx);}
 
     public void setReserveRate(Double reserveRate) { movie.setReserveRate(reserveRate); }
 

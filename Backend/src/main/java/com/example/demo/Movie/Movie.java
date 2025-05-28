@@ -64,7 +64,9 @@ public class Movie {
     // @Column(name = "urls")
     // private String[] urls;          /* 예고편이나 스틸컷 등 기타 링크 */
 
-    private String label;           /* MEGA ONLY, DOLBY등 비고 */
+    // private String label;           /* MEGA ONLY, DOLBY등 비고 */
+    private Boolean imax;
+    private Boolean _4dx;  
 
     @Column(name = "reserve_rate")
     private Double reserveRate;     /* 예매율(임시) */
