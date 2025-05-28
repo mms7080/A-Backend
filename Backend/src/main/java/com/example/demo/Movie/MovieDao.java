@@ -27,7 +27,7 @@ public class MovieDao {
 
 
     public List<Movie> findForMoviePage() {
-        return repo.findIdAndRankAndDescriptionAndScoreAndTitleAndRateAndLabelAndReleaseDateAndLikeNumberAndPosterByOrderByIdAsc();
+        return repo.findIdAndRankAndDescriptionAndScoreAndTitleAndRateAndReleaseDateAndLikeNumberAndPosterAndImaxAnd_4dxAndReserveDateByOrderByIdAsc();
     }
 
 
