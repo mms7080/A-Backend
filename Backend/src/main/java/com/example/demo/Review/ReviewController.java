@@ -18,15 +18,13 @@ public class ReviewController {
     @Autowired
     ReviewDao dao;
 
-    @GetMapping("/all")/* 모든든 리뷰들을 불러오기 */
+    @GetMapping("/all")/* 모든 리뷰들을 불러오기 */
     public List<Review> getAllReviews() {
-        return null;
-        //return dao.findAll();
+        return dao.findAll();
     }
     @GetMapping("/{id}")/* 영화 ID를 기반으로 리뷰들을 불러오기 */
     public List<Review> getReviewsByMovieID(@PathVariable Long id) {
-        return null;
-        //return dao.findForMoviePage();
+        return dao.findbymovieid(id);
     }
 
 }

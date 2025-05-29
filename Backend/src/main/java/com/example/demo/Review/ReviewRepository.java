@@ -1,5 +1,12 @@
 package com.example.demo.Review;
 
-public class ReviewRepository {
-    
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface ReviewRepository extends JpaRepository<Review, Long> {
+    public List<Review> findAll();
+    public List<Review> findbymovieid(Long movieid);
 }

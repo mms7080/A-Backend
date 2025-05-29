@@ -36,6 +36,8 @@ public class Review {
     )
     private Long id;
 
+    private Long movieid; /* 리뷰가 작성된 영화의 ID 값 */
+
     private String author; /* 작성자의 아이디(username) */
 
     private String content; /* 리뷰의 내용 */
