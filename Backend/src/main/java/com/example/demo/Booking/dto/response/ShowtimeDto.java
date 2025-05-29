@@ -1,47 +1,70 @@
 package com.example.demo.Booking.dto.response;
 
- 
-import lombok.AllArgsConstructor;
+import com.example.demo.Booking.entity.Seat;
+import com.example.demo.Booking.entity.SeatStatus;
+import com.example.demo.Booking.entity.Showtime; 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
-
+// 상영 시간표 전달
 @Getter 
-@Setter 
 @NoArgsConstructor 
-@AllArgsConstructor 
 public class ShowtimeDto {
 
-    // 상영 시간의 고유 ID (Showtime 엔티티의 기본 키와 매칭) 
-    private Long id;
+    private Long showtimeId;
+    private MovieBookingInfoDto movieInfo;
+    private TheaterDto theateInfo;
+    private String startTime;
+    private String auditoriumName;
+    private Integer totalSeats;
+    private Integer avilableSeats;
 
-    /** 상영되는 영화의 ID */
-    private Long movieId;
+    public ShowtimeDto(Showtime showtime){
+        this.showtimeId = showtime.getId();
 
-    /** 상영이 이루어지는 극장의 ID */
-    private Long theaterId;
+        if(showtime.getMovie() != null){
+            this.movieInfo = MovieBookingInfoDto.fromEntity(showtime.getMovie());
+        }
 
-    //상영이 이루어지는 극장의 이름.
-    private String theaterName;
+        if(showtime.getTheater() != null){
+            this.theateInfo = TheaterDto.fromEntity(showtime.getTheater());
+        }
 
-    /** 실제 상영이 이루어지는 상영관의 이름 또는 번호 (예: "1관", "IMAX관") */
-    private String screenNameOrNumber;
+        if(showtime.getStartTime() != null){
+            this.startTime = showtime.getStartTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm0"));
+        }
+        this.auditoriumName = showtime.getAuditoriumName();
 
-    /** 영화 상영 시작 시간 */
-    private LocalDateTime startTime;
+        if(showtime.getSeats() != null){
+            this.totalSeats = showtime.getSeats().size();
+            this.avilableSeats = (int) showtime.getSeats().stream()
+                .filter(seat -> seat.getStatus() == SeatStatus.AVAILABLE)
+                .count();
+        } else{
+            this.totalSeats =0;
+            this.avilableSeats =0;
+        }
 
-    /** 영화 상영 종료 시간 (선택적이며, 시작 시간과 영화 러닝타임으로 계산될 수도 있음) */
-    private LocalDateTime endTime;
+    }
 
-    /** 이 상영 시간의 기본 티켓 가격 */
-    private Double ticketPrice;
+    public ShowtimeDto(Long shotimeId, MovieBookingInfoDto movieInfo, TheaterDto theaterInfo,String startTime, String auditoriumName, Integer totalSeats, Integer avilableSeats ){
+        this.showtimeId = shotimeId;
+        this.movieInfo = movieInfo;
+        this.theateInfo = theaterInfo;
+        this.startTime = startTime;
+        this.auditoriumName = auditoriumName;
+        this.totalSeats = totalSeats;
+        this.avilableSeats = avilableSeats;
+    }
 
-    /** 현재 예매 가능한 좌석 수 */
-    private Integer availableSeats;
-
-    
+    public static ShowtimeDto fromEntity(Showtime showtime){
+        if(showtime == null){
+            return null;
+        }
+        return new ShowtimeDto(showtime);
+    }
    
 }

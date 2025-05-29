@@ -1,26 +1,43 @@
 package com.example.demo.Booking.dto.response;
 
 
-
-import lombok.Data;
+import com.example.demo.Booking.entity.Theater; 
 import lombok.Getter;
-import lombok.Setter;
+import lombok.NoArgsConstructor;
 
-@Data
+
+// 극장 정보 전달
 @Getter
-@Setter
+@NoArgsConstructor
 public class TheaterDto {
 
     private Long theaterId;
     private String name;
     private String region;
-    // private String location; // 위치 정보는 필요에 따라 추가
+    
 
-    public TheaterDto(Long theaterId, String name, String region) {
+    public TheaterDto(Theater theater){
+        this.theaterId = theater.getId();
+        this.name = theater.getName();
+        this.region = theater.getRegion();
+    }
+    
+    public static TheaterDto fromEntity(Theater theater){
+        if(theater == null){
+            return null;
+        }
+        return new TheaterDto(
+            theater.getId(),
+            theater.getName(),
+            theater.getRegion()
+        );
+    }
+
+    public TheaterDto(Long theaterId, String name, String region){
         this.theaterId = theaterId;
         this.name = name;
         this.region = region;
+
     }
-    
      
 }
