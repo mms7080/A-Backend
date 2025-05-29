@@ -62,7 +62,10 @@ public class Movie {
     private String wideImage;      /* 큰 이미지 */
 
     // @Column(name = "urls")
-    // private String[] urls;          /* 예고편이나 스틸컷 등 기타 링크 */
+    // private String[] urls;
+
+    @Column(name = "preview_url")
+    private String trailer;         /* 예고편 */   
 
     private String label;           /* MEGA ONLY, DOLBY등 비고 */
 

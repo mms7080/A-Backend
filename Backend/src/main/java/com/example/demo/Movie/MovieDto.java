@@ -39,6 +39,8 @@ public class MovieDto {
 
     // public String[] getUrls() { return movie.getUrls(); }
 
+    public String getTrailer() { return movie.getTrailer(); }
+
     public String getLabel() { return movie.getLabel(); }
 
     public Double getReserveRate() { return movie.getReserveRate(); }
@@ -78,6 +80,8 @@ public class MovieDto {
 
     // public void setUrls(String[] urls) { movie.setUrls(urls); }
 
+    public void setTrailer(String trailer) {movie.setTrailer(trailer);}
+
     public void setLabel(String label) { movie.setLabel(label); }
 
     public void setReserveRate(Double reserveRate) { movie.setReserveRate(reserveRate); }
@@ -85,4 +89,5 @@ public class MovieDto {
     public void setTotalView(Long totalView) { movie.setTotalView(totalView); }
 
     public void setRank(Integer rank) { movie.setRank(rank); }
+
 }
