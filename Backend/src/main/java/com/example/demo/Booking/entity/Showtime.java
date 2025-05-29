@@ -7,6 +7,7 @@ import java.util.List;
 import com.example.demo.Movie.Movie;
 
 import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -16,47 +17,67 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
+@Setter
 @Entity
 @Table(name = "showtimes")
 // 상영 시간표 정보 엔티티
 public class Showtime {
     
     @Id
-    @GeneratedValue(
-        strategy = GenerationType.IDENTITY
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
 
     private Long id; 
 
-    // 상영시간에 상영될 영화 정보
-    // Movie엔티티와 ManyToOne 관계
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "movie_id")
+    @JoinColumn(name = "movie_id", nullable = false)
     private Movie movie;
 
-    // 상영시간이 진행될 영화관 정보
-    // Theater 엔티티와 ManyToOne 
+    // 여러 상영시간표(Showtime)는 하나의 극장(Theater)에 해당
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "theater_id")
+    @JoinColumn(name = "theater_id", nullable = false)
     private Theater theater;
 
-    // 영화 상영 시작 정확한 날짜와 시간
-    private LocalDateTime startTime;
+    @Column(nullable = false)
+    private LocalDateTime startTime; // 상영 시작 시간
+    
 
-    // 실제 영화가 상영되는 상영관 이름
-    private String auditoriumName;
+    @Column(nullable = false, length = 50)
+    private String auditoriumName; // 상영관 이름
 
-    // 상영 회차의 기본 성인 티켓 가격
-    private Double basePrice;
-
-    // 상영시간에 할당된 모든 좌석 목록
+    // 하나의 상영시간표(Showtime)는 여러 좌석(Seat)을 가짐
     @OneToMany(mappedBy = "showtime", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
-    private List<Seat> seats = new ArrayList<>(); //초기에는 빈 리스트로 생성
+    private List<Seat> seats = new ArrayList<>();
+
+    // 하나의 상영시간표(Showtime)는 여러 예매(Booking) 정보를 가짐
+    @OneToMany(mappedBy = "showtime", fetch = FetchType.LAZY) 
+    private List<Booking> bookings = new ArrayList<>();
+
+    @Builder
+    public Showtime(Movie movie, Theater theater, LocalDateTime startTime, String auditoriumName) {
+        this.movie = movie;
+        this.theater = theater;
+        this.startTime = startTime;
+        this.auditoriumName = auditoriumName;
+    }
+
+    public void addSeat(Seat seat) {
+        this.seats.add(seat);
+        if (seat.getShowtime() != this) { // 무한루프 방지
+            seat.setShowtime(this);
+        }
+    }
+
+     public void addBooking(Booking booking) {
+        this.bookings.add(booking);
+        if (booking.getShowtime() != this) { // 무한루프 방지
+            booking.setShowtime(this);
+        }
+    }
 }

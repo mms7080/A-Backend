@@ -1,93 +1,114 @@
 package com.example.demo.Booking.entity;
 
-
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import com.example.demo.Payment.Payment;
-import com.example.demo.User.User;
-
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.CollectionTable;
-import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.MapKeyColumn;
-import jakarta.persistence.MapKeyEnumerated;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import com.example.demo.Payment.Payment; 
+import com.example.demo.User.User;     
+import jakarta.persistence.*;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
 
-// 사용자 예매 정보를 총괄하는 엔티티
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
+
+
 @Entity
-@Table(name = "bookings")
+@Table(name = "bookings") 
+@Getter
+@Setter
+@NoArgsConstructor 
 public class Booking {
+
     @Id
-    @GeneratedValue(
-        strategy = GenerationType.IDENTITY
-    )
+    @GeneratedValue(strategy = GenerationType.IDENTITY) 
     private Long id;
 
-    // 예매를 진행한 사용자 정보
+   
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
+    @JoinColumn(name = "user_id", nullable = false) 
     private User user;
+
     
-    // 예매 대상이 된 상영시간 정보
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "showtime_id")
+    @JoinColumn(name = "showtime_id", nullable = false) 
     private Showtime showtime;
 
-    // 예매 사용자가 선택한 좌석 목록
-    @ManyToMany(fetch = FetchType.LAZY)
+    
+    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
-        name = "booking_selected_seats",
-        joinColumns = @JoinColumn(name = "booking_id"),
-        inverseJoinColumns = @JoinColumn(name = "seat_id")
+            name = "booking_selected_seats", 
+            joinColumns = @JoinColumn(name = "booking_id"),       
+            inverseJoinColumns = @JoinColumn(name = "seat_id")    
     )
-    private List<Seat> selectedSeats = new ArrayList<>();
+    private Set<Seat> selectedSeats = new HashSet<>();
 
-    // 고객 유형(CustomerCategory)별로 선택한 인원수를 저장하는 맵(Map)
+    
     @ElementCollection(fetch = FetchType.LAZY)
-    @CollectionTable(name = "booking_passenger_counts", joinColumns = @JoinColumn(name = "booking_id"))
-    @MapKeyColumn(name = "customer_category") 
-    @MapKeyEnumerated(EnumType.STRING) 
-    @Column(name = "count") 
-    private Map<CustomerCategory, Integer> passengerCounts = new HashMap<>();
+    @CollectionTable(name = "booking_customer_counts", 
+                     joinColumns = @JoinColumn(name = "booking_id")) 
+    @MapKeyColumn(name = "customer_category_key") 
+    @MapKeyEnumerated(EnumType.STRING)      
+    @Column(name = "count_value")                 
+    private Map<CustomerCategory, Integer> customerCounts = new HashMap<>();
 
-    // 예매의 총 결제 금액
-    private Double totalPrice;
+    @Column(nullable = false, precision = 10, scale = 2) 
+    private BigDecimal totalPrice; 
 
-    //예매의 현재 상태
+    @CreationTimestamp // 엔티티가 생성될 때의 시간을 자동으로 기록
+    @Column(nullable = false, updatable = false)
+    private LocalDateTime bookingTime; // 예매가 이루어진 시간
+
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private BookingStatus status;
+    @Column(nullable = false, length = 30)
+    private BookingStatus status; 
 
-    // 예매가 시도되거나 최종적으로 확정된 시간
-    @Column(nullable = false)
-    private LocalDateTime bookingTime;
-
-    // 예매와 관련된 결제 정보
     @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, orphanRemoval = true)
     @JoinColumn(name = "payment_id", referencedColumnName = "id", unique = true)
     private Payment payment;
+
+
+    @Builder
+    public Booking(User user, Showtime showtime, Map<CustomerCategory, Integer> customerCounts,
+                   BigDecimal totalPrice, BookingStatus status, Payment payment) {
+        this.user = user;
+        this.showtime = showtime;
+        this.customerCounts = (customerCounts != null) ? new HashMap<>(customerCounts) : new HashMap<>();
+        this.totalPrice = totalPrice;
+        this.status = status;
+        this.payment = payment;
+    }
+
+    public void addSelectedSeat(Seat seat) {
+        this.selectedSeats.add(seat);}
+
     
+    public void setCustomerCount(CustomerCategory category, int count) {
+        if (count < 0) {
+            throw new IllegalArgumentException("인원수는 0 이상이어야 합니다.");
+        }
+        if (count == 0) {
+            this.customerCounts.remove(category);
+        } else {
+            this.customerCounts.put(category, count);
+        }
+    }
+
+    
+    /**
+     * 예매에 연결된 결제 정보를 설정합니다.
+     * Payment 엔티티에 booking 필드가 없으므로, payment 객체에 booking을 설정하는 로직을 제거합니다.
+     * @param payment 결제 정보 객체
+     */
+    public void setPayment(Payment payment) {
+        this.payment = payment;
+        // 아래의 양방향 연관관계 설정 로직은 주석 처리 또는 제거된 상태여야 합니다.
+        // if (payment != null && payment.getBooking() != this) {
+        //     payment.setBooking(this);
+        // }
+    }
 }
