@@ -18,8 +18,8 @@ public class ReviewDao {
         return repo.findAll();
     }
 
-    public List<Review> findbymovieid(Long movieid) {
-        return repo.findbymovieid(movieid);
+    public List<Review> findByMovieid(Long movieid) {
+        return repo.findByMovieid(movieid);
     }
 
     public void insert(Review review){
