@@ -4,14 +4,14 @@ import com.example.demo.Booking.dto.response.TheaterDto;
 import com.example.demo.Booking.entity.Theater;
 import com.example.demo.Booking.repository.TheaterRepository;
 import com.example.demo.Booking.exception.ResourceNotFoundException;
-import jakarta.annotation.PostConstruct;
+
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger; 
 import org.slf4j.LoggerFactory; 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList; 
+
 import java.util.Arrays;
 import java.util.Collections; 
 import java.util.HashMap; 
@@ -43,73 +43,26 @@ public class TheaterService {
         EXAMPLE_THEATER_NAMES_BY_REGION = Collections.unmodifiableMap(tempMap);
     }
 
-    @PostConstruct
-    @Transactional
-    public void initializeTheaters() {
-        log.info("Initializing theaters for each region...");
-        List<String> regions = regionService.getAllRegions();
-
-        for (String region : regions) {
-            List<Theater> existingTheatersInRegion = theaterRepository.findByRegion(region);
-            int currentTheaterCount = existingTheatersInRegion.size();
-            int theatersToCreateTarget = 4; // 각 지역별 목표 극장 수
-
-            if (currentTheaterCount < theatersToCreateTarget) {
-                List<String> exampleNamesForRegion = EXAMPLE_THEATER_NAMES_BY_REGION.getOrDefault(region, new ArrayList<>());
-                List<String> existingNames = existingTheatersInRegion.stream().map(Theater::getName).collect(Collectors.toList());
-                int namesCreated = 0;
-
-                // 1. 예시 목록에서 아직 없는 이름으로 생성
-                for (String exampleName : exampleNamesForRegion) {
-                    if (namesCreated >= (theatersToCreateTarget - currentTheaterCount)) break; 
-                    if (!existingNames.contains(exampleName)) {
-                        Theater newTheater = Theater.builder()
-                                .name(exampleName)
-                                .region(region)
-                                .build();
-                        theaterRepository.save(newTheater);
-                        log.info("Created theater: {} in {}", exampleName, region);
-                        namesCreated++;
-                    }
-                }
-
-                // 2. 그래도 부족하면 더미 이름으로 추가 생성
-                int stillNeedToCreate = (theatersToCreateTarget - currentTheaterCount) - namesCreated;
-                for (int i = 0; i < stillNeedToCreate; i++) {
-                    String theaterName = region + " 임시 " + (currentTheaterCount + namesCreated + i + 1) + "호점";
-                    if (!theaterRepository.findByName(theaterName).isEmpty()) { // 이름 중복 체크
-                       theaterName = region + " 임시 " + (currentTheaterCount + namesCreated + i + 1) + "호점_" + System.currentTimeMillis()%1000;
-                    }
-
-                    Theater newTheater = Theater.builder()
-                            .name(theaterName)
-                            .region(region)
-                            .build();
-                    theaterRepository.save(newTheater);
-                    log.info("Created dummy theater: {} in {}", theaterName, region);
-                }
-            }
-        }
-        log.info("Theater initialization complete.");
-    }
     
 public List<TheaterDto> getTheatersByRegion(String region) {
+        log.debug("Fetching theaters for region: {}", region); 
         List<Theater> theaters = theaterRepository.findByRegion(region);
+        if (theaters.isEmpty()) {
+            log.info("No theaters found for region: {}", region);
+        }
         return theaters.stream()
                 .map(TheaterDto::fromEntity)
                 .collect(Collectors.toList());
     }
-
+    
     public TheaterDto getTheaterById(Long theaterId) {
+        log.debug("Fetching theater by ID: {}", theaterId);
         Theater theater = theaterRepository.findById(theaterId)
-                .orElseThrow(() -> new ResourceNotFoundException("해당 ID의 극장을 찾을 수 없습니다: " + theaterId));
+                .orElseThrow(() -> {
+                    log.warn("Theater not found with ID: {}", theaterId);
+                    return new ResourceNotFoundException("해당 ID의 극장을 찾을 수 없습니다: " + theaterId);
+                });
         return TheaterDto.fromEntity(theater);
     }
 
-    public List<TheaterDto> getAllTheaters() {
-        return theaterRepository.findAll().stream()
-                .map(TheaterDto::fromEntity)
-                .collect(Collectors.toList());
-    }
-    
 }
