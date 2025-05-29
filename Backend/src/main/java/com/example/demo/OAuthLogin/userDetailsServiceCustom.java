@@ -36,28 +36,38 @@ public class userDetailsServiceCustom extends DefaultOAuth2UserService implement
         Map<String, Object> response = null;
 
         switch (provider) {
-            case "naver":
+            case "naver" -> {
                 response = oauth2user.getAttribute("response");
+                if(response == null)
+                    throw new OAuth2AuthenticationException("Response is null");
                 getid = "id";
                 name = (String) response.get("name");
                 platform = "naver";
-                break;
-            case "kakao":
+            }
+            case "kakao" -> {
                 response = oauth2user.getAttributes();
+                if(response == null)
+                    throw new OAuth2AuthenticationException("Response is null");
                 getid = "id";
+                @SuppressWarnings("unchecked")
                 Map<String, Object> kakao_account = (Map<String, Object>) response.get("kakao_account");
+                @SuppressWarnings("unchecked")
                 Map<String, Object> profile = (Map<String, Object>) kakao_account.get("profile");
                 name = (String) profile.get("nickname");
                 platform = "kakao";
-                break;
-            case "Google":
+            }
+            case "Google" -> {
                 response = oauth2user.getAttributes();
+                if(response == null)
+                    throw new OAuth2AuthenticationException("Response is null");
                 getid = "sub";
                 name = (String) response.get("name");
                 platform = "google";
-                break;
+            }
         }
 
+        if(response == null)
+            throw new OAuth2AuthenticationException("Response is null");
         String username = String.valueOf(response.get(getid));
 
         User user = daoUser.findUsername(username); // 중복 처리된 안전한 조회
