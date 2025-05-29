@@ -1,26 +1,30 @@
 package com.example.demo.Booking.repository;
 
+import com.example.demo.Booking.entity.Booking;
+import com.example.demo.Booking.entity.BookingStatus; 
+import com.example.demo.User.User; 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
-import org.springframework.data.jpa.repository.JpaRepository;
-
-import com.example.demo.Booking.entity.Booking;
-import com.example.demo.Booking.entity.BookingStatus;
-
+@Repository
 public interface BookingRepository extends JpaRepository<Booking, Long> {
 
-    
-   // 특정 사용자(userId)의 모든 예매(Booking) 내역을 조회
-   // Booking 엔티티 내 user 필드의 id를 기준으로 조회
+   List<Booking> findByUserOrderByBookingTimeDesc(User user);
 
-   List<Booking> findByUserId(Long userId);
+   @Query("SELECT b FROM Booking b WHERE b.user.id = :userId ORDER BY b.bookingTime DESC")
+   List<Booking> findAllByUserIdOrderByBookingTimeDesc(@Param("userId") Long userId);
 
-   // 특정 예매 ID(id)와 특정 예매 상태(status)를 모두 만족하는 예매(Booking) 내역을 조회
-   Optional<Booking> findByIdAndStatus(Long id, BookingStatus status);
+   List<Booking> findByStatus(BookingStatus status);
 
-   // 특정 사용자(userId)의 특정 예매 상태(status)를 가진 모든 예매(Booking) 내역을 조회
-   List<Booking> findByUserIdAndStatusOrderByBookingTimeDesc(Long userId, BookingStatus status);
-   
-    
+   List<Booking> findByBookingTimeBetween(LocalDateTime startTime, LocalDateTime endTime);
+
+   List<Booking> findByShowtimeId(Long showtimeId);
+
+   Optional<Booking> findByIdAndUser_Id(Long bookingId, Long userId);
 } 
