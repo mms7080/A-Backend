@@ -24,7 +24,7 @@ public class ReviewController {
     }
     @GetMapping("/{id}")/* 영화 ID를 기반으로 리뷰들을 불러오기 */
     public List<Review> getReviewsByMovieID(@PathVariable Long id) {
-        return dao.findbymovieid(id);
+        return dao.findByMovieid(id);
     }
 
 }
