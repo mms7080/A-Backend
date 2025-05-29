@@ -1,12 +1,12 @@
 package com.example.demo.Booking.dto.response;
 
-import com.example.demo.Booking.entity.Seat;
+
 import com.example.demo.Booking.entity.SeatStatus;
 import com.example.demo.Booking.entity.Showtime; 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
+
 import java.time.format.DateTimeFormatter;
 
 // 상영 시간표 전달
@@ -16,7 +16,7 @@ public class ShowtimeDto {
 
     private Long showtimeId;
     private MovieBookingInfoDto movieInfo;
-    private TheaterDto theateInfo;
+    private TheaterDto theaterInfo;
     private String startTime;
     private String auditoriumName;
     private Integer totalSeats;
@@ -30,7 +30,7 @@ public class ShowtimeDto {
         }
 
         if(showtime.getTheater() != null){
-            this.theateInfo = TheaterDto.fromEntity(showtime.getTheater());
+            this.theaterInfo = TheaterDto.fromEntity(showtime.getTheater());
         }
 
         if(showtime.getStartTime() != null){
@@ -53,7 +53,7 @@ public class ShowtimeDto {
     public ShowtimeDto(Long shotimeId, MovieBookingInfoDto movieInfo, TheaterDto theaterInfo,String startTime, String auditoriumName, Integer totalSeats, Integer avilableSeats ){
         this.showtimeId = shotimeId;
         this.movieInfo = movieInfo;
-        this.theateInfo = theaterInfo;
+        this.theaterInfo = theaterInfo;
         this.startTime = startTime;
         this.auditoriumName = auditoriumName;
         this.totalSeats = totalSeats;
