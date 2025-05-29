@@ -71,9 +71,9 @@ public class ReviewDao {
         insert(new Review(
             null,
             5L,//어벤져스 : 엔드게임
-            "root",
+            "lovelytourist84",
             "어벤져스 엔드게임 다시 봐도 소름...",
-            10,
+            9,
             8,
             List.of("shin1234"),
             "2025-05-03T00:00:00.000"
@@ -84,8 +84,164 @@ public class ReviewDao {
             5L,//어벤져스 : 엔드게임
             "root",
             "어벤져스 엔드게임 너무 재밌어요!...",
+            8,
+            7,
+            List.of("shin1234"),
+            "2025-05-04T00:00:00.000"
+        ));
+
+        insert(new Review(
+            null,
+            2L,//킬러 어드바이스
+            "shin1234",
+            "정말 희대의 역작입니다!",
+            7,
+            3,
+            List.of("root","shin1234"),
+            "2025-05-01T00:00:00.000"
+        ));
+        insert(new Review(
+            null,
+            2L,//킬러 어드바이스
+            "root",
+            "형편없네요",
+            4,
+            1,
+            List.of("shin1234"),
+            "2025-05-02T00:00:00.000"
+        ));
+
+        insert(new Review(
+            null,
+            3L,//인터스텔라
+            "shin1234",
+            "이 영화 정말 최고였어요! 감동받았습니다.",
+            9,
+            9,
+            List.of("root"),
+            "2025-05-05T00:00:00.000"
+        ));
+
+        insert(new Review(
+            null,
+            3L,//인터스텔라
+            "root",
+            "인터스텔라 다시 봐도 소름...",
+            7,
+            5,
+            List.of("shin1234"),
+            "2025-05-03T00:00:00.000"
+        ));
+
+        insert(new Review(
+            null,
+            3L,//인터스텔라
+            "kerasis23",
+            "인터스텔라라 너무 재밌어요!...",
+            8,
+            6,
+            List.of("shin1234"),
+            "2025-05-04T00:00:00.000"
+        ));
+
+        insert(new Review(
+            null,
+            4L,//내 이름은 알프레드 히치콕
+            "kkj7584",
+            "이 영화 정말 최고였어요! 감동받았습니다.",
+            7,
+            3,
+            List.of("root"),
+            "2025-05-05T00:00:00.000"
+        ));
+
+        insert(new Review(
+            null,
+            4L,//내 이름은 알프레드 히치콕
+            "lovelytourist84",
+            "노잼이네요",
+            3,
+            5,
+            List.of("shin1234"),
+            "2025-05-03T00:00:00.000"
+        ));
+
+        insert(new Review(
+            null,
+            4L,//내 이름은 알프레드 히치콕
+            "mns7080",
+            "내 이름은 알프레드 히치콕 너무 재밌어요!...",
             10,
             7,
+            List.of("shin1234"),
+            "2025-05-04T00:00:00.000"
+        ));
+
+
+        //movieid = 6 범죄도시는 건너뜀
+
+        insert(new Review(
+            null,
+            7L,//귀멸의 칼날 무한성편
+            "kkj7584",
+            "이 영화 정말 최고였어요! 감동받았습니다.",
+            9,
+            143,
+            List.of("root"),
+            "2025-05-05T00:00:00.000"
+        ));
+
+        insert(new Review(
+            null,
+            7L,//귀멸의 칼날 무한성편
+            "lovelytourist84",
+            "그저 그렇네요.",
+            5,
+            78,
+            List.of("shin1234"),
+            "2025-05-03T00:00:00.000"
+        ));
+
+        insert(new Review(
+            null,
+            7L,//귀멸의 칼날 무한성편
+            "mns7080",
+            "귀멸의 칼날 너무 재밌어요!...",
+            8,
+            1,
+            List.of("shin1234"),
+            "2025-05-04T00:00:00.000"
+        ));
+
+        insert(new Review(
+            null,
+            8L,//승부
+            "kkj7584",
+            "이 영화 정말 최고였어요! 감동받았습니다.",
+            8,
+            31,
+            List.of("root"),
+            "2025-05-05T00:00:00.000"
+        ));
+
+        insert(new Review(
+            null,
+            8L,//승부
+            "lovelytourist84",
+            "재미없어요.",
+            1,
+            13,
+            List.of("shin1234"),
+            "2025-05-03T00:00:00.000"
+        ));
+
+        insert(new Review(
+            null,
+            8L,//승부
+            "mns7080",
+            "승부 너무 재밌어요!...",
+            9,
+            3,
             List.of("shin1234"),
             "2025-05-04T00:00:00.000"
         ));
