@@ -75,7 +75,7 @@ public class ConfigSecurity{/* 로그인 로직 */
         .formLogin(login->login
         .loginPage(corsOrigin+"/signin")/* 로그인 페이지 */
         .loginProcessingUrl("/signin/logic")/* 로그인 처리 URL */
-        .failureUrl(corsOrigin+"/signin")/* 실패시 리다이렉트 */
+        .failureUrl(corsOrigin+"/signin?error=true")/* 실패시 리다이렉트 */
         .usernameParameter("id")/* 입력 폼의 id 필드명 */
         .passwordParameter("pw")/* 입력 폼의 pw 필드명 */
         .successHandler((req,res,auth)->{
