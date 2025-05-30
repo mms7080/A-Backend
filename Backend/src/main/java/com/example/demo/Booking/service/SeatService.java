@@ -40,13 +40,13 @@ public class SeatService {
 
         // 4. 좌석이 존재하지 않으면 새로 생성
         List<Seat> newSeats = new ArrayList<>();
-        for (char row = 'A'; row <= 'I'; row++) { // A열부터 I열까지
-            for (int number = 1; number <= 12; number++) { // 1번부터 12번까지
+        for (char row = 'A'; row <= 'I'; row++) { 
+            for (int number = 1; number <= 12; number++) {
                 Seat newSeat = Seat.builder()
                         .showtime(showtime)
                         .seatRow(String.valueOf(row))
                         .seatNumber(number)
-                        .status(SeatStatus.AVAILABLE) // 모든 좌석은 '예매 가능' 상태로 시작
+                        .status(SeatStatus.AVAILABLE) 
                         .build();
                 newSeats.add(newSeat);
             }
