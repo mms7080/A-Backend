@@ -31,6 +31,11 @@ public class ReviewDao {
         repo.save(review);
     }
 
+    @Transactional
+    public void delete(Long id) {
+        repo.deleteById(id);
+    }
+
     // 초기 데이터 입력
     @PostConstruct
     @Transactional
