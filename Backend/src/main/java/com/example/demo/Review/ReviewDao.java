@@ -137,7 +137,7 @@ public class ReviewDao {
             null,
             3L,//인터스텔라
             "kerasis23",
-            "인터스텔라라 너무 재밌어요!...",
+            "인터스텔라 너무 재밌어요!...",
             8,
             6,
             List.of("shin1234"),
@@ -205,7 +205,7 @@ public class ReviewDao {
         insert(new Review(
             null,
             7L,//귀멸의 칼날 무한성편
-            "mns7080",
+            "mms7080",
             "귀멸의 칼날 너무 재밌어요!...",
             8,
             1,
@@ -238,7 +238,7 @@ public class ReviewDao {
         insert(new Review(
             null,
             8L,//승부
-            "mns7080",
+            "mms7080",
             "승부 너무 재밌어요!...",
             9,
             3,
