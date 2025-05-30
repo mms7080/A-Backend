@@ -44,7 +44,7 @@ public class ReviewDao {
             8,
             2,
             List.of("root","shin1234"),
-            "2025-05-01T00:00:00.000"
+            "2025-05-01 00:00:00"
         ));
         insert(new Review(
             null,
@@ -54,7 +54,7 @@ public class ReviewDao {
             7,
             1,
             List.of("shin1234"),
-            "2025-05-02T00:00:00.000"
+            "2025-05-02 00:00:00"
         ));
 
         insert(new Review(
@@ -65,7 +65,7 @@ public class ReviewDao {
             10,
             10,
             List.of("root"),
-            "2025-05-05T00:00:00.000"
+            "2025-05-05 00:00:00"
         ));
 
         insert(new Review(
@@ -76,7 +76,7 @@ public class ReviewDao {
             9,
             8,
             List.of("shin1234"),
-            "2025-05-03T00:00:00.000"
+            "2025-05-03 00:00:00"
         ));
 
         insert(new Review(
@@ -87,7 +87,7 @@ public class ReviewDao {
             8,
             7,
             List.of("shin1234"),
-            "2025-05-04T00:00:00.000"
+            "2025-05-04 00:00:00"
         ));
 
         insert(new Review(
@@ -98,7 +98,7 @@ public class ReviewDao {
             7,
             3,
             List.of("root","shin1234"),
-            "2025-05-01T00:00:00.000"
+            "2025-05-01 00:00:00"
         ));
         insert(new Review(
             null,
@@ -108,7 +108,7 @@ public class ReviewDao {
             4,
             1,
             List.of("shin1234"),
-            "2025-05-02T00:00:00.000"
+            "2025-05-02 00:00:00"
         ));
 
         insert(new Review(
@@ -119,7 +119,7 @@ public class ReviewDao {
             9,
             9,
             List.of("root"),
-            "2025-05-05T00:00:00.000"
+            "2025-05-05 00:00:00"
         ));
 
         insert(new Review(
@@ -130,7 +130,7 @@ public class ReviewDao {
             7,
             5,
             List.of("shin1234"),
-            "2025-05-03T00:00:00.000"
+            "2025-05-03 00:00:00"
         ));
 
         insert(new Review(
@@ -141,7 +141,7 @@ public class ReviewDao {
             8,
             6,
             List.of("shin1234"),
-            "2025-05-04T00:00:00.000"
+            "2025-05-04 00:00:00"
         ));
 
         insert(new Review(
@@ -152,7 +152,7 @@ public class ReviewDao {
             7,
             3,
             List.of("root"),
-            "2025-05-05T00:00:00.000"
+            "2025-05-05 00:00:00"
         ));
 
         insert(new Review(
@@ -163,7 +163,7 @@ public class ReviewDao {
             3,
             5,
             List.of("shin1234"),
-            "2025-05-03T00:00:00.000"
+            "2025-05-03 00:00:00"
         ));
 
         insert(new Review(
@@ -174,7 +174,7 @@ public class ReviewDao {
             10,
             7,
             List.of("shin1234"),
-            "2025-05-04T00:00:00.000"
+            "2025-05-04 00:00:00"
         ));
 
 
@@ -188,7 +188,7 @@ public class ReviewDao {
             9,
             143,
             List.of("root"),
-            "2025-05-05T00:00:00.000"
+            "2025-05-05 00:00:00"
         ));
 
         insert(new Review(
@@ -199,7 +199,7 @@ public class ReviewDao {
             5,
             78,
             List.of("shin1234"),
-            "2025-05-03T00:00:00.000"
+            "2025-05-03 00:00:00"
         ));
 
         insert(new Review(
@@ -210,7 +210,7 @@ public class ReviewDao {
             8,
             1,
             List.of("shin1234"),
-            "2025-05-04T00:00:00.000"
+            "2025-05-04 00:00:00"
         ));
 
         insert(new Review(
@@ -221,7 +221,7 @@ public class ReviewDao {
             8,
             31,
             List.of("root"),
-            "2025-05-05T00:00:00.000"
+            "2025-05-05 00:00:00"
         ));
 
         insert(new Review(
@@ -232,7 +232,7 @@ public class ReviewDao {
             1,
             13,
             List.of("shin1234"),
-            "2025-05-03T00:00:00.000"
+            "2025-05-03 00:00:00"
         ));
 
         insert(new Review(
@@ -243,7 +243,7 @@ public class ReviewDao {
             9,
             3,
             List.of("shin1234"),
-            "2025-05-04T00:00:00.000"
+            "2025-05-04 00:00:00"
         ));
     }
 
