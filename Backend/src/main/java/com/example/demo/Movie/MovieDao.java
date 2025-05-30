@@ -1,5 +1,6 @@
 package com.example.demo.Movie;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,6 +38,8 @@ public class MovieDao {
     @Transactional
     public void insertTestMovies() {
         if(repo.count() > 0) return;
+        LocalDateTime now = LocalDateTime.now();
+        
         save(new Movie(null, 
             "필즈 오브 데스티니", "Fields of Destiny", 
             "12", "2023.05.16", 
@@ -47,7 +50,7 @@ public class MovieDao {
             "https://live.staticflickr.com/65535/52900840054_14af3e493c_z.jpg", 
             "https://res.cloudinary.com/upwork-cloud/image/upload/c_scale,w_1000/v1700795880/catalog/1600659718750367744/xiry6ufbjttckqxpfzrw.jpg", 
             "https://www.youtube.com/embed/2cLHNgN5PKY", 
-            "", 20.1, 2000L, 1
+            "", 20.1, 2000L, 1, now
         ));
         save(new Movie(null, 
             "킬러 어드바이스", "Killer Advice", 
@@ -59,7 +62,7 @@ public class MovieDao {
             "https://m.media-amazon.com/images/M/MV5BYzgxZjY5MGQtODRhZi00ZDQyLWE5MDQtYTk3NGJkN2I5M2M1XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
             "https://res.cloudinary.com/upwork-cloud/image/upload/c_scale,w_1000/v1700796426/catalog/1600659718750367744/iqmiudmmo6s7zcofwmpf.jpg",
             "https://www.youtube.com/embed/g_yDsQDJOjg",
-            "4DX", 19.8, 1900L, 2
+            "4DX", 19.8, 1900L, 2, now
         ));
         save(new Movie(null, 
             "인터스텔라", "InterStella", 
@@ -71,7 +74,7 @@ public class MovieDao {
             "https://rukminim2.flixcart.com/image/850/1000/l2dmky80/poster/y/f/b/small-poster-interstellar-sl407-wall-poster-13x19-inches-matte-original-imagdqezkfchjkhz.jpeg?q=20&crop=false", 
             "https://i.ytimg.com/vi/YF1eYbfbH5k/maxresdefault.jpg?sqp=-oaymwEmCIAKENAF8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGE4gYShlMA8=&rs=AOn4CLDt6JPoesvmQnP8qf-00JpeDZUfyA",
             "https://www.youtube.com/embed/d2VN6NNa9BE", 
-            "IMAX", 18.7, 1800L, 3
+            "IMAX", 18.7, 1800L, 3, now
         ));
         save(new Movie(null, 
             "내 이름은 알프레드 히치콕", "My Name is Alfred Hitchcock", 
@@ -83,7 +86,7 @@ public class MovieDao {
             "https://www.mvtimes.com/mvt/uploads/2024/11/film-my-name-alfred-hitchcock-2.jpg", 
             "https://theknockturnal.com/wp-content/uploads/2024/11/maxresdefault-3.jpg", 
             "https://www.youtube.com/embed/xpvBJXhsUDU", 
-            "", 17.6, 1700L, 4
+            "", 17.6, 1700L, 4, now
         ));
         save(
             new Movie(null, 
@@ -96,7 +99,7 @@ public class MovieDao {
             "https://upload.wikimedia.org/wikipedia/ko/thumb/f/f2/%EC%96%B4%EB%B2%A4%EC%A0%B8%EC%8A%A4-_%EC%97%94%EB%93%9C%EA%B2%8C%EC%9E%84_%ED%8F%AC%EC%8A%A4%ED%84%B0.jpg/1200px-%EC%96%B4%EB%B2%A4%EC%A0%B8%EC%8A%A4-_%EC%97%94%EB%93%9C%EA%B2%8C%EC%9E%84_%ED%8F%AC%EC%8A%A4%ED%84%B0.jpg", 
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjvX4mwUQtb-pTitJuZAbutp6dgMG9YXojLQ&s", 
            "https://www.youtube.com/embed/Ko2NWhXI9e8", 
-            "IMAX, 4DX", 16.5, 1600L, 5
+            "IMAX, 4DX", 16.5, 1600L, 5, now
         ));
         save(new Movie(null, 
             "범죄도시4", "THE ROUNDUP : PUNISHMENT", 
@@ -108,7 +111,7 @@ public class MovieDao {
             "https://i.namu.wiki/i/KwJ2dfIySu2k8JWlK3nD-gS7A9G-2I2EWKkNjoVRqaHabjK88STUo8FXi545XV6Pe8ERSX5DjF4e5k0IkOvznQ.webp",
             "https://biz.chosun.com/resizer/v2/XIXAJIUJ6YFR5YLGQDRVYHLJ54.jpg?auth=ca0a12238befb32839c719e6beedf5e71aa7684834c2bf17e3993c4530d0f706",
             "https://www.youtube.com/embed/pMAPj6WVsT4", 
-            "IMAX", 15.4, 1500L, 6
+            "IMAX", 15.4, 1500L, 6, now
         ));
         save(new Movie(null, 
             "귀멸의칼날 무한성편", 
@@ -121,7 +124,7 @@ public class MovieDao {
             "https://i.namu.wiki/i/YvPBZ1kzk8Dku4HhOC2FGB7xKVXj5bpg8cSdRWsAZg-3Knqu5LcWJchrZDIVmz-08V3OV9uFLMfCRNCZRcnTxQ.webp", 
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYEAVqhsnZC3KnuJ_JMtuHSI7WEBwFc1as3w&s", 
             "https://www.youtube.com/embed/dndBpb41Q-w",
-            "", 14.3, 1400L, 7
+            "", 14.3, 1400L, 7, now
         ));
         save(new Movie(null, 
             "승부", "The Match", 
@@ -133,7 +136,7 @@ public class MovieDao {
             "https://img.megabox.co.kr/SharedImg/2025/03/27/O6RnDMOAnUw6geDdlaAXRlkqgy0mSSDb_420.jpg", 
             "https://i.namu.wiki/i/4sLX83VoaVVEDMA9Nmj9YCPnVnsnJSKIs7GEK4XSj89ofinn6FVUUjZKoIy2d5eYOgEL341pY-2Rq3PCk6c1MKAzfpVmYjfLfY0HbWjUfW1DhygfA8raXT49CaBTHWpz2gRQi49vsuXR4Y0CwInj_g.webp",
             "https://www.youtube.com/embed/J8qqMLZPPTo", 
-            "IMAX", 13.2, 1300L, 8
+            "IMAX", 13.2, 1300L, 8, now
         ));
         save(new Movie(null, 
             "필즈 오브 데스티니", "Fields of Destiny", 
@@ -145,7 +148,7 @@ public class MovieDao {
             "https://live.staticflickr.com/65535/52900840054_14af3e493c_z.jpg", 
             "https://res.cloudinary.com/upwork-cloud/image/upload/c_scale,w_1000/v1700795880/catalog/1600659718750367744/xiry6ufbjttckqxpfzrw.jpg", 
             "https://www.youtube.com/embed/2cLHNgN5PKY", 
-            "", 12.1, 1200L, 9
+            "", 12.1, 1200L, 9, now
         ));
         save(new Movie(null, 
             "킬러 어드바이스", "Killer Advice", 
@@ -157,7 +160,7 @@ public class MovieDao {
             "https://m.media-amazon.com/images/M/MV5BYzgxZjY5MGQtODRhZi00ZDQyLWE5MDQtYTk3NGJkN2I5M2M1XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
             "https://res.cloudinary.com/upwork-cloud/image/upload/c_scale,w_1000/v1700796426/catalog/1600659718750367744/iqmiudmmo6s7zcofwmpf.jpg",
             "https://www.youtube.com/embed/g_yDsQDJOjg",
-            "4DX", 11.0, 1100L, 10
+            "4DX", 11.0, 1100L, 10, now
         ));
         save(new Movie(null, 
             "인터스텔라", "InterStella", 
@@ -169,7 +172,7 @@ public class MovieDao {
             "https://rukminim2.flixcart.com/image/850/1000/l2dmky80/poster/y/f/b/small-poster-interstellar-sl407-wall-poster-13x19-inches-matte-original-imagdqezkfchjkhz.jpeg?q=20&crop=false", 
             "https://i.ytimg.com/vi/YF1eYbfbH5k/maxresdefault.jpg?sqp=-oaymwEmCIAKENAF8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGE4gYShlMA8=&rs=AOn4CLDt6JPoesvmQnP8qf-00JpeDZUfyA",
             "https://www.youtube.com/embed/d2VN6NNa9BE", 
-            "IMAX", 10.9, 1000L, 11
+            "IMAX", 10.9, 1000L, 11, now
         ));
         save(new Movie(null, 
             "내 이름은 알프레드 히치콕", "My Name is Alfred Hitchcock", 
@@ -181,7 +184,7 @@ public class MovieDao {
             "https://www.mvtimes.com/mvt/uploads/2024/11/film-my-name-alfred-hitchcock-2.jpg", 
             "https://theknockturnal.com/wp-content/uploads/2024/11/maxresdefault-3.jpg", 
             "https://www.youtube.com/embed/xpvBJXhsUDU", 
-            "", 9.8, 900L, 12
+            "", 9.8, 900L, 12, now
         ));
         save(
             new Movie(null, 
@@ -194,7 +197,7 @@ public class MovieDao {
             "https://upload.wikimedia.org/wikipedia/ko/thumb/f/f2/%EC%96%B4%EB%B2%A4%EC%A0%B8%EC%8A%A4-_%EC%97%94%EB%93%9C%EA%B2%8C%EC%9E%84_%ED%8F%AC%EC%8A%A4%ED%84%B0.jpg/1200px-%EC%96%B4%EB%B2%A4%EC%A0%B8%EC%8A%A4-_%EC%97%94%EB%93%9C%EA%B2%8C%EC%9E%84_%ED%8F%AC%EC%8A%A4%ED%84%B0.jpg", 
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSjvX4mwUQtb-pTitJuZAbutp6dgMG9YXojLQ&s", 
             "https://www.youtube.com/embed/Ko2NWhXI9e8", 
-            "IMAX, 4DX", 8.7, 800L, 13
+            "IMAX, 4DX", 8.7, 800L, 13, now
         ));
         save(new Movie(null, 
             "범죄도시4", "THE ROUNDUP : PUNISHMENT", 
@@ -206,7 +209,7 @@ public class MovieDao {
             "https://i.namu.wiki/i/KwJ2dfIySu2k8JWlK3nD-gS7A9G-2I2EWKkNjoVRqaHabjK88STUo8FXi545XV6Pe8ERSX5DjF4e5k0IkOvznQ.webp",
             "https://biz.chosun.com/resizer/v2/XIXAJIUJ6YFR5YLGQDRVYHLJ54.jpg?auth=ca0a12238befb32839c719e6beedf5e71aa7684834c2bf17e3993c4530d0f706",
             "https://www.youtube.com/embed/pMAPj6WVsT4", 
-            "IMAX", 7.6, 700L, 14
+            "IMAX", 7.6, 700L, 14, now
         ));
         save(new Movie(null, 
             "귀멸의칼날 무한성편", 
@@ -219,7 +222,7 @@ public class MovieDao {
             "https://i.namu.wiki/i/YvPBZ1kzk8Dku4HhOC2FGB7xKVXj5bpg8cSdRWsAZg-3Knqu5LcWJchrZDIVmz-08V3OV9uFLMfCRNCZRcnTxQ.webp", 
             "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQYEAVqhsnZC3KnuJ_JMtuHSI7WEBwFc1as3w&s", 
             "https://www.youtube.com/embed/dndBpb41Q-w",
-            "", 6.5, 600L, 15
+            "", 6.5, 600L, 15, now
         ));
         save(new Movie(null, 
             "승부", "The Match", 
@@ -231,7 +234,7 @@ public class MovieDao {
             "https://img.megabox.co.kr/SharedImg/2025/03/27/O6RnDMOAnUw6geDdlaAXRlkqgy0mSSDb_420.jpg", 
             "https://i.namu.wiki/i/4sLX83VoaVVEDMA9Nmj9YCPnVnsnJSKIs7GEK4XSj89ofinn6FVUUjZKoIy2d5eYOgEL341pY-2Rq3PCk6c1MKAzfpVmYjfLfY0HbWjUfW1DhygfA8raXT49CaBTHWpz2gRQi49vsuXR4Y0CwInj_g.webp",
             "https://www.youtube.com/embed/J8qqMLZPPTo", 
-            "IMAX", 5.4, 500L, 16
+            "IMAX", 5.4, 500L, 16, now
         ));
         save(new Movie(null, 
             "필즈 오브 데스티니", "Fields of Destiny", 
@@ -243,7 +246,7 @@ public class MovieDao {
             "https://live.staticflickr.com/65535/52900840054_14af3e493c_z.jpg", 
             "https://res.cloudinary.com/upwork-cloud/image/upload/c_scale,w_1000/v1700795880/catalog/1600659718750367744/xiry6ufbjttckqxpfzrw.jpg", 
             "https://www.youtube.com/embed/2cLHNgN5PKY", 
-            "", 4.3, 400L, 17
+            "", 4.3, 400L, 17, now
         ));
         save(new Movie(null, 
             "킬러 어드바이스", "Killer Advice", 
@@ -255,7 +258,7 @@ public class MovieDao {
             "https://m.media-amazon.com/images/M/MV5BYzgxZjY5MGQtODRhZi00ZDQyLWE5MDQtYTk3NGJkN2I5M2M1XkEyXkFqcGc@._V1_FMjpg_UX1000_.jpg",
             "https://res.cloudinary.com/upwork-cloud/image/upload/c_scale,w_1000/v1700796426/catalog/1600659718750367744/iqmiudmmo6s7zcofwmpf.jpg",
             "https://www.youtube.com/embed/g_yDsQDJOjg",
-            "4DX", 3.2, 300L, 18
+            "4DX", 3.2, 300L, 18, now
         ));
         save(new Movie(null, 
             "인터스텔라", "InterStella", 
@@ -267,7 +270,7 @@ public class MovieDao {
             "https://rukminim2.flixcart.com/image/850/1000/l2dmky80/poster/y/f/b/small-poster-interstellar-sl407-wall-poster-13x19-inches-matte-original-imagdqezkfchjkhz.jpeg?q=20&crop=false", 
             "https://i.ytimg.com/vi/YF1eYbfbH5k/maxresdefault.jpg?sqp=-oaymwEmCIAKENAF8quKqQMa8AEB-AH-CYAC0AWKAgwIABABGE4gYShlMA8=&rs=AOn4CLDt6JPoesvmQnP8qf-00JpeDZUfyA",
             "https://www.youtube.com/embed/d2VN6NNa9BE", 
-            "IMAX", 2.3, 200L, 19
+            "IMAX", 2.3, 200L, 19, now
         ));
         save(new Movie(null, 
             "내 이름은 알프레드 히치콕", "My Name is Alfred Hitchcock", 
@@ -279,7 +282,7 @@ public class MovieDao {
             "https://www.mvtimes.com/mvt/uploads/2024/11/film-my-name-alfred-hitchcock-2.jpg", 
             "https://theknockturnal.com/wp-content/uploads/2024/11/maxresdefault-3.jpg", 
             "https://www.youtube.com/embed/xpvBJXhsUDU", 
-            "", 1.2, 100L, 20
+            "", 1.2, 100L, 20, now
         ));
     }
 }

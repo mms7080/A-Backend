@@ -1,5 +1,7 @@
 package com.example.demo.Movie;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -77,7 +79,8 @@ public class Movie {
 
     private Integer rank;           /* 순위(임시) */
     
-    
+    @Column(name = "created_at")
+    private LocalDateTime createdAt = LocalDateTime.now();
     
     
     
