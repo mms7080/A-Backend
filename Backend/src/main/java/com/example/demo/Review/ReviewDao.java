@@ -57,6 +57,19 @@ public class ReviewDao {
             "2025-05-02 00:00:00"
         ));
 
+        for(int i=0;i<25;i++){
+           insert(new Review(
+            null,
+            1L,//필즈 오브 데스티니
+            "root"+i,
+            "이런 작품은 생전 처음봐요!!",
+            i%10+1,
+            i,
+            List.of("shin1234"),
+            "2025-05-02 00:00:00"
+        )); 
+        }
+
         insert(new Review(
             null,
             5L,//어벤져스 : 엔드게임
