@@ -3,6 +3,9 @@ package com.example.demo.Booking.service;
 import com.example.demo.Booking.dto.response.TheaterDto;
 import com.example.demo.Booking.entity.Theater;
 import com.example.demo.Booking.repository.TheaterRepository;
+
+import jakarta.annotation.PostConstruct;
+
 import com.example.demo.Booking.exception.ResourceNotFoundException;
 
 import lombok.RequiredArgsConstructor;
@@ -27,7 +30,7 @@ public class TheaterService {
     
     private static final Logger log = LoggerFactory.getLogger(TheaterService.class); // 로거 선언
     private final TheaterRepository theaterRepository;
-    private final RegionService regionService;
+    
 
     private static final Map<String, List<String>> EXAMPLE_THEATER_NAMES_BY_REGION;
 
@@ -43,6 +46,20 @@ public class TheaterService {
         EXAMPLE_THEATER_NAMES_BY_REGION = Collections.unmodifiableMap(tempMap);
     }
 
+    // 💡 서버 시작 시 더미 극장 데이터 자동 삽입
+    @PostConstruct
+    @Transactional 
+    public void initTheaters() {
+        if (theaterRepository.count() == 0) { // DB에 극장 데이터가 없을 경우에만 실행
+            log.info("Initializing dummy theater data...");
+            EXAMPLE_THEATER_NAMES_BY_REGION.forEach((region, theaterNames) -> {
+                theaterNames.forEach(name -> {
+                    theaterRepository.save(Theater.builder().name(name).region(region).build());
+                });
+            });
+            log.info("Dummy theater data initialization complete.");
+        }
+    }
     
 public List<TheaterDto> getTheatersByRegion(String region) {
         log.debug("Fetching theaters for region: {}", region); 
