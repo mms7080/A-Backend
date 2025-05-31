@@ -80,8 +80,8 @@ public class StoreController {
     public Map<String, Object> openRandomBox(@RequestParam String userId) {
         Map<String, Object> response = new HashMap<>();
 
-        // 50% 확률로 꽝
-        if (new Random().nextInt(100) >= 50) {
+        // 70% 확률로 꽝
+        if (new Random().nextInt(100) >= 30) {
             response.put("result", "꽝입니다! 다음 기회에~");
             return response;
         }
