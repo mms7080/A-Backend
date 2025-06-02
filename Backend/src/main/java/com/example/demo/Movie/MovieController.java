@@ -5,7 +5,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -65,7 +64,7 @@ public class MovieController {
             @RequestParam("label") String label
     ) {
         try {
-            List<String> imageUrls = new ArrayList<>();
+            String posterUrl = null, wideImageUrl = null;
 
             // 이미지 저장 경로
             Path uploadPath = Paths.get("src/main").toAbsolutePath().getParent().getParent().resolve(uploadDir);
@@ -79,9 +78,11 @@ public class MovieController {
                 String filename = UUID.randomUUID() + "_" + StringUtils.cleanPath(image.getOriginalFilename());
                 Path filePath = uploadPath.resolve(filename);
                 image.transferTo(filePath.toFile());
-                imageUrls.add("/images/movie/" + filename);
+                if(posterUrl == null) posterUrl = ("/images/movie/" + filename);
+                else if(wideImageUrl == null) wideImageUrl = ("/images/movie/" + filename);
+                else throw new IOException("url is already full");
             }
-            Movie movie = new Movie(null, title, titleEnglish, rate, releaseDate, description, runningTime, genre, director, cast, 0.0, 0L, "poster", "wideImage", trailer, label, 0.0, 0L, 0, LocalDateTime.now());
+            Movie movie = new Movie(null, title, titleEnglish, rate, releaseDate, description, runningTime, genre, director, cast, 0.0, 0L, posterUrl, wideImageUrl, trailer, label, 0.0, 0L, 0, LocalDateTime.now());
             dao.save(movie);
             return ResponseEntity.ok("업로드 성공");
         } catch (IOException e) {
