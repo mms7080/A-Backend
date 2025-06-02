@@ -1,5 +1,6 @@
 package com.example.demo.Review;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,10 @@ public class ReviewDao {
 
     public List<Review> findAll() {
         return repo.findAll();
+    }
+
+    public Review findById(Long id) {
+        return repo.findById(id).orElse(null);
     }
 
     public List<Review> findByMovieid(Long movieid) {
@@ -63,6 +68,9 @@ public class ReviewDao {
         ));
 
         for(int i=0;i<25;i++){
+            List<String> templikeusers=new ArrayList<>();
+            for(int j=0;j<i;j++)
+                templikeusers.add("user"+j);
            insert(new Review(
             null,
             1L,//필즈 오브 데스티니
@@ -70,19 +78,22 @@ public class ReviewDao {
             "이런 작품은 생전 처음봐요!!",
             i%10+1,
             i,
-            List.of("shin1234"),
+            templikeusers,
             "2025-05-02 00:00:00"
         )); 
         }
 
+        List<String> templikeusers=new ArrayList<>();
+        for(int j=0;j<100;j++)
+            templikeusers.add("user"+j);
         insert(new Review(
             null,
             5L,//어벤져스 : 엔드게임
             "shin1234",
             "이 영화 정말 최고였어요! 감동받았습니다.",
             10,
-            10,
-            List.of("root"),
+            100,
+            templikeusers,
             "2025-05-05 00:00:00"
         ));
 
@@ -92,7 +103,7 @@ public class ReviewDao {
             "lovelytourist84",
             "어벤져스 엔드게임 다시 봐도 소름...",
             9,
-            8,
+            1,
             List.of("shin1234"),
             "2025-05-03 00:00:00"
         ));
@@ -103,19 +114,22 @@ public class ReviewDao {
             "root",
             "어벤져스 엔드게임 너무 재밌어요!...",
             8,
-            7,
+            1,
             List.of("shin1234"),
             "2025-05-04 00:00:00"
         ));
 
+        templikeusers=new ArrayList<>();
+        for(int j=0;j<27;j++)
+            templikeusers.add("user"+j);
         insert(new Review(
             null,
             2L,//킬러 어드바이스
             "shin1234",
             "정말 희대의 역작입니다!",
             7,
-            3,
-            List.of("root","shin1234"),
+            27,
+            templikeusers,
             "2025-05-01 00:00:00"
         ));
         insert(new Review(
@@ -135,7 +149,7 @@ public class ReviewDao {
             "shin1234",
             "이 영화 정말 최고였어요! 감동받았습니다.",
             9,
-            9,
+            1,
             List.of("root"),
             "2025-05-05 00:00:00"
         ));
@@ -146,7 +160,7 @@ public class ReviewDao {
             "root",
             "인터스텔라 다시 봐도 소름...",
             7,
-            5,
+            1,
             List.of("shin1234"),
             "2025-05-03 00:00:00"
         ));
@@ -157,7 +171,7 @@ public class ReviewDao {
             "kerasis23",
             "인터스텔라 너무 재밌어요!...",
             8,
-            6,
+            1,
             List.of("shin1234"),
             "2025-05-04 00:00:00"
         ));
@@ -168,7 +182,7 @@ public class ReviewDao {
             "kkj7584",
             "이 영화 정말 최고였어요! 감동받았습니다.",
             7,
-            3,
+            1,
             List.of("root"),
             "2025-05-05 00:00:00"
         ));
@@ -179,7 +193,7 @@ public class ReviewDao {
             "lovelytourist84",
             "노잼이네요",
             3,
-            5,
+            1,
             List.of("shin1234"),
             "2025-05-03 00:00:00"
         ));
@@ -190,7 +204,7 @@ public class ReviewDao {
             "mns7080",
             "내 이름은 알프레드 히치콕 너무 재밌어요!...",
             10,
-            7,
+            1,
             List.of("shin1234"),
             "2025-05-04 00:00:00"
         ));
@@ -204,7 +218,7 @@ public class ReviewDao {
             "kkj7584",
             "이 영화 정말 최고였어요! 감동받았습니다.",
             9,
-            143,
+            1,
             List.of("root"),
             "2025-05-05 00:00:00"
         ));
@@ -215,7 +229,7 @@ public class ReviewDao {
             "lovelytourist84",
             "그저 그렇네요.",
             5,
-            78,
+            1,
             List.of("shin1234"),
             "2025-05-03 00:00:00"
         ));
@@ -237,7 +251,7 @@ public class ReviewDao {
             "kkj7584",
             "이 영화 정말 최고였어요! 감동받았습니다.",
             8,
-            31,
+            1,
             List.of("root"),
             "2025-05-05 00:00:00"
         ));
@@ -248,7 +262,7 @@ public class ReviewDao {
             "lovelytourist84",
             "재미없어요.",
             1,
-            13,
+            1,
             List.of("shin1234"),
             "2025-05-03 00:00:00"
         ));
@@ -259,7 +273,7 @@ public class ReviewDao {
             "mms7080",
             "승부 너무 재밌어요!...",
             9,
-            3,
+            1,
             List.of("shin1234"),
             "2025-05-04 00:00:00"
         ));

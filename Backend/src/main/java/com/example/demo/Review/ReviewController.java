@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -27,9 +26,6 @@ public class ReviewController {
     @Autowired
     ReviewDao dao;
 
-    @Value("${spring.security.cors.site}")
-    String corsOrigin;
-
     @GetMapping("/all")/* 모든 리뷰들을 불러오기 */
     public List<Review> getAllReviews() {
         return dao.findAll();
@@ -44,7 +40,8 @@ public class ReviewController {
     @RequestBody Map<String, String> data) {
 
         String content = data.get("content");
-        Integer score = Integer.parseInt(data.get("score"));
+        String scoreRaw = data.get("score");
+        Integer score = Integer.parseInt(scoreRaw);
 
         LocalDateTime now = LocalDateTime.now(); // 현재 시간
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"); // 포맷 지정
@@ -64,6 +61,28 @@ public class ReviewController {
         );
 
         return dao.findByMovieid(movieid);
+    }
+
+    @PostMapping("/like/logic/{reviewid}")/* 리뷰 작성하기 */
+    public List<String> likeReview(@PathVariable Long reviewid,@RequestBody Map<String, String> data) {
+
+        String liked=data.get("liked");
+        String liker=data.get("liker");
+
+        Review targetreview=dao.findById(reviewid);
+
+        if(liked.equals("true")){
+            targetreview.getLikeusers().remove(liker);
+            targetreview.setLikenumber(targetreview.getLikenumber()-1);
+        }
+        else if(liked.equals("false")){
+            targetreview.getLikeusers().add(liker);
+            targetreview.setLikenumber(targetreview.getLikenumber()+1);
+        }
+        
+        dao.modify(targetreview);
+
+        return targetreview.getLikeusers();
     }
 
 }
