@@ -34,7 +34,7 @@ public class ShowtimeDto {
         }
 
         if(showtime.getStartTime() != null){
-            this.startTime = showtime.getStartTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm0"));
+            this.startTime = showtime.getStartTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm"));
         }
         this.auditoriumName = showtime.getAuditoriumName();
 

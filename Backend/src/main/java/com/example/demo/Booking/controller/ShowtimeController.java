@@ -17,7 +17,7 @@ public class ShowtimeController {
 
     private final ShowtimeService showtimeService;
 
-    @GetMapping("/showtimes")
+    @GetMapping("/showtimes") // 예 ?movieId=1&heaterId=5&date2025-06-02
     public ApiResponseDto<List<ShowtimeDto>> getShowtimes(
             @RequestParam Long movieId,
             @RequestParam Long theaterId,
@@ -25,7 +25,7 @@ public class ShowtimeController {
         return ApiResponseDto.success(showtimeService.getShowtimes(movieId, theaterId, date));
     }
 
-    @GetMapping("/available-dates")
+    @GetMapping("/available-dates") // 예 ?movieId=1&theaterId=5
     public ApiResponseDto<List<LocalDate>> getAvailableDates(
             @RequestParam Long movieId,
             @RequestParam Long theaterId) {
