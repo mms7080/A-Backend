@@ -22,7 +22,7 @@ public class TheaterController {
 	
     private final TheaterService theaterService;
 
-    @GetMapping("/theaters")
+    @GetMapping("/theaters") // 사용시 ?region=서울(예)
     public ApiResponseDto<List<TheaterDto>> getTheartersByRegion(@RequestParam String region) {
         return ApiResponseDto.success(theaterService.getTheatersByRegion(region));
     }
