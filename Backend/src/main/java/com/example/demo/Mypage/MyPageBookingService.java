@@ -3,23 +3,27 @@ package com.example.demo.Mypage;
 import com.example.demo.Booking.dto.response.BookingResponseDto;
 import com.example.demo.Booking.entity.Booking;
 import com.example.demo.Booking.entity.BookingStatus;
+import com.example.demo.Booking.entity.CustomerCategory; 
 import com.example.demo.Booking.entity.Seat;
 import com.example.demo.Booking.entity.SeatStatus;
 import com.example.demo.Booking.exception.CustomBookingException;
 import com.example.demo.Booking.exception.ResourceNotFoundException;
 import com.example.demo.Booking.repository.BookingRepository;
 import com.example.demo.Booking.repository.SeatRepository;
-import com.example.demo.User.UserRepository; 
+import com.example.demo.Booking.service.PricePolicyService; 
+import com.example.demo.User.UserRepository;
 import lombok.RequiredArgsConstructor;
-import org.slf4j.Logger; 
-import org.slf4j.LoggerFactory; 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigDecimal; 
 import java.time.LocalDateTime;
-import java.util.ArrayList; 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map; 
 import java.util.stream.Collectors;
 
 @Service
@@ -31,6 +35,7 @@ public class MyPageBookingService {
     private final BookingRepository bookingRepository;
     private final SeatRepository seatRepository;
     private final UserRepository userRepository;
+    private final PricePolicyService pricePolicyService;
     
     // 사용자의 예매 내역 조회
     @Transactional(readOnly = true)
@@ -42,7 +47,12 @@ public class MyPageBookingService {
 
         List<Booking> bookings = bookingRepository.findAllByUserIdOrderByBookingTimeDesc(userId);
         log.info("사용자 ID '{}' 에 대해 총 {} 건의 예매 내역을 찾았습니다.",userId, bookings.size());
-        return bookings.stream().map(BookingResponseDto::fromEntity).collect(Collectors.toList());
+        
+        Map<CustomerCategory, BigDecimal> currentPricePolicy = pricePolicyService.getAllPricePolicies();
+
+        return bookings.stream()
+                .map(booking -> BookingResponseDto.fromEntity(booking, currentPricePolicy)) // 💡 수정
+                .collect(Collectors.toList());
     }
 
     // 예매 취소
@@ -78,9 +88,6 @@ public class MyPageBookingService {
         } else {
             log.info("예매 ID '{}'에 연결된 좌석이 없어 상태를 변경할 좌석이 없습니다.", bookingId);
         }
-
-        
-
         log.info("사용자 ID '{}'에 의해 예매 ID '{}'가 성공적으로 취소되었습니다.", userId, bookingId);
     }
 
