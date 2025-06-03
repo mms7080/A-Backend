@@ -31,11 +31,11 @@ public class TossPaymentController {
 
         String now = ZonedDateTime.now().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
 
-        Payment p1 = new Payment(null, "dummyKey1", "order-111", 12000, "1", "일반관람권", "DONE", now, "카드", "현대카드",
+        Payment p1 = new Payment(null, "dummyKey1", "order-111", 12000, "root", "일반관람권", "DONE", now, "카드", "현대카드",
                 "1111-****-****-1111");
-        Payment p2 = new Payment(null, "dummyKey2", "order-112", 15000, "2", "더블콤보", "DONE", now, "카드", "삼성카드",
+        Payment p2 = new Payment(null, "dummyKey2", "order-112", 15000, "root", "더블콤보", "DONE", now, "카드", "삼성카드",
                 "2222-****-****-2222");
-        Payment p3 = new Payment(null, "dummyKey3", "order-113", 18000, "2", "러브콤보", "DONE", now, "기타", null, null);
+        Payment p3 = new Payment(null, "dummyKey3", "order-113", 18000, "root", "러브콤보", "DONE", now, "기타", null, null);
 
         repository.saveAll(List.of(p1, p2, p3));
         System.out.println("✅ 결제 더미 데이터 3건 자동 삽입 완료");
