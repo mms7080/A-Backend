@@ -82,7 +82,7 @@ public class ShowtimeService {
 
         // 오늘부터 3일간의 더미 데이터 생성 (너무 많아지지 않도록 날짜 제한)
         // 필요에 따라 이 반복 횟수를 조절하여 생성되는 데이터 양을 제어. (예: 1일치만 또는 maxAdvanceDays까지)
-        for (int i = 0; i < 1; i++) { // 예시로 3일치 데이터만 생성
+        for (int i = 0; i < 1; i++) { // 예시로 1일치 데이터만 생성
             LocalDate currentDate = today.plusDays(i);
 
             for (Movie movie : allMovies) {
