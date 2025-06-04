@@ -6,6 +6,7 @@ import java.util.List;
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -47,10 +48,10 @@ public class User{
     private String createdate;/* 계정 생성 날짜 */
 
     /* 좋아요 누른 영화의 id 값 목록 (1:N 구조) → 별도 테이블 생성됨 */
-    @ElementCollection
+    @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(
         name = "like_movies", /* 생성될 테이블 이름 */
-        joinColumns = @JoinColumn(name = "like_movies_id") /* 외래 키 */
+        joinColumns = @JoinColumn(name = "user_id") /* 외래 키 */
     )
     private List<Long> likemovies=new ArrayList<>();
 
