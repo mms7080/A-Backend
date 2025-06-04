@@ -29,6 +29,7 @@ public class MovielikeuserController {
         else/* 영화를 기존에 라이크하지 않았던 경우 -> 라이크 추가 */
             likedMovies.add(movieid);
 
+        user.setLikemovies(likedMovies);
         daoUser.Modify(user);
         return Collections.singletonMap("result", "like_unlike_success");
     }
