@@ -20,7 +20,7 @@ public class MovielikeuserController {
     DAOUser daoUser;
 
     @GetMapping("/movieLikeToggle/{movieid}")
-    public Map<String,String> deleteReview(@PathVariable Long movieid,@Auth User user){
+    public List<Long> deleteReview(@PathVariable Long movieid,@Auth User user){
 
         List<Long> likedMovies=user.getLikemovies();
 
@@ -31,7 +31,7 @@ public class MovielikeuserController {
 
         user.setLikemovies(likedMovies);
         daoUser.Modify(user);
-        return Collections.singletonMap("result", "like_unlike_success");
+        return likedMovies;
     }
 
 }
