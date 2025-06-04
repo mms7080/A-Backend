@@ -15,7 +15,7 @@ public class MovieDao {
     private MovieRepository repo;
 
     public List<Movie> findAll() {
-        return repo.findAll();
+        return repo.findAllByOrderByIdAsc();
     }
 
     public Movie findById(Long id) {

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MovieRepository extends JpaRepository<Movie, Long> {
-    public List<Movie> findAll();
+    public List<Movie> findAllByOrderByIdAsc();
     public List<Movie> findIdAndRankAndDescriptionAndScoreAndTitleAndRateAndReleaseDateAndLikeNumberAndPosterAndLabelAndReserveRateByOrderByIdAsc();
     public Movie findFirstById(Long id);
     public boolean existsById(Long id);
