@@ -26,6 +26,14 @@ public class MovieDao {
         repo.save(movie);
     }
 
+    public boolean existsById(Long id) {
+        return repo.existsById(id);
+    }
+
+    public void deleteById(Long id) {
+        repo.deleteById(id);
+    }
+
 
     public List<Movie> findForMoviePage() {
         return repo.findIdAndRankAndDescriptionAndScoreAndTitleAndRateAndReleaseDateAndLikeNumberAndPosterAndLabelAndReserveRateByOrderByIdAsc();
@@ -49,7 +57,7 @@ public class MovieDao {
             9.8, 5300L, 
             "/images/poster1.jpg", 
             "/images/wide1.jpg",
-            List.of(""),
+            List.of(),
             "https://www.youtube.com/embed/2cLHNgN5PKY", 
             "", 20.1, 2000L, 1, now
         ));
