@@ -3,6 +3,7 @@ package com.example.demo.Review;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -97,7 +98,6 @@ public class ReviewController {
     @PostMapping("/delete/logic/{id}")/* 리뷰 삭제하기 */
     public Map<String,String> deleteReview(@PathVariable Long id) {
 
-        System.out.println("***************"+id);
         dao.delete(id);
         return Collections.singletonMap("result", "deletesuccess");
 
