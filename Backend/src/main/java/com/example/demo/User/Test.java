@@ -28,7 +28,8 @@ public class Test implements CommandLineRunner{
                 "문새로72번길 13",
                 "ADMIN",
                 null,
-                "2025-05-16"
+                "2025-05-16",
+                null
             )
         );
         daoUser.Insert(/* 테스트를 위한 유저 정보 입력 2 */
@@ -46,7 +47,8 @@ public class Test implements CommandLineRunner{
                 "조화로14번길 26",
                 "USER",
                 null,
-                "2025-05-23"
+                "2025-05-23",
+                null
             )
         );        
     }    

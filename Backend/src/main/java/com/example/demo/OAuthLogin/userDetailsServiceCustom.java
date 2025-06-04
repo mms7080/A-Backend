@@ -90,8 +90,8 @@ public class userDetailsServiceCustom extends DefaultOAuth2UserService implement
                 null, null, null, null, null, null, null,
                 "USER",
                 platform,
-                formattedDate
-
+                formattedDate,
+                null
             );
             daoUser.Insert(newuser);
             user = newuser;

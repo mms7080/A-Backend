@@ -64,7 +64,8 @@ public class joinLogicController{
                 address_detail,
                 "USER",
                 null,
-                formattedDate
+                formattedDate,
+                null
 
             )
         );

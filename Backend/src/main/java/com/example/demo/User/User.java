@@ -1,9 +1,15 @@
 package com.example.demo.User;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -39,5 +45,13 @@ public class User{
     private String auth;/* 유저의 권한 ( 예 : "USER" ) */
     private String platform;/* OAuth2 유저의 경우, 로그인한 플랫폼 */
     private String createdate;/* 계정 생성 날짜 */
+
+    /* 좋아요 누른 영화의 id 값 목록 (1:N 구조) → 별도 테이블 생성됨 */
+    @ElementCollection
+    @CollectionTable(
+        name = "like_movies", /* 생성될 테이블 이름 */
+        joinColumns = @JoinColumn(name = "like_movies_id") /* 외래 키 */
+    )
+    private List<Long> likemovies=new ArrayList<>();
 
 }
