@@ -48,7 +48,8 @@ public class MovieDao {
             "엘리자 레이먼드", "클레어 하딩턴,루카스 멜든,윌터 그레인", 
             9.8, 5300L, 
             "/images/poster1.jpg", 
-            "/images/wide1.jpg", 
+            "/images/wide1.jpg",
+            List.of(""),
             "https://www.youtube.com/embed/2cLHNgN5PKY", 
             "", 20.1, 2000L, 1, now
         ));
@@ -61,6 +62,7 @@ public class MovieDao {
             9.8, 2100L, 
             "/images/poster2.jpg",
             "/images/wide2.jpg",
+            List.of("/images/stillCut2-1.jpg","/images/stillCut2-2.jpg"),
             "https://www.youtube.com/embed/g_yDsQDJOjg",
             "4DX", 19.8, 1900L, 2, now
         ));
@@ -73,6 +75,7 @@ public class MovieDao {
             9.8, 1500L, 
             "/images/poster3.jpg", 
             "/images/wide3.jpg",
+            List.of("/images/stillCut3-1.jpg","/images/stillCut3-2.jpg"),
             "https://www.youtube.com/embed/d2VN6NNa9BE", 
             "IMAX", 18.7, 1800L, 3, now
         ));
@@ -84,7 +87,8 @@ public class MovieDao {
             "마크 코신스", "알리스테어 맥고완", 
             9.8, 1300L, 
             "/images/poster4.jpg", 
-            "/images/wide4.jpg", 
+            "/images/wide4.jpg",
+            List.of("/images/stillCut4-1.jpg","/images/stillCut4-2.jpg"),
             "https://www.youtube.com/embed/xpvBJXhsUDU", 
             "", 17.6, 1700L, 4, now
         ));
@@ -97,7 +101,8 @@ public class MovieDao {
             "앤서니 루소, 조 루소", "로버트 다우니 주니어,크리스 에반스,마크 러팔로,크리스 헴스워스,스칼렛 요한슨,제레미 레너", 
             9.8, 986L, 
             "/images/poster5.jpg", 
-            "/images/wide5.jpg", 
+            "/images/wide5.jpg",
+            List.of("/images/stillCut5-1.jpg","/images/stillCut5-2.jpg"),
             "https://www.youtube.com/embed/Ko2NWhXI9e8", 
             "IMAX, 4DX", 16.5, 1600L, 5, now
         ));
@@ -110,6 +115,7 @@ public class MovieDao {
             9.8, 734L, 
             "/images/poster6.jpg",
             "/images/wide6.jpg",
+            List.of("/images/stillCut6-1.jpg","/images/stillCut6-2.jpg"),
             "https://www.youtube.com/embed/pMAPj6WVsT4", 
             "IMAX", 15.4, 1500L, 6, now
         ));
@@ -122,7 +128,8 @@ public class MovieDao {
             "소토자키 하루오", "하나에 나츠키,키토 아카리,시모노 히로,마츠오카 요시츠구", 
             9.8, 521L, 
             "/images/poster7.jpg", 
-            "/images/wide7.jpg", 
+            "/images/wide7.jpg",
+            List.of("/images/stillCut7-1.jpg","/images/stillCut7-2.jpg"),
             "https://www.youtube.com/embed/dndBpb41Q-w",
             "", 14.3, 1400L, 7, now
         ));
@@ -135,6 +142,7 @@ public class MovieDao {
             9.8, 342L, 
             "/images/poster8.jpg", 
             "/images/wide8.jpg",
+            List.of("/images/stillCut8-1.jpg","/images/stillCut8-2.jpg"),
             "https://www.youtube.com/embed/J8qqMLZPPTo", 
             "IMAX", 13.2, 1300L, 8, now
         ));
@@ -146,7 +154,8 @@ public class MovieDao {
             "엘리자 레이먼드", "클레어 하딩턴,루카스 멜든,윌터 그레인", 
             9.8, 5300L, 
             "/images/poster1.jpg", 
-            "/images/wide1.jpg", 
+            "/images/wide1.jpg",
+            List.of(""),
             "https://www.youtube.com/embed/2cLHNgN5PKY", 
             "", 12.1, 1200L, 9, now
         ));
@@ -159,6 +168,7 @@ public class MovieDao {
             9.8, 2100L, 
             "/images/poster2.jpg",
             "/images/wide2.jpg",
+            List.of("/images/stillCut2-1.jpg","/images/stillCut2-2.jpg"),
             "https://www.youtube.com/embed/g_yDsQDJOjg",
             "4DX", 11.0, 1100L, 10, now
         ));
@@ -171,6 +181,7 @@ public class MovieDao {
             9.8, 1500L, 
             "/images/poster3.jpg", 
             "/images/wide3.jpg",
+            List.of("/images/stillCut3-1.jpg","/images/stillCut3-2.jpg"),
             "https://www.youtube.com/embed/d2VN6NNa9BE", 
             "IMAX", 10.9, 1000L, 11, now
         ));
@@ -182,7 +193,8 @@ public class MovieDao {
             "마크 코신스", "알리스테어 맥고완", 
             9.8, 1300L, 
             "/images/poster4.jpg", 
-            "/images/wide4.jpg", 
+            "/images/wide4.jpg",
+            List.of("/images/stillCut4-1.jpg","/images/stillCut4-2.jpg"),
             "https://www.youtube.com/embed/xpvBJXhsUDU", 
             "", 9.8, 900L, 12, now
         ));

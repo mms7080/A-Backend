@@ -1,12 +1,17 @@
 package com.example.demo.Movie;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
@@ -63,8 +68,13 @@ public class Movie {
     @Column(name = "wide_image_url", length = 300)
     private String wideImage;      /* 큰 이미지 */
 
-    // @Column(name = "urls")
-    // private String[] urls;
+    @ElementCollection
+    @CollectionTable(
+        name = "movie_still_cut",
+        joinColumns = @JoinColumn(name="movie_id")
+    )
+    @Column(name = "still_cut_url")
+    private List<String> stillCut = new ArrayList<>();
 
     @Column(name = "preview_url")
     private String trailer;         /* 예고편 */   

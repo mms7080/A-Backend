@@ -1,5 +1,7 @@
 package com.example.demo.Movie;
 
+import java.util.List;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -37,7 +39,7 @@ public class MovieDto {
 
     public String getWideImage() { return movie.getWideImage(); }
 
-    // public String[] getUrls() { return movie.getUrls(); }
+    public List<String> getStillCut() {return movie.getStillCut(); }
 
     public String getTrailer() { return movie.getTrailer(); }
 
@@ -78,7 +80,7 @@ public class MovieDto {
 
     public void setWideImage(String wideImage) { movie.setWideImage(wideImage); }
 
-    // public void setUrls(String[] urls) { movie.setUrls(urls); }
+    public void setStillCut(List<String> stillCut) { movie.setStillCut(stillCut); }
 
     public void setTrailer(String trailer) {movie.setTrailer(trailer);}
 

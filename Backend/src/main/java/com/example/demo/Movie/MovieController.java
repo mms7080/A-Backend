@@ -5,6 +5,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -60,11 +61,13 @@ public class MovieController {
             @RequestParam("cast") String cast,
             @RequestParam("poster") MultipartFile poster,
             @RequestParam("wideImage") MultipartFile wideImage,
+            @RequestParam("stillCut") List<MultipartFile> stillCut,
             @RequestParam("trailer") String trailer,
             @RequestParam("label") String label
     ) {
         try {
             String posterUrl = null, wideImageUrl = null;
+            List<String> steelCutUrl = new ArrayList<>();
 
             // 이미지 저장 경로
             Path uploadPath = Paths.get("src/main").toAbsolutePath().getParent().getParent().resolve(uploadDir);
@@ -82,7 +85,13 @@ public class MovieController {
                 else if(wideImageUrl == null) wideImageUrl = ("/images/movie/" + filename);
                 else throw new IOException("url is already full");
             }
-            Movie movie = new Movie(null, title, titleEnglish, rate, releaseDate, description, runningTime, genre, director, cast, 0.0, 0L, posterUrl, wideImageUrl, trailer, label, 0.0, 0L, 0, LocalDateTime.now());
+            for (MultipartFile image : stillCut) {
+                String filename = UUID.randomUUID() + "_" + StringUtils.cleanPath(image.getOriginalFilename());
+                Path filePath = uploadPath.resolve(filename);
+                image.transferTo(filePath.toFile());
+                steelCutUrl.add("/images/movie/" + filename);
+            }
+            Movie movie = new Movie(null, title, titleEnglish, rate, releaseDate, description, runningTime, genre, director, cast, 0.0, 0L, posterUrl, wideImageUrl, steelCutUrl, trailer, label, 0.0, 0L, 0, LocalDateTime.now());
             dao.save(movie);
             return ResponseEntity.ok("업로드 성공");
         } catch (IOException e) {
