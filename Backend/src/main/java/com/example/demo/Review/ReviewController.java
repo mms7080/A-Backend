@@ -94,7 +94,16 @@ public class ReviewController {
         return dao.findByMovieid(original.getMovieid());
     }
 
-    @PostMapping("/like/logic/{reviewid}")/* 리뷰 작성하기 */
+    @PostMapping("/delete/logic/{id}")/* 리뷰 삭제하기 */
+    public Map<String,String> deleteReview(@PathVariable Long id) {
+
+        System.out.println("***************"+id);
+        dao.delete(id);
+        return Collections.singletonMap("result", "deletesuccess");
+
+    }
+
+    @PostMapping("/like/logic/{reviewid}")/* 리뷰 공감/비공감하기 */
     public List<String> likeReview(@PathVariable Long reviewid,@RequestBody Map<String, String> data) {
 
         String liked=data.get("liked");
