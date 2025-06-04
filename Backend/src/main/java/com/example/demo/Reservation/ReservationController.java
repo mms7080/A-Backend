@@ -1,8 +1,13 @@
 package com.example.demo.Reservation;
 
+import java.util.List;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
+
+import jakarta.annotation.PostConstruct;
 
 @RestController
 @RequestMapping("/api/reservations")
@@ -14,6 +19,38 @@ public class ReservationController {
     public ReservationController(ReservationRepository repo) {
         this.repo = repo;
     }
+
+
+@Component
+public class ReservationDataInitializer {
+
+    private final ReservationRepository repository;
+
+    public ReservationDataInitializer(ReservationRepository repository) {
+        this.repository = repository;
+    }
+
+    @PostConstruct
+    public void init() {
+        if (repository.count() > 0) {
+            System.out.println("⚠️ 예약 데이터가 이미 존재하여 초기화를 건너뜁니다.");
+            return;
+        }
+
+        List<Reservation> dummyReservations = List.of(
+            new Reservation(null, "root", 1L, "서울", "강남", "2025-06-05", "18:00", "A1,A2", 2, 0, 0, 0, 26000, "reservation-1717560000000"),
+            new Reservation(null, "root2", 2L, "부산", "센텀", "2025-06-06", "20:30", "B3,B4,B5", 3, 0, 0, 0, 39000, "reservation-1717560100000"),
+            new Reservation(null, "root3", 3L, "대전", "둔산", "2025-06-07", "14:00", "C1,C2", 1, 1, 0, 0, 24000, "reservation-1717560200000"),
+            new Reservation(null, "root4", 4L, "서울", "홍대", "2025-06-08", "16:45", "D1", 0, 0, 1, 0, 10000, "reservation-1717560300000"),
+            new Reservation(null, "root5", 5L, "인천", "송도", "2025-06-09", "12:00", "E2,E3,E4,E5", 2, 1, 0, 1, 46000, "reservation-1717560400000")
+        );
+
+        repository.saveAll(dummyReservations);
+        System.out.println("✅ 예약 더미 데이터 삽입 완료");
+    }
+}
+
+
 
     @PostMapping
     public ResponseEntity<?> save(@RequestBody Reservation reservation) {

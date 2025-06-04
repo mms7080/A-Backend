@@ -7,6 +7,8 @@ import com.example.demo.Movie.Movie;
 import com.example.demo.Movie.MovieRepository;
 import com.example.demo.Payment.Payment;
 import com.example.demo.Payment.PaymentRepository;
+import com.example.demo.Reservation.Reservation;
+import com.example.demo.Reservation.ReservationRepository;
 import com.example.demo.Store.StoreRepository;
 
 import java.util.List;
@@ -27,26 +29,27 @@ public class AdminController {
     private final MovieRepository movieRepository;
     private final EventRepository eventRepository;
     private final PaymentRepository paymentRepository;
+    private final ReservationRepository reservationRepository;
 
     public AdminController(UserRepository userRepository,
             StoreRepository storeRepository,
             MovieRepository movieRepository,
             EventRepository eventRepository,
-            PaymentRepository paymentRepository) {
+            PaymentRepository paymentRepository,
+            ReservationRepository reservationRepository) {
         this.userRepository = userRepository;
         this.storeRepository = storeRepository;
         this.movieRepository = movieRepository;
         this.eventRepository = eventRepository;
         this.paymentRepository = paymentRepository;
+        this.reservationRepository = reservationRepository;
     }
 
-    // 총 회원 수
     @GetMapping("/user-count")
     public long getUserCount() {
         return userRepository.count();
     }
 
-    // 유저정보
     @GetMapping("/users")
     public List<?> getAllUsers() {
         return userRepository.findAll();
@@ -60,14 +63,14 @@ public class AdminController {
 
     // 스토어 목록
     @GetMapping("/store")
-    public List<?> getAllstores() {
+    public List<?> getAllStores() {
         return storeRepository.findAll();
     }
 
     // 영화화 목록
     @GetMapping("/movies")
     public List<Movie> getAllMovies() {
-        return movieRepository.findAll(Sort.by(Sort.Direction.ASC, "rank")); // 랭킹순 정렬
+        return movieRepository.findAll(Sort.by(Sort.Direction.ASC, "rank"));
     }
 
     // 총 영화 수
@@ -92,6 +95,17 @@ public class AdminController {
     @GetMapping("/payments")
     public List<Payment> getAllPayments() {
         return paymentRepository.findAll(Sort.by(Sort.Direction.DESC, "approvedAt"));
+    }
+
+    // 예매 전체 조회
+    @GetMapping("/reservations")
+    public List<Reservation> getAllReservations() {
+        return reservationRepository.findAll();
+    }
+    // 예매 수 카운트
+    @GetMapping("/reservation-count")
+    public long getReservationCount() {
+        return reservationRepository.count();
     }
 
 }
