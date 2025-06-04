@@ -70,7 +70,7 @@ public class TossPaymentController {
             Payment payment = new Payment();
             payment.setPaymentKey((String) res.get("paymentKey"));
             payment.setOrderId((String) res.get("orderId"));
-            payment.setAmount((Integer) res.get("totalAmount"));
+            payment.setAmount(((Number) res.get("totalAmount")).intValue()); 
             payment.setOrderName((String) res.get("orderName"));
             payment.setApprovedAt((String) res.get("approvedAt"));
             payment.setStatus((String) res.get("status"));

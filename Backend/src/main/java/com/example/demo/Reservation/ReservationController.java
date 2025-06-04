@@ -14,8 +14,10 @@ public class ReservationController {
         this.repo = repo;
     }
 
-    @PostMapping
-    public ResponseEntity<?> save(@RequestBody Reservation reservation) {
-        return ResponseEntity.ok(repo.save(reservation));
-    }
+@PostMapping
+public ResponseEntity<?> save(@RequestBody Reservation reservation) {
+    System.out.println("📥 예약 저장 요청: " + reservation);
+    return ResponseEntity.ok(repo.save(reservation));
+}
+
 }
