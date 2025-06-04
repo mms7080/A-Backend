@@ -84,7 +84,7 @@ public class MovieDao {
             "마크 코신스", "알리스테어 맥고완", 
             9.8, 1300L, 
             "/images/poster4.jpg", 
-            "/iamges/wide4.jpg", 
+            "/images/wide4.jpg", 
             "https://www.youtube.com/embed/xpvBJXhsUDU", 
             "", 17.6, 1700L, 4, now
         ));
@@ -182,7 +182,7 @@ public class MovieDao {
             "마크 코신스", "알리스테어 맥고완", 
             9.8, 1300L, 
             "/images/poster4.jpg", 
-            "/iamges/wide4.jpg", 
+            "/images/wide4.jpg", 
             "https://www.youtube.com/embed/xpvBJXhsUDU", 
             "", 9.8, 900L, 12, now
         ));
