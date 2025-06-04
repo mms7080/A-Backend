@@ -63,6 +63,37 @@ public class ReviewController {
         return dao.findByMovieid(movieid);
     }
 
+    @PostMapping("/modify/logic")/* 리뷰 수정하기 */
+    public List<Review> modifyReview(@RequestBody Map<String, String> data) {
+
+        String idRaw = data.get("id");
+        String content = data.get("content");
+        String scoreRaw = data.get("score");
+        Long id = Long.parseLong(idRaw);
+        Integer score = Integer.parseInt(scoreRaw);
+
+        Review original=dao.findById(id);
+
+        LocalDateTime now = LocalDateTime.now(); // 현재 시간
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"); // 포맷 지정
+        String formattedNow = now.format(formatter); // 문자열로 변환
+
+        dao.modify(
+            new Review(
+            id,
+            original.getMovieid(),
+            original.getAuthor(),
+            content,
+            score,
+            original.getLikenumber(),
+            original.getLikeusers(),
+            formattedNow
+            )
+        );
+
+        return dao.findByMovieid(original.getMovieid());
+    }
+
     @PostMapping("/like/logic/{reviewid}")/* 리뷰 작성하기 */
     public List<String> likeReview(@PathVariable Long reviewid,@RequestBody Map<String, String> data) {
 
