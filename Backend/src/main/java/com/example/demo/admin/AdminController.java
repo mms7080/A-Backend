@@ -9,6 +9,8 @@ import com.example.demo.Payment.Payment;
 import com.example.demo.Payment.PaymentRepository;
 import com.example.demo.Reservation.Reservation;
 import com.example.demo.Reservation.ReservationRepository;
+import com.example.demo.Review.Review;
+import com.example.demo.Review.ReviewRepository;
 import com.example.demo.Store.StoreRepository;
 
 import java.util.List;
@@ -30,19 +32,22 @@ public class AdminController {
     private final EventRepository eventRepository;
     private final PaymentRepository paymentRepository;
     private final ReservationRepository reservationRepository;
+    private final ReviewRepository reviewRepository;
 
     public AdminController(UserRepository userRepository,
             StoreRepository storeRepository,
             MovieRepository movieRepository,
             EventRepository eventRepository,
             PaymentRepository paymentRepository,
-            ReservationRepository reservationRepository) {
+            ReservationRepository reservationRepository,
+            ReviewRepository reviewRepository) {
         this.userRepository = userRepository;
         this.storeRepository = storeRepository;
         this.movieRepository = movieRepository;
         this.eventRepository = eventRepository;
         this.paymentRepository = paymentRepository;
         this.reservationRepository = reservationRepository;
+        this.reviewRepository = reviewRepository;
     }
 
     @GetMapping("/user-count")
@@ -102,10 +107,23 @@ public class AdminController {
     public List<Reservation> getAllReservations() {
         return reservationRepository.findAll();
     }
+
     // 예매 수 카운트
     @GetMapping("/reservation-count")
     public long getReservationCount() {
         return reservationRepository.count();
+    }
+
+    // 리뷰 전체 조회
+    @GetMapping("/reviews")
+    public List<Review> getAllReviews() {
+        return reviewRepository.findAll();
+    }
+
+    // 리뷰 수 카운트
+    @GetMapping("/review-count")
+    public Long getReviewCount() {
+        return reviewRepository.count();
     }
 
 }
