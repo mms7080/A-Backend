@@ -36,13 +36,13 @@ public class TheaterService {
 
     static {
         Map<String, List<String>> tempMap = new HashMap<>();
-        tempMap.put("서울", Arrays.asList("CGV 강남", "롯데시네마 월드타워", "메가박스 코엑스", "대한극장", "CGV 용산아이파크몰"));
-        tempMap.put("경기/인천", Arrays.asList("CGV 판교", "롯데시네마 수원", "메가박스 송도", "CGV 인천터미널", "메가박스 킨텍스"));
-        tempMap.put("충청/대전", Arrays.asList("CGV 대전터미널", "롯데시네마 대전센트럴", "메가박스 대전중앙로", "CGV 청주지웰시티"));
-        tempMap.put("전라/광주", Arrays.asList("CGV 광주터미널", "롯데시네마 광주광산", "메가박스 전주객사", "CGV 광주상무"));
-        tempMap.put("경남/부산", Arrays.asList("CGV 센텀시티", "롯데시네마 부산본점", "메가박스 해운대(장산)", "CGV 서면", "영화의전당"));
-        tempMap.put("강원", Arrays.asList("CGV 춘천", "롯데시네마 원주무실", "메가박스 강릉", "CGV 강릉"));
-        tempMap.put("제주", Arrays.asList("CGV 제주", "롯데시네마 제주아라", "메가박스 제주삼화", "CGV 제주노형"));
+        tempMap.put("서울", Arrays.asList("롯데시네마 강남", "롯데시네마 월드타워", "롯데시네마 코엑스", "롯데시네마 노원", "롯데시네마 용산아이파크몰"));
+        tempMap.put("경기/인천", Arrays.asList("롯데시네마 판교", "롯데시네마 수원", "롯데시네마 송도", "롯데시네마 인천터미널", "롯데시네마 킨텍스"));
+        tempMap.put("충청/대전", Arrays.asList("롯데시네마 대전터미널", "롯데시네마 대전센트럴", "롯데시네마 대전중앙로", "롯데시네마 청주지웰시티"));
+        tempMap.put("전라/광주", Arrays.asList("롯데시네마 광주터미널", "롯데시네마 광주광산", "롯데시네마 전주객사", "롯데시네마 광주상무"));
+        tempMap.put("경남/부산", Arrays.asList("롯데시네마 센텀시티", "롯데시네마 부산본점", "롯데시네마 해운대(장산)", "롯데시네마 서면", "롯데시네마 마산"));
+        tempMap.put("강원", Arrays.asList("롯데시네마 춘천", "롯데시네마 원주무실", "롯데시네마 강릉", "롯데시네마 양양"));
+        tempMap.put("제주", Arrays.asList("롯데시네마 제주", "롯데시네마 제주아라", "롯데시네마 제주삼화", "롯데시네마 제주노형"));
         EXAMPLE_THEATER_NAMES_BY_REGION = Collections.unmodifiableMap(tempMap);
     }
 

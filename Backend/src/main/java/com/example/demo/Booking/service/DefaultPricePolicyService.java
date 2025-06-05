@@ -22,7 +22,7 @@ public class DefaultPricePolicyService implements PricePolicyService  {
         CustomerCategory.DISABLED, new BigDecimal("8000")  
     );
 
-    private static final String VALID_COUPON_CODE = "FILM10"; // 10%할인 쿠폰폰
+    private static final String VALID_COUPON_CODE = "10%할인쿠폰"; // 10%할인 쿠폰폰
     private static final BigDecimal DISCOUNT_PERCENTAGE = new BigDecimal("0.10"); 
 
     @Override
