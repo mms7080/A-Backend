@@ -101,7 +101,7 @@ public class MovieController {
     }
 
     // 영화 삭제 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("movie/{id}")
     public ResponseEntity<?> deleteMovie(@PathVariable Long id) {
         if (!dao.existsById(id)) {
             return ResponseEntity.notFound().build();
