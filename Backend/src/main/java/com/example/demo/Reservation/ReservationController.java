@@ -38,11 +38,11 @@ public class ReservationDataInitializer {
         }
 
         List<Reservation> dummyReservations = List.of(
-            new Reservation(null, "root", 1L, "서울", "강남", "2025-06-05", "18:00", "A1,A2", 2, 0, 0, 0, 26000, "reservation-1717560000000"),
-            new Reservation(null, "root2", 2L, "부산", "센텀", "2025-06-06", "20:30", "B3,B4,B5", 3, 0, 0, 0, 39000, "reservation-1717560100000"),
-            new Reservation(null, "root3", 3L, "대전", "둔산", "2025-06-07", "14:00", "C1,C2", 1, 1, 0, 0, 24000, "reservation-1717560200000"),
-            new Reservation(null, "root4", 4L, "서울", "홍대", "2025-06-08", "16:45", "D1", 0, 0, 1, 0, 10000, "reservation-1717560300000"),
-            new Reservation(null, "root5", 5L, "인천", "송도", "2025-06-09", "12:00", "E2,E3,E4,E5", 2, 1, 0, 1, 46000, "reservation-1717560400000")
+            new Reservation(null, "root", 1L, "서울", "강남", "2025-06-05", "18:00", "A1", 2, 0, 0, 0, 15000, "reservation-1717560000000"),
+            new Reservation(null, "root2", 1L, "부산", "센텀", "2025-06-06", "20:30", "B3", 3, 0, 0, 0, 15000, "reservation-1717560100000"),
+            new Reservation(null, "root3", 1L, "대전", "둔산", "2025-06-07", "14:00", "C1", 1, 1, 0, 0, 15000, "reservation-1717560200000"),
+            new Reservation(null, "root4", 4L, "서울", "홍대", "2025-06-08", "16:45", "D1", 0, 0, 1, 0, 15000, "reservation-1717560300000"),
+            new Reservation(null, "root5", 5L, "인천", "송도", "2025-06-09", "12:00", "E2", 2, 1, 0, 1, 15000, "reservation-1717560400000")
         );
 
         repository.saveAll(dummyReservations);
