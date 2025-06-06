@@ -18,7 +18,7 @@ public class Test implements CommandLineRunner{
                 null,
                 "root",
                 new BCryptPasswordEncoder().encode("1234"),
-                "홍길동",
+                "관리자",
                 "01011223344",
                 "honggildong@naver.com",
                 "1990-10-31",
