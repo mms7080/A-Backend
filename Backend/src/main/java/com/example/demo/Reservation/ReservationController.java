@@ -20,37 +20,70 @@ public class ReservationController {
         this.repo = repo;
     }
 
+    @Component
+    public class ReservationDataInitializer {
 
-@Component
-public class ReservationDataInitializer {
+        private final ReservationRepository repository;
 
-    private final ReservationRepository repository;
-
-    public ReservationDataInitializer(ReservationRepository repository) {
-        this.repository = repository;
-    }
-
-    @PostConstruct
-    public void init() {
-        if (repository.count() > 0) {
-            System.out.println("⚠️ 예약 데이터가 이미 존재하여 초기화를 건너뜁니다.");
-            return;
+        public ReservationDataInitializer(ReservationRepository repository) {
+            this.repository = repository;
         }
 
-        List<Reservation> dummyReservations = List.of(
-            new Reservation(null, "root", 1L, "서울", "강남", "2025-06-05", "18:00", "A1", 2, 0, 0, 0, 15000, "reservation-1717560000000"),
-            new Reservation(null, "root2", 1L, "부산", "센텀", "2025-06-06", "20:30", "B3", 3, 0, 0, 0, 15000, "reservation-1717560100000"),
-            new Reservation(null, "root3", 1L, "대전", "둔산", "2025-06-07", "14:00", "C1", 1, 1, 0, 0, 15000, "reservation-1717560200000"),
-            new Reservation(null, "root4", 4L, "서울", "홍대", "2025-06-08", "16:45", "D1", 0, 0, 1, 0, 15000, "reservation-1717560300000"),
-            new Reservation(null, "root5", 5L, "인천", "송도", "2025-06-09", "12:00", "E2", 2, 1, 0, 1, 15000, "reservation-1717560400000")
-        );
+        @PostConstruct
+        public void init() {
+            if (repository.count() > 0) {
+                System.out.println("⚠️ 예약 데이터가 이미 존재하여 초기화를 건너뜁니다.");
+                return;
+            }
 
-        repository.saveAll(dummyReservations);
-        System.out.println("✅ 예약 더미 데이터 삽입 완료");
+            List<Reservation> dummyReservations = List.of(
+                    new Reservation(null, "root1", 1L, "서울", "강남", "2025-06-07", "10:00", "A1", 1, 0, 0, 0, 12000,
+                            "movie-1717550000001"),
+                    new Reservation(null, "root2", 2L, "서울", "홍대", "2025-06-07", "13:30", "C3,C4", 2, 0, 0, 0, 24000,
+                            "movie-1717550000002"),
+                    new Reservation(null, "root3", 3L, "서울", "용산", "2025-06-07", "15:00", "D5", 0, 1, 0, 0, 11000,
+                            "movie-1717550000003"),
+                    new Reservation(null, "root4", 4L, "서울", "홍대", "2025-06-08", "16:45", "D1", 0, 0, 1, 0, 15000,
+                            "movie-1717550000004"),
+                    new Reservation(null, "root5", 5L, "서울", "강남", "2025-06-08", "18:20", "E2,E3", 2, 0, 0, 0, 24000,
+                            "movie-1717550000005"),
+                    new Reservation(null, "root6", 3L, "부산", "서면", "2025-06-09", "12:00", "B2", 0, 1, 0, 0, 11000,
+                            "movie-1717550000006"),
+                    new Reservation(null, "root7", 3L, "부산", "해운대", "2025-06-09", "14:30", "C7,C8", 2, 0, 0, 0, 24000,
+                            "movie-1717550000007"),
+                    new Reservation(null, "root8", 4L, "인천", "부평", "2025-06-10", "10:00", "D3", 0, 0, 1, 0, 15000,
+                            "movie-1717550000008"),
+                    new Reservation(null, "root9", 2L, "대구", "동성로", "2025-06-10", "17:00", "E1,E2", 2, 0, 0, 0, 24000,
+                            "movie-1717550000009"),
+                    new Reservation(null, "root10", 5L, "서울", "건대입구", "2025-06-11", "19:10", "A5", 1, 0, 0, 0, 12000,
+                            "movie-1717550000010"),
+                    new Reservation(null, "root11", 4L, "서울", "왕십리", "2025-06-12", "20:30", "C9,C10", 2, 0, 0, 0,
+                            24000, "movie-1717550000011"),
+                    new Reservation(null, "root12", 2L, "서울", "코엑스", "2025-06-13", "11:00", "D6", 0, 1, 0, 0, 11000,
+                            "movie-1717550000012"),
+                    new Reservation(null, "root13", 1L, "서울", "강변", "2025-06-13", "14:15", "B3,B4", 1, 1, 0, 0, 23000,
+                            "movie-1717550000013"),
+                    new Reservation(null, "root14", 1L, "서울", "명동", "2025-06-13", "16:50", "C2", 1, 0, 0, 1, 16000,
+                            "movie-1717550000014"),
+                    new Reservation(null, "root15", 2L, "서울", "홍대", "2025-06-14", "18:00", "A6,A7", 2, 0, 0, 0, 24000,
+                            "movie-1717550000015"),
+                    new Reservation(null, "root16", 2L, "수원", "수원역", "2025-06-14", "20:00", "E4", 0, 0, 1, 0, 15000,
+                            "movie-1717550000016"),
+                    new Reservation(null, "root17", 3L, "서울", "상봉", "2025-06-15", "10:30", "B1,B2", 1, 1, 0, 0, 23000,
+                            "movie-1717550000017"),
+                    new Reservation(null, "root18", 3L, "서울", "압구정", "2025-06-15", "13:15", "C6", 1, 0, 0, 0, 12000,
+                            "movie-1717550000018"),
+                    new Reservation(null, "root19", 3L, "서울", "건대", "2025-06-15", "16:00", "A1,A2", 2, 0, 0, 0, 24000,
+                            "movie-1717550000019"),
+                    new Reservation(null, "root20", 3L, "서울", "왕십리", "2025-06-15", "19:00", "D8", 0, 0, 0, 1, 14000,
+                            "movie-1717550000020"),
+                    new Reservation(null, "root5", 5L, "인천", "송도", "2025-06-09", "12:00", "E2", 2, 1, 0, 1, 15000,
+                            "movie-1717560400000"));
+
+            repository.saveAll(dummyReservations);
+            System.out.println("✅ 예약 더미 데이터 삽입 완료");
+        }
     }
-}
-
-
 
     @PostMapping
     public ResponseEntity<?> save(@RequestBody Reservation reservation) {
@@ -73,5 +106,3 @@ public class ReservationDataInitializer {
         }
     }
 }
-
-
