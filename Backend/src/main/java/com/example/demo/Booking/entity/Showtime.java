@@ -22,6 +22,7 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import jakarta.persistence.CascadeType;
 
 @Data
 @NoArgsConstructor
@@ -58,9 +59,9 @@ public class Showtime {
     private List<Seat> seats = new ArrayList<>();
 
     // 하나의 상영시간표(Showtime)는 여러 예매(Booking) 정보를 가짐
-    @OneToMany(mappedBy = "showtime", fetch = FetchType.LAZY) 
+     @OneToMany(mappedBy = "showtime", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY) 
     private List<Booking> bookings = new ArrayList<>();
-
+    
     @Builder
     public Showtime(Movie movie, Theater theater, LocalDateTime startTime, String auditoriumName) {
         this.movie = movie;

@@ -4,6 +4,13 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
+// 아래 4개의 import 문 추가
+import com.example.demo.Booking.entity.Showtime;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.OneToMany;
+
 import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
@@ -14,13 +21,13 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
-import lombok.AllArgsConstructor;
+// import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
+// import lombok.NoArgsConstructor;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+// @AllArgsConstructor
+// @NoArgsConstructor
 @Entity
 @Table(name = "MOVIE")
 @SequenceGenerator(
@@ -92,9 +99,41 @@ public class Movie {
     @Column(name = "created_at")
     private LocalDateTime createdAt = LocalDateTime.now();
     
-    
-    
-    
+    // cascade 추가 삭제시 showtime->booking,seat도 같이 삭제 무결성제약조건 해결을 위해 추가.
+    @OneToMany(mappedBy = "movie", cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
+    @JsonIgnore // Api 응답시 무한 순환 참조 방지
+    private List<Showtime> showtimes = new ArrayList<>();
 
+    // 1. JPA를 위한 기본 생성자 // cascade때문에 만듦은 이게 없으면 기존 생성자가 총 20개인데 cascade 추가 삭제때문에 1개가 더 생겨 21개로 되서 이게 없으면 movie컨트롤,DAO에서 오류가남 생성자가 안맞아서
+    public Movie() {
+    }
+
+    // 2. 기존 코드(MovieDao, MovieController)에서 필요로 하는 생성자
+    public Movie(Long id, String title, String titleEnglish, String rate, String releaseDate, String description,
+                 Integer runningTime, String genre, String director, String cast, Double score, Long likeNumber,
+                 String poster, String wideImage, List<String> stillCut, String trailer, String label,
+                 Double reserveRate, Long totalView, Integer rank, LocalDateTime createdAt) {
+        this.id = id;
+        this.title = title;
+        this.titleEnglish = titleEnglish;
+        this.rate = rate;
+        this.releaseDate = releaseDate;
+        this.description = description;
+        this.runningTime = runningTime;
+        this.genre = genre;
+        this.director = director;
+        this.cast = cast;
+        this.score = score;
+        this.likeNumber = likeNumber;
+        this.poster = poster;
+        this.wideImage = wideImage;
+        this.stillCut = stillCut;
+        this.trailer = trailer;
+        this.label = label;
+        this.reserveRate = reserveRate;
+        this.totalView = totalView;
+        this.rank = rank;
+        this.createdAt = createdAt;
+    }
     
 }
