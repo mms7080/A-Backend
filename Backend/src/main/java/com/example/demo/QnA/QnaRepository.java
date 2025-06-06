@@ -9,5 +9,4 @@ import org.springframework.stereotype.Repository;
 public interface QnaRepository extends JpaRepository<Qna, Long>  {
     public List<Qna> findByAuthor(String author);
     public List<Qna> findByReplyto(String replyto);
-    public List<Qna> findByReplytoid(Long replytoid);
 }

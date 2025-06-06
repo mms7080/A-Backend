@@ -30,10 +30,6 @@ public class QnaDao {
         return repo.findByReplyto(replyto);
     }
 
-    public List<Qna> findByReplytoid(Long replytoid){
-        return repo.findByReplytoid(replytoid);
-    }
-
     public void insert(Qna qna){
         qna.setId(null);
         repo.save(qna);

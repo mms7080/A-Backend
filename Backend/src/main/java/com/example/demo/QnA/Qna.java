@@ -39,7 +39,7 @@ public class Qna {
 
     private String title; /* QnA의 제목 */
 
-    @Column(length = 500)
+    @Column(length = 1000)
     private String content; /* QnA의 내용 */
 
     private String writetime; /* QnA 작성 날짜, 시간 */
