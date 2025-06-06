@@ -62,14 +62,9 @@ public class ConfigSecurity{/* 로그인 로직 */
     public SecurityFilterChain security(HttpSecurity http) throws Exception{
         return http
         .csrf(csrf->csrf.disable())/* CSRF 비활성화 */
-        /* .ignoringRequestMatchers("/public","/private","/signin/logic","/logout","/join/logic","/modify/logic","/find_id/logic","/find_pw/logic","/set_pw/logic"))// JWT 토큰을 사용하면서 더 이상 사용하지 않게 된 부분 */
         .authorizeHttpRequests(auth->auth.dispatcherTypeMatchers(DispatcherType.FORWARD)/* JSP forward는 허용 */
         .permitAll()
-        .requestMatchers("/secure","/logout")/* 로그인 필요 */
-        .authenticated()
-        .requestMatchers("/check")/* ADMIN 권한 필요 */
-        .hasAnyRole("ADMIN")
-        .anyRequest()/* 나머지 허용 */
+        .anyRequest()/* 모두 허용 */
         .permitAll()
         )
         .formLogin(login->login
@@ -93,15 +88,6 @@ public class ConfigSecurity{/* 로그인 로직 */
             cookieUtil.RemoveJWTCookie(res);/* JWT 쿠키 제거 */
             res.sendRedirect(corsOrigin+"/home");/* 로그아웃 후 홈으로 */
         })
-        )
-        .rememberMe(rm->rm
-        .key("Z7EMefBrld4tlbRJgxvJKVLcUnTt2PbIHawfCUgzmO4Y8O9uvavu9SeFZvoStUrZtqoBxSt9Y7yWLCX1D82sHYROIBIjeQy5WGx4fY2i1IUbPXs43p8UzfEiSRG2DSvE")/* 내부적으로 토큰 서명에 사용 */
-        .tokenValiditySeconds(3600*24*7)/* 7일 유지 */
-        .rememberMeCookieDomain("domain")
-        .rememberMeCookieName("name")
-        .useSecureCookie(false)
-        .alwaysRemember(false)
-        .rememberMeParameter("remember-login")/* 폼 필드 이름 */
         )
         .oauth2Login(login->login
         .loginPage(corsOrigin+"/signin")
