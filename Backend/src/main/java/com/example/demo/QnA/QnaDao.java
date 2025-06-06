@@ -34,7 +34,7 @@ public class QnaDao {
         return repo.findByReplytoid(replytoid);
     }
 
-       public void insert(Qna qna){
+    public void insert(Qna qna){
         qna.setId(null);
         repo.save(qna);
     }
@@ -52,6 +52,45 @@ public class QnaDao {
     @Transactional
     public void testQnas() {
         if(repo.count() > 0)return;
+        for(int j=0;j<2;j++)
+
+            insert(new Qna(
+            null,
+            "shin1234",
+            null,
+            null,
+            "질문 테스트 제목입니다"+(j+1),
+            "질문 테스트 내용입니다"+(j+1),
+            "2025-05-05 00:00:0"+j
+
+        ));
+        insert(new Qna(
+            null,
+            "root",
+            "shin1234",
+            1L,
+            "답변 테스트 제목입니다1",
+            "답변 테스트 내용입니다1",
+            "2025-05-06 00:00:00"
+        ));
+        insert(new Qna(
+            null,
+            "root",
+            "shin1234",
+            1L,
+            "답변 테스트 제목입니다1-1",
+            "답변 테스트 내용입니다1-1",
+            "2025-05-07 00:00:00"
+        ));
+        insert(new Qna(
+            null,
+            "root",
+            "shin1234",
+            2L,
+            "답변 테스트 제목입니다2",
+            "답변 테스트 내용입니다2",
+            "2025-05-04 00:00:00"
+        ));
     }
     
 }
