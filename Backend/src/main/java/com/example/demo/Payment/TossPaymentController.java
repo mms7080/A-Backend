@@ -1,7 +1,10 @@
 package com.example.demo.Payment;
 
+import com.example.demo.Payment.EmailService;
+import com.example.demo.User.UserService;
 import jakarta.annotation.PostConstruct;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
@@ -19,16 +22,19 @@ public class TossPaymentController {
     private static final String SECRET_KEY = "test_sk_DpexMgkW36vnlW1bALgB3GbR5ozO";
     private final PaymentRepository repository;
 
+    @Autowired
+    private EmailService emailService;
+
+    @Autowired
+    private UserService userService;
+
     public TossPaymentController(PaymentRepository repository) {
         this.repository = repository;
     }
 
-
-    // ✅ 서버 실행 시 더미 결제 데이터 3건 삽입
     @PostConstruct
     public void insertDummyPayments() {
-        if (repository.count() > 0)
-            return;
+        if (repository.count() > 0) return;
 
         String now = ZonedDateTime.now().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
 
@@ -58,7 +64,7 @@ public class TossPaymentController {
             System.out.println("paymentKey: " + req.getPaymentKey());
             System.out.println("orderId: " + req.getOrderId());
             System.out.println("amount: " + req.getAmount());
-            System.out.println("userId: " + req.getUserId());
+            System.out.println("userId(username): " + req.getUserId());
 
             Optional<Payment> existing = repository.findByPaymentKey(req.getPaymentKey());
             if (existing.isPresent()) {
@@ -81,10 +87,10 @@ public class TossPaymentController {
             HttpEntity<Map<String, String>> request = new HttpEntity<>(body, headers);
 
             ResponseEntity<Map> response = restTemplate.exchange(
-                "https://api.tosspayments.com/v1/payments/confirm",
-                HttpMethod.POST,
-                request,
-                Map.class
+                    "https://api.tosspayments.com/v1/payments/confirm",
+                    HttpMethod.POST,
+                    request,
+                    Map.class
             );
 
             Map<String, Object> res = response.getBody();
@@ -105,8 +111,48 @@ public class TossPaymentController {
                 payment.setMethod("기타");
             }
 
-            payment.setUserId(req.getUserId());
+            payment.setUserId(req.getUserId()); // username
             repository.save(payment);
+
+            // ✅ 이메일 발송 (reservation 전용)
+            if (type.equals("reservation")) {
+                try {
+                    String email = userService.getEmailById(req.getUserId());
+                    System.out.println("📧 조회된 이메일: " + email);
+
+                    if (email == null || email.isBlank()) {
+                        System.err.println("❌ 이메일 조회 실패: 유효한 username 아님");
+                    } else {
+                        String content = String.format("""
+                                🎬 예매가 성공적으로 완료되었습니다!
+
+                                [예매 정보]
+                                예매 번호: %s
+                                결제 금액: %,d원
+                                결제 수단: %s (%s)
+                                결제 일시: %s
+
+                                예매 내역은 마이페이지에서 확인하실 수 있습니다.
+                                감사합니다!
+                                """,
+                                payment.getOrderId(),
+                                payment.getAmount(),
+                                payment.getMethod(),
+                                payment.getCardCompany() != null ? payment.getCardCompany() : "기타",
+                                payment.getApprovedAt()
+                        );
+
+                        emailService.sendReservationSuccessEmail(
+                                email,
+                                "🎟️ 영화 예매 완료 안내",
+                                content
+                        );
+                        System.out.println("✅ 예매 이메일 발송 성공");
+                    }
+                } catch (Exception e) {
+                    System.err.println("⚠️ 이메일 발송 중 예외 발생: " + e.getMessage());
+                }
+            }
 
             return ResponseEntity.ok(payment);
 
@@ -122,7 +168,7 @@ public class TossPaymentController {
         private String paymentKey;
         private String orderId;
         private int amount;
-        private String userId;
+        private String userId; // 반드시 username 값이 들어가야 함
     }
 
     @DeleteMapping("/refund/{paymentId}")

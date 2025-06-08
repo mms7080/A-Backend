@@ -51,6 +51,26 @@ public class Test implements CommandLineRunner{
                 null
             )
         );        
+
+            daoUser.Insert(/* 테스트를 위한 유저 정보 입력 1 */
+            new User(
+                null,
+                "bum",
+                new BCryptPasswordEncoder().encode("1234"),
+                "박범수",
+                "01030600342",
+                "mms7080@naver.com",
+                "1990-10-31",
+                "남성",
+                "21176",
+                "서울시 은평구",
+                "문새로72번길 13",
+                "ADMIN",
+                null,
+                "2025-05-16",
+                null
+            )
+        );    
     }    
 
 }

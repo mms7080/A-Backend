@@ -9,6 +9,8 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
+    Optional<User> findFirstByUsername(String username); // 이메일 조회용 하나만들게요요 List<User>는 단일유저 조회못함 
+
     public List<User> findByUsername(String username);/* 유저 ID 기반으로 찾는 함수 */
     
     public Optional<User> findByUsernameAndNameAndEmail(String username,String name,String email);/* 유저 ID, 이름, 이메일 기반으로 찾는 함수 */
