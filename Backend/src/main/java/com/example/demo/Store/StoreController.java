@@ -1,25 +1,22 @@
 package com.example.demo.Store;
 
+import com.example.demo.Payment.Payment;
+import com.example.demo.Payment.PaymentRepository;
+import com.example.demo.Reservation.Coupon;
+import com.example.demo.Reservation.CouponRepository;
+import com.example.demo.User.User;
+import com.example.demo.User.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
-import com.example.demo.Payment.Payment;
-import com.example.demo.Payment.PaymentRepository;
-import com.example.demo.User.User;
-import com.example.demo.User.UserRepository;
 
 import java.io.IOException;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.NoSuchElementException;
-import java.util.Random;
-import java.util.UUID;
+import java.util.*;
 
 @RestController
 @RequestMapping("/store")
@@ -30,37 +27,40 @@ public class StoreController {
     private final StoreRepository storeRepo;
     private final PaymentRepository paymentRepo;
     private final UserRepository userRepo;
+    private final CouponRepository couponRepo;
 
     public StoreController(StoreService service,
             StoreRepository storeRepo,
             PaymentRepository paymentRepo,
-            UserRepository userRepo) {
+            UserRepository userRepo,
+            CouponRepository couponRepo) {
         this.service = service;
         this.storeRepo = storeRepo;
         this.paymentRepo = paymentRepo;
         this.userRepo = userRepo;
+        this.couponRepo = couponRepo;
     }
 
-    // 카테고리별 상품 리스트 반환
+    // 📦 카테고리별 상품 리스트
     @GetMapping
     public Map<String, List<Store>> getGroupedItems() {
         return service.getGroupedByCategory();
     }
 
-    // 상품 상세 조회
+    // 🧾 상품 상세 조회
     @GetMapping("/detail/{id}")
     public Store getItemById(@PathVariable Long id) {
         return service.findById(id);
     }
 
-    // 상품 삭제
+    // ❌ 상품 삭제
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable Long id) {
         service.delete(id);
     }
 
-    // 상품 업로드 (이미지 포함)
+    // 🖼️ 상품 업로드
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
     public Store uploadItem(
@@ -75,18 +75,16 @@ public class StoreController {
         return service.saveWithImage(category, title, subtitle, price, originalPrice, badge, badgeColor, image);
     }
 
-    // ✅ 랜덤박스 열기 API
+    // 🎲 랜덤박스 열기
     @PostMapping("/random-box")
     public Map<String, Object> openRandomBox(@RequestParam String userId) {
         Map<String, Object> response = new HashMap<>();
 
-        // 70% 확률로 꽝
-        if (new Random().nextInt(100) >= 30) {
+        if (new Random().nextInt(100) >= 50) {
             response.put("result", "꽝입니다! 다음 기회에~");
             return response;
         }
 
-        // 포인트몰 상품 목록 가져오기
         List<Store> pointMallItems = storeRepo.findByCategory("포인트몰");
         if (pointMallItems.isEmpty()) {
             response.put("result", "당첨 상품이 없습니다.");
@@ -95,11 +93,9 @@ public class StoreController {
 
         Store prize = pointMallItems.get(new Random().nextInt(pointMallItems.size()));
 
-        // 유저 정보 확인
         User user = userRepo.findByUsername(userId).stream().findFirst()
                 .orElseThrow(() -> new NoSuchElementException("해당 유저 없음"));
 
-        // Payment 레코드 생성
         Payment payment = new Payment();
         payment.setPaymentKey("RANDOM-" + UUID.randomUUID());
         payment.setOrderId("randombox-" + UUID.randomUUID());
@@ -109,13 +105,55 @@ public class StoreController {
         payment.setStatus("WON");
         payment.setApprovedAt(ZonedDateTime.now().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
         payment.setMethod("랜덤박스");
-        payment.setCardCompany(null);
-        payment.setCardNumber(null);
 
         paymentRepo.save(payment);
+
+        // ⭐ 랜덤박스 쿠폰 지급
+        issueCouponIfNeeded(prize.getTitle(), user.getUsername(), "랜덤박스"); // 반드시 username!
 
         response.put("result", "당첨!");
         response.put("item", prize);
         return response;
+    }
+
+    @PostMapping("/purchase/success")
+    public ResponseEntity<?> onStorePurchaseSuccess(@RequestBody Map<String, String> payload) {
+        String username = payload.get("username"); // ✅ 키 이름 수정
+        String itemTitle = payload.get("title");
+
+        if (username == null || itemTitle == null) {
+            return ResponseEntity.badRequest().body("필수 정보 누락");
+        }
+
+        // username으로 바로 조회
+        Optional<User> userOpt = userRepo.findByUsername(username).stream().findFirst();
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.badRequest().body("유저를 찾을 수 없습니다");
+        }
+
+        issueCouponIfNeeded(itemTitle, username, "스토어 구매");
+        return ResponseEntity.ok("쿠폰 발급 완료");
+    }
+
+    // 🎟️ 쿠폰 발급 공통 로직
+    private void issueCouponIfNeeded(String title, String userId, String source) {
+        Coupon coupon = new Coupon();
+        coupon.setUserId(userId); // 반드시 username
+        coupon.setUsed(false);
+
+        if (title.contains("관람권")) {
+            coupon.setType("GENERAL_TICKET");
+            coupon.setDiscountAmount(14999);
+            coupon.setDescription(source + " 일반 관람권");
+        } else if (title.contains("할인")) {
+            coupon.setType("DISCOUNT");
+            coupon.setDiscountAmount(1000);
+            coupon.setDescription(source + " 할인 쿠폰");
+        } else {
+            return; // 쿠폰 발급 대상 아님
+        }
+
+        couponRepo.save(coupon);
+        System.out.println("✅ 쿠폰 발급 완료: " + coupon);
     }
 }
