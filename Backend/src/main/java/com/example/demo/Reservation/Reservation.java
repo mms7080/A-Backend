@@ -37,4 +37,9 @@ public class Reservation {
 
     @Column(name = "approved_at")
     private String approvedAt; // ✅ 추가: 결제 승인 시각 (예: 2025-06-09T09:14:27+09:00)
+
+    @Column(name = "status")
+    private String status; //환불권한  예: "CONFIRMED", "CANCELED"
+
+
 }
