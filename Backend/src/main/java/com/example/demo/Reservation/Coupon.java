@@ -1,11 +1,6 @@
 package com.example.demo.Reservation;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -21,14 +16,23 @@ public class Coupon {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String userId; // 사용자 식별자 (username)
+    private String userId;
 
-    private String type; // "GENERAL_TICKET" 또는 "DISCOUNT"
+    private String type;
 
-    private int discountAmount; // 할인 금액 (일반권은 0, 할인권은 1000 등)
+    private int discountAmount;
 
-    @Column(columnDefinition = "CHAR(1)")
-    private boolean used;
+    @Column(name = "used")
+    private int used; // Oracle에서는 int로 처리
 
-    private String description; // 예: "일반 관람권", "1000원 할인 쿠폰"
+    private String description;
+
+    // 편의용 getter/setter (boolean처럼 사용 가능)
+    public boolean isUsed() {
+        return this.used == 1;
+    }
+
+    public void setUsed(boolean value) {
+        this.used = value ? 1 : 0;
+    }
 }

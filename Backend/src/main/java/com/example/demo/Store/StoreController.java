@@ -156,4 +156,26 @@ public class StoreController {
         couponRepo.save(coupon);
         System.out.println("✅ 쿠폰 발급 완료: " + coupon);
     }
+
+    // 쿠폰 사용처리
+    @PostMapping("/use-coupon")
+    public ResponseEntity<?> useCoupon(@RequestBody Map<String, Object> payload) {
+        Long couponId = Long.parseLong(payload.get("couponId").toString());
+
+        Optional<Coupon> optionalCoupon = couponRepo.findById(couponId);
+        if (optionalCoupon.isEmpty()) {
+            return ResponseEntity.badRequest().body("해당 쿠폰이 존재하지 않습니다.");
+        }
+
+        Coupon coupon = optionalCoupon.get();
+        if (coupon.isUsed()) {
+            return ResponseEntity.badRequest().body("이미 사용된 쿠폰입니다.");
+        }
+
+        coupon.setUsed(true);
+        couponRepo.save(coupon);
+
+        return ResponseEntity.ok("쿠폰 사용 처리 완료");
+    }
+
 }
