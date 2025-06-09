@@ -65,7 +65,7 @@ public class QnaDao {
             null,
             "질문 테스트 제목입니다"+(j+1),
             "질문 테스트 내용입니다"+(j+1),
-            formattedNow
+            "2025-05-05 00:00:00"
 
         ));
         insert(new Qna(
@@ -75,11 +75,11 @@ public class QnaDao {
             1L,
             "답변 테스트 제목입니다1",
             "답변 테스트 내용입니다1",
-            formattedNow
+            "2025-05-09 00:00:00"
         ));
         insert(new Qna(
             null,
-            "WWWWWWWWWWWW",
+            "WWWWWWWWWWWWWWWW",
             "shin1234",
             1L,
             "답변 테스트 제목입니다1-1",
@@ -93,46 +93,7 @@ public class QnaDao {
             2L,
             "답변 테스트 제목입니다2",
             "답변 테스트 내용입니다2",
-            "2025-05-04 00:00:00"
-        ));
-
-        for(int j=0;j<33;j++)
-
-            insert(new Qna(
-            null,
-            "shin1234",
-            null,
-            null,
-            "질문 테스트 제목입니다"+(j+1),
-            "질문 테스트 내용입니다"+(j+1),
-            "2025-06-08 00:00:00"
-
-        ));
-
-        for(int j=33;j<66;j++)
-
-            insert(new Qna(
-            null,
-            "shin1234",
-            null,
-            null,
-            "질문 테스트 제목입니다"+(j+1),
-            "질문 테스트 내용입니다"+(j+1),
-            "2025-06-09 00:00:00"
-
-        ));
-
-        for(int j=66;j<99;j++)
-
-            insert(new Qna(
-            null,
-            "shin1234",
-            null,
-            null,
-            "질문 테스트 제목입니다"+(j+1),
-            "질문 테스트 내용입니다"+(j+1),
-            "2025-06-10 00:00:00"
-
+            "2025-07-01 00:00:00"
         ));
     }
     

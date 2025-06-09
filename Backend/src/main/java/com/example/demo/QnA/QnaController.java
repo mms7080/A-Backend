@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -44,11 +45,13 @@ public class QnaController {
     @PostMapping("/write/logic")/* Qna 작성하기 */
     public Qna writeQna(
         @Auth User user,
-        @RequestParam("replyto") String replyto,
-        @RequestParam("replytoid") String replytoid,
-        @RequestParam("title") String title,
-        @RequestParam("content") String content
+        @RequestBody Map<String, String> data
         ) {
+
+        String title = data.get("title");
+        String content = data.get("content");
+        String replyto = data.get("replyto");
+        String replytoid = data.get("replytoid");
 
         LocalDateTime now = LocalDateTime.now(); // 현재 시간
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"); // 포맷 지정
@@ -58,7 +61,7 @@ public class QnaController {
             null,
             user.getUsername(),
             replyto,
-            Long.valueOf(replytoid),
+            (replytoid!=null)?Long.valueOf(replytoid):null,
             title,
             content,
             formattedNow
