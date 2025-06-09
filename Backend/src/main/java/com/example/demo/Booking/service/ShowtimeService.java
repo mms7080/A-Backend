@@ -1,19 +1,15 @@
 package com.example.demo.Booking.service;
 
-import com.example.demo.Booking.dto.response.ShowtimeDto;
-// import com.example.demo.Booking.entity.Seat; // ShowtimeService에서 직접 Seat을 다루지 않으므로 주석 처리 
-// import com.example.demo.Booking.entity.SeatStatus; // ShowtimeService에서 직접 Seat을 다루지 않으므로 주석 처리 
-import com.example.demo.Booking.entity.Showtime;
-import com.example.demo.Booking.entity.Theater;
-import com.example.demo.Booking.exception.ResourceNotFoundException;
-// import com.example.demo.Booking.repository.SeatRepository; // ShowtimeService에서 직접 Seat을 다루지 않으므로 주석 처리 
-import com.example.demo.Booking.repository.ShowtimeRepository;
-import com.example.demo.Booking.repository.TheaterRepository;
-import com.example.demo.Movie.Movie;
-import com.example.demo.Movie.MovieRepository;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
-import jakarta.annotation.PostConstruct;
-import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,16 +17,17 @@ import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import com.example.demo.Booking.dto.response.ShowtimeDto;
+import com.example.demo.Booking.entity.Showtime;
+import com.example.demo.Booking.entity.Theater;
+import com.example.demo.Booking.exception.ResourceNotFoundException;
+import com.example.demo.Booking.repository.ShowtimeRepository;
+import com.example.demo.Booking.repository.TheaterRepository;
+import com.example.demo.Movie.Movie;
+import com.example.demo.Movie.MovieRepository;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-import java.util.stream.Collectors;
+import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 
 
 
@@ -71,7 +68,7 @@ public class ShowtimeService {
             LocalTime.of(10, 0), 
             LocalTime.of(13, 0),
             LocalTime.of(16, 30), 
-            LocalTime.of(19, 0)
+            LocalTime.of(23, 0)
            
         };
 
