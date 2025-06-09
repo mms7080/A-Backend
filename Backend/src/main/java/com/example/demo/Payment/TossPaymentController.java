@@ -34,7 +34,8 @@ public class TossPaymentController {
 
     @PostConstruct
     public void insertDummyPayments() {
-        if (repository.count() > 0) return;
+        if (repository.count() > 0)
+            return;
 
         String now = ZonedDateTime.now().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
 
@@ -90,8 +91,7 @@ public class TossPaymentController {
                     "https://api.tosspayments.com/v1/payments/confirm",
                     HttpMethod.POST,
                     request,
-                    Map.class
-            );
+                    Map.class);
 
             Map<String, Object> res = response.getBody();
 
@@ -124,29 +124,27 @@ public class TossPaymentController {
                         System.err.println("❌ 이메일 조회 실패: 유효한 username 아님");
                     } else {
                         String content = String.format("""
-                                🎬 예매가 성공적으로 완료되었습니다!
-
-                                [예매 정보]
-                                예매 번호: %s
-                                결제 금액: %,d원
-                                결제 수단: %s (%s)
-                                결제 일시: %s
-
-                                예매 내역은 마이페이지에서 확인하실 수 있습니다.
-                                감사합니다!
+                                <div style="font-family: Arial, sans-serif; line-height: 1.6;">
+                                    <h2>🎬 FILMORA 예매가 성공적으로 완료되었습니다!</h2>
+                                    <h3>[예매 정보]</h3>
+                                    <p><strong>예매 번호:</strong> %s</p>
+                                    <p><strong>결제 금액:</strong> %,d원</p>
+                                    <p><strong>결제 수단:</strong> %s (%s)</p>
+                                    <p><strong>결제 일시:</strong> %s</p>
+                                    <hr>
+                                    <p>예매 내역은 마이페이지에서 확인하실 수 있습니다.<br>감사합니다!</p>
+                                </div>
                                 """,
                                 payment.getOrderId(),
                                 payment.getAmount(),
                                 payment.getMethod(),
                                 payment.getCardCompany() != null ? payment.getCardCompany() : "기타",
-                                payment.getApprovedAt()
-                        );
+                                payment.getApprovedAt());
 
                         emailService.sendReservationSuccessEmail(
                                 email,
                                 "🎟️ 영화 예매 완료 안내",
-                                content
-                        );
+                                content);
                         System.out.println("✅ 예매 이메일 발송 성공");
                     }
                 } catch (Exception e) {

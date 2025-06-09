@@ -34,4 +34,7 @@ public class Reservation {
 
     private int totalPrice;
     private String orderId; // 결제와 연결되는 ID
+
+    @Column(name = "approved_at")
+    private String approvedAt; // ✅ 추가: 결제 승인 시각 (예: 2025-06-09T09:14:27+09:00)
 }
