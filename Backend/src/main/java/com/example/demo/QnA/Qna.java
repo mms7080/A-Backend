@@ -43,4 +43,7 @@ public class Qna {
     private String content; /* QnA의 내용 */
 
     private String writetime; /* QnA 작성 날짜, 시간 */
+
+    @Column(name = "DELETED")
+    private Boolean deleted;  /* QnA 삭제 여부 */
 }

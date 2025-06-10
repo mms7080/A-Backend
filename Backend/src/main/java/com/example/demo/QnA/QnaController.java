@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.demo.Annotations.Auth;
@@ -64,7 +63,8 @@ public class QnaController {
             (replytoid!=null)?Long.valueOf(replytoid):null,
             title,
             content,
-            formattedNow
+            formattedNow,
+            false
             );
         dao.insert(newqna);
 
@@ -73,10 +73,12 @@ public class QnaController {
 
     @PostMapping("/modify/logic")/* Qna 수정하기 */
     public Qna modifyQna(
-        @RequestParam("id") Long id,
-        @RequestParam("title") String title,
-        @RequestParam("content") String content
+        @RequestBody Map<String,String> data
     ) {
+
+        Long id=Long.valueOf(data.get("id"));
+        String title=data.get("title");
+        String content=data.get("content");
 
         Qna original=dao.findById(id);
 
