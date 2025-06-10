@@ -2,7 +2,6 @@ package com.example.demo.QnA;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -95,11 +94,16 @@ public class QnaController {
         return original;/* 수정본을 리턴 */
     }
 
-    @PostMapping("/delete/logic/{id}")/* Qna 삭제하기 */
-    public Map<String,String> deleteReview(@PathVariable Long id) {
+    @GetMapping("/delete/logic/{id}")/* Qna 삭제하기 */
+    public Qna deleteQna(@PathVariable Long id) {
 
-        dao.delete(id);
-        return Collections.singletonMap("result", "deletesuccess");
+        Qna original=dao.findById(id);
+
+        original.setDeleted(true);
+
+        dao.modify(original);
+
+        return original;/* 삭제본을 리턴 */
 
     }
 }
