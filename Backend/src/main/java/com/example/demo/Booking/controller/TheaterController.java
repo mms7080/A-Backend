@@ -28,5 +28,10 @@ public class TheaterController {
     public ApiResponseDto<List<TheaterDto>> getTheartersByRegion(@RequestParam String region) {
         return ApiResponseDto.success(theaterService.getTheatersByRegion(region));
     }
+
+    @GetMapping("theaters/all")
+    public ApiResponseDto<List<TheaterDto>> getTheaters() {
+        return ApiResponseDto.success(theaterService.getAllTheaters());
+    }
     
 }

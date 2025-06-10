@@ -9,6 +9,8 @@ import java.util.List;
 
 @Repository
 public interface TheaterRepository extends JpaRepository<Theater, Long> {
+    List<Theater> findAll();
+
     List<Theater> findByRegion(String region);
 
     List<Theater> findByName(String name);
