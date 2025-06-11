@@ -35,12 +35,12 @@ public class BookingRequestDto{
     // private String orderId;    // 예: 클라이언트 또는 서버에서 생성한 주문 ID
     // private Long amount;       // 예: 총 결제 금액 (서버에서 최종 검증 필요)
 
-    private String couponCode;
+    
 
-    public BookingRequestDto(Long showtimeId, List<Long> selectedSeatIds, Map<CustomerCategory, Integer> customerCounts, String couponCode) {
+    public BookingRequestDto(Long showtimeId, List<Long> selectedSeatIds, Map<CustomerCategory, Integer> customerCounts) {
         this.showtimeId = showtimeId;
         this.selectedSeatIds = selectedSeatIds;
         this.customerCounts = customerCounts;
-        this.couponCode = couponCode;
+        
     }
 }

@@ -51,28 +51,28 @@ public class BookingProcessService {
         }
 
         // 3. 인원 수 검증
-        int totalCustomerCount = requestDto.getCustomerCounts().values().stream().mapToInt(Integer::intValue).sum();
-        if (totalCustomerCount != selectedSeats.size()) {
-            throw new CustomBookingException("선택된 좌석 수와 총 인원 수가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
-        }
-        if (totalCustomerCount == 0 && !selectedSeats.isEmpty()) {
-             throw new CustomBookingException("인원을 선택하지 않고 좌석만 선택할 수 없습니다.", HttpStatus.BAD_REQUEST);
-        }
-        if (totalCustomerCount > 0 && selectedSeats.isEmpty()) {
-            throw new CustomBookingException("좌석을 선택하지 않고 인원만 선택할 수 없습니다.", HttpStatus.BAD_REQUEST);
-        }
-         if (totalCustomerCount == 0 && selectedSeats.isEmpty()){
+        // int totalCustomerCount = requestDto.getCustomerCounts().values().stream().mapToInt(Integer::intValue).sum();
+        // if (totalCustomerCount != selectedSeats.size()) {
+        //     throw new CustomBookingException("선택된 좌석 수와 총 인원 수가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
+        // }
+        // if (totalCustomerCount == 0 && !selectedSeats.isEmpty()) {
+        //      throw new CustomBookingException("인원을 선택하지 않고 좌석만 선택할 수 없습니다.", HttpStatus.BAD_REQUEST);
+        // }
+        // if (totalCustomerCount > 0 && selectedSeats.isEmpty()) {
+        //     throw new CustomBookingException("좌석을 선택하지 않고 인원만 선택할 수 없습니다.", HttpStatus.BAD_REQUEST);
+        // }
+        //  if (totalCustomerCount == 0 && selectedSeats.isEmpty()){
 
-            throw new CustomBookingException("예매할 좌석 및 인원을 선택해주세요.", HttpStatus.BAD_REQUEST);
-        }
+        //     throw new CustomBookingException("예매할 좌석 및 인원을 선택해주세요.", HttpStatus.BAD_REQUEST);
+        // }
 
-        BigDecimal finalPrice = pricePolicyService.calculateTotalPrice(requestDto.getCustomerCounts(), requestDto.getCouponCode());
+        // BigDecimal finalPrice = pricePolicyService.calculateTotalPrice(requestDto.getCustomerCounts(), requestDto.getCouponCode());
 
         Booking booking = Booking.builder()
                 .user(user)
                 .showtime(showtime)
                 .customerCounts(requestDto.getCustomerCounts())
-                .totalPrice(finalPrice)
+                // .totalPrice(finalPrice)
                 .status(BookingStatus.PENDING_PAYMENT)
                 .build();
 

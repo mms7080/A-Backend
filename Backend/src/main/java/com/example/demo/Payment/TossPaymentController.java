@@ -1,5 +1,9 @@
 package com.example.demo.Payment;
 
+import com.example.demo.Booking.entity.Booking;
+import com.example.demo.Booking.entity.BookingStatus;
+import com.example.demo.Booking.entity.SeatStatus;
+import com.example.demo.Booking.repository.BookingRepository;
 import com.example.demo.Payment.EmailService;
 import com.example.demo.User.UserService;
 import jakarta.annotation.PostConstruct;
@@ -9,6 +13,7 @@ import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 
+import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -21,6 +26,7 @@ public class TossPaymentController {
 
     private static final String SECRET_KEY = "test_sk_DpexMgkW36vnlW1bALgB3GbR5ozO";
     private final PaymentRepository repository;
+    private final BookingRepository bookingRepository; // 추가
 
     @Autowired
     private EmailService emailService;
@@ -28,8 +34,9 @@ public class TossPaymentController {
     @Autowired
     private UserService userService;
 
-    public TossPaymentController(PaymentRepository repository) {
+    public TossPaymentController(PaymentRepository repository, BookingRepository bookingRepository) { // 생성자 수정
         this.repository = repository;
+        this.bookingRepository = bookingRepository; // 추가
     }
 
     @PostConstruct
@@ -113,6 +120,38 @@ public class TossPaymentController {
 
             payment.setUserId(req.getUserId()); // username
             repository.save(payment);
+
+            // ✅ 예매(Booking) 상태 업데이트 로직 추가 (reservation 타입일 때만)
+            if ("reservation".equals(type)) {
+                try {
+                    // orderId가 bookingId라고 가정하고 파싱
+                    Long bookingId = Long.parseLong(req.getOrderId()); 
+                    Booking booking = bookingRepository.findById(bookingId)
+                        .orElseThrow(() -> new RuntimeException("Booking not found with id: " + bookingId));
+
+                    // 1. Booking 상태를 CONFIRMED로 변경
+                    booking.setStatus(BookingStatus.CONFIRMED);
+                    
+                    // 2. 최종 결제 금액 업데이트
+                    booking.setTotalPrice(new BigDecimal(req.getAmount()));
+
+                    // 3. 연결된 좌석들의 상태를 RESERVED로 변경
+                    if (booking.getSelectedSeats() != null) {
+                        booking.getSelectedSeats().forEach(seat -> seat.setStatus(SeatStatus.RESERVED));
+                    }
+                    bookingRepository.save(booking); // 변경된 booking과 seat 상태를 함께 저장 (cascade)
+
+                    System.out.println("✅ Booking ID " + bookingId + " status updated to CONFIRMED and seats to RESERVED.");
+
+                } catch (NumberFormatException e) {
+                    System.err.println("❌ Order ID is not a valid Booking ID: " + req.getOrderId());
+                    // 에러 처리...
+                } catch (Exception e) {
+                    System.err.println("❌ Booking status update failed: " + e.getMessage());
+                    e.printStackTrace();
+                    // 에러 처리...
+                }
+            }
 
             // ✅ 이메일 발송 (reservation 전용)
             if (type.equals("reservation")) {
