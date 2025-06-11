@@ -5,6 +5,7 @@ import com.example.demo.Booking.entity.BookingStatus;
 import com.example.demo.Booking.entity.SeatStatus;
 import com.example.demo.Booking.repository.BookingRepository;
 import com.example.demo.Payment.EmailService;
+import com.example.demo.Reservation.ReservationRepository;
 import com.example.demo.User.UserService;
 import jakarta.annotation.PostConstruct;
 import lombok.Data;
@@ -27,6 +28,7 @@ public class TossPaymentController {
     private static final String SECRET_KEY = "test_sk_DpexMgkW36vnlW1bALgB3GbR5ozO";
     private final PaymentRepository repository;
     private final BookingRepository bookingRepository; // 추가
+    private final ReservationRepository reservationRepo;
 
     @Autowired
     private EmailService emailService;
@@ -34,9 +36,10 @@ public class TossPaymentController {
     @Autowired
     private UserService userService;
 
-    public TossPaymentController(PaymentRepository repository, BookingRepository bookingRepository) { // 생성자 수정
+    public TossPaymentController(PaymentRepository repository, BookingRepository bookingRepository,ReservationRepository reservationRepo) { // 생성자 수정
         this.repository = repository;
         this.bookingRepository = bookingRepository; // 추가
+        this.reservationRepo = reservationRepo; // 추가
     }
 
     @PostConstruct
@@ -218,8 +221,19 @@ public class TossPaymentController {
         Optional<Payment> optionalPayment = repository.findById(paymentId);
 
         Payment payment = optionalPayment.get();
+
         payment.setRefundstatus("CANCELED");
+        payment.setApprovedAt(ZonedDateTime.now().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
         repository.save(payment); // 변경 사항 저장
+
+        // 💳 관련 예매 정보 환불 처리
+        String orderId = payment.getOrderId();
+        reservationRepo.findByOrderId(orderId).ifPresent(reservation -> {
+            reservation.setStatus("CANCELED");
+            reservation.setApprovedAt(ZonedDateTime.now().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+            reservationRepo.save(reservation);
+            System.out.println("💳 예매 환불 처리 완료: " + orderId);
+        });
 
         return ResponseEntity.ok("환불 처리 완료");
     }

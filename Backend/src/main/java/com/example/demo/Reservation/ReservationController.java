@@ -11,6 +11,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
+import com.example.demo.Payment.PaymentRepository;
+
 import jakarta.annotation.PostConstruct;
 
 @RestController
@@ -20,10 +22,12 @@ public class ReservationController {
 
         private final ReservationRepository reservationRepo;
         private final CouponRepository couponRepo;
+        private final PaymentRepository paymentRepo;
 
-        public ReservationController(ReservationRepository reservationRepo, CouponRepository couponRepo) {
+        public ReservationController(ReservationRepository reservationRepo, CouponRepository couponRepo,PaymentRepository paymentRepo) {
                 this.reservationRepo = reservationRepo;
                 this.couponRepo = couponRepo;
+                this.paymentRepo = paymentRepo;
         }
 
         @Component
@@ -210,6 +214,16 @@ public class ReservationController {
                         reservation.setApprovedAt(ZonedDateTime.now().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
                         reservationRepo.save(reservation);
                         System.out.println("🔁 예약 환불 완료: " + reservation.getId());
+
+                        // 💳 관련 결제 정보 환불 처리
+                        String orderId = reservation.getOrderId();
+                        paymentRepo.findByOrderId(orderId).ifPresent(payment -> {
+                            payment.setRefundstatus("CANCELED");
+                            payment.setApprovedAt(ZonedDateTime.now().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+                            paymentRepo.save(payment);
+                            System.out.println("💳 결제 환불 처리 완료: " + orderId);
+                        });
+
                         return ResponseEntity.ok("예매가 환불되었습니다.");
                 }).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("예매를 찾을 수 없습니다."));
         }
