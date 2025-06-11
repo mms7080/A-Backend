@@ -28,4 +28,7 @@ public class Payment {
     private String method; // 카드, 가상계좌 등
     private String cardCompany; // 카드사 정보
     private String cardNumber;
+
+    @Column(name = "refundstatus")
+    private String refundstatus; //환불권한  예: "CONFIRMED", "CANCELED"
 }

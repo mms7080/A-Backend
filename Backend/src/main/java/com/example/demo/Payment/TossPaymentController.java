@@ -47,10 +47,10 @@ public class TossPaymentController {
         String now = ZonedDateTime.now().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME);
 
         Payment p1 = new Payment(null, "dummyKey1", "order-111", 12000, "root", "일반관람권", "DONE", now, "카드", "현대카드",
-                "1111-****-****-1111");
+                "1111-****-****-1111","CONFIRMED");
         Payment p2 = new Payment(null, "dummyKey2", "order-112", 15000, "root", "더블콤보", "DONE", now, "카드", "삼성카드",
-                "2222-****-****-2222");
-        Payment p3 = new Payment(null, "dummyKey3", "order-113", 18000, "root", "러브콤보", "DONE", now, "기타", null, null);
+                "2222-****-****-2222","CONFIRMED");
+        Payment p3 = new Payment(null, "dummyKey3", "order-113", 18000, "root", "러브콤보", "DONE", now, "기타", null, null,"CONFIRMED");
 
         repository.saveAll(List.of(p1, p2, p3));
         System.out.println("✅ 결제 더미 데이터 3건 자동 삽입 완료");
@@ -109,6 +109,7 @@ public class TossPaymentController {
             payment.setOrderName((String) res.get("orderName"));
             payment.setApprovedAt((String) res.get("approvedAt"));
             payment.setStatus((String) res.get("status"));
+            payment.setRefundstatus("CONFIRMED");
 
             if (res.get("card") instanceof Map card) {
                 payment.setMethod("카드");
@@ -208,13 +209,18 @@ public class TossPaymentController {
         private String userId; // 반드시 username 값이 들어가야 함
     }
 
-    @DeleteMapping("/refund/{paymentId}")
+    @PatchMapping("/refund/{paymentId}")
     public ResponseEntity<?> deletePayment(@PathVariable Long paymentId) {
         if (!repository.existsById(paymentId)) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당 결제 내역이 존재하지 않습니다.");
         }
 
-        repository.deleteById(paymentId);
+        Optional<Payment> optionalPayment = repository.findById(paymentId);
+
+        Payment payment = optionalPayment.get();
+        payment.setRefundstatus("CANCELED");
+        repository.save(payment); // 변경 사항 저장
+
         return ResponseEntity.ok("환불 처리 완료");
     }
 }
