@@ -2,6 +2,7 @@ package com.example.demo.Booking.controller;
 
 import com.example.demo.Booking.dto.common.ApiResponseDto;
 import com.example.demo.Booking.dto.response.SeatDto;
+import com.example.demo.Booking.entity.SeatStatus;
 import com.example.demo.Booking.service.SeatService;
 import lombok.RequiredArgsConstructor;
 
@@ -29,4 +30,9 @@ public class SeatController {
         return ApiResponseDto.success(seats, "좌석 정보가 성공적으로 조회되었습니다.");
     }
     
+    @GetMapping("/showtimes/{showtimeId}/seat/{seatName}/{status}")
+    public ApiResponseDto<List<SeatDto>> setSeatsBySeatName(@PathVariable Long showtimeId, @PathVariable String seatName, @PathVariable SeatStatus status) {
+        List<SeatDto> seats = seatService.setSeatsByShowtime(showtimeId, seatName, status);
+        return ApiResponseDto.success(seats, "좌석 정보가 성공적으로 변경되었습니다.");
+    }
 }

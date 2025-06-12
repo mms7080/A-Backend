@@ -24,7 +24,22 @@ public class SeatService {
     private static final Logger log = LoggerFactory.getLogger(SeatService.class);
     private final SeatRepository seatRepository;
     private final ShowtimeRepository showtimeRepository;
+    @Transactional
+    public List<SeatDto> setSeatsByShowtime(Long showtimeId, String seatName, SeatStatus status) {
+        Showtime showtime = showtimeRepository.findById(showtimeId)
+                .orElseThrow(() -> new ResourceNotFoundException("해당 ID의 상영 시간표를 찾을 수 없습니다: " + showtimeId));
+        // 해당 상영 시간표의 좌석이 이미 존재하는지 확인
+        List<Seat> seats = seatRepository.findAllByShowtimeId(showtimeId);
+        if(seats.isEmpty()) throw new ResourceNotFoundException("해당 ID의 상영 시간표에 좌석이 없습니다: " + showtimeId);
 
+        seats = seats.stream().filter(seat->seat.getFullSeatName().equalsIgnoreCase(seatName)).map(seat->{seat.setStatus(status); return seat;}).toList();
+        if(seats.isEmpty()) throw new ResourceNotFoundException("해당 좌표의 좌석이 존재하지 않습니다.: " + seatName);
+        seatRepository.saveAll(seats);
+        // 최종 좌석 목록을 DTO로 변환하여 반환
+        return seats.stream()
+                .map(SeatDto::fromEntity)
+                .collect(Collectors.toList());
+    }
     @Transactional
     public List<SeatDto> getSeatsByShowtime(Long showtimeId) {
         Showtime showtime = showtimeRepository.findById(showtimeId)
@@ -80,7 +95,7 @@ public class SeatService {
 
         // 상태가 변경된 좌석이 있다면 DB에 저장
         if (!seatsToUpdate.isEmpty()) {
-            seatRepository.saveAll(seatsToUpdate);
+            seats = seatRepository.saveAll(seatsToUpdate);
             log.info("{} seats had their status updated to UNAVAILABLE in DB for showtimeId: {}", seatsToUpdate.size(), showtimeId);
         }
         // --- 테스트용 코드 종료 ---
