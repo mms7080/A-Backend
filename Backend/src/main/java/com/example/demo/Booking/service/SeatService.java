@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -24,10 +25,12 @@ public class SeatService {
     private static final Logger log = LoggerFactory.getLogger(SeatService.class);
     private final SeatRepository seatRepository;
     private final ShowtimeRepository showtimeRepository;
+
     @Transactional
     public List<SeatDto> setSeatsByShowtime(Long showtimeId, String seatName, SeatStatus status) {
         Showtime showtime = showtimeRepository.findById(showtimeId)
                 .orElseThrow(() -> new ResourceNotFoundException("해당 ID의 상영 시간표를 찾을 수 없습니다: " + showtimeId));
+
         // 해당 상영 시간표의 좌석이 이미 존재하는지 확인
         List<Seat> seats = seatRepository.findAllByShowtimeId(showtimeId);
         if(seats.isEmpty()) throw new ResourceNotFoundException("해당 ID의 상영 시간표에 좌석이 없습니다: " + showtimeId);
@@ -52,13 +55,20 @@ public class SeatService {
         if (seats.isEmpty()) {
             log.info("No seats found for showtimeId: {}. Generating new seats A1-I12...", showtimeId);
             List<Seat> newSeats = new ArrayList<>();
+
+            Set<String> isPreferentialSeat = Set.of("A3", "A4", "A9", "A10");
             for (char row = 'A'; row <= 'I'; row++) { 
                 for (int number = 1; number <= 12; number++) {
+
+                    String fullSeatName = String.valueOf(row) + number;
+
+                    SeatStatus initialStatus = isPreferentialSeat.contains(fullSeatName)
+                        ? SeatStatus.UNAVAILABLE : SeatStatus.AVAILABLE;
                     Seat newSeat = Seat.builder()
                             .showtime(showtime)
                             .seatRow(String.valueOf(row))
                             .seatNumber(number)
-                            .status(SeatStatus.AVAILABLE) 
+                            .status(initialStatus)
                             .build();
                     newSeats.add(newSeat);
                 }
@@ -69,36 +79,7 @@ public class SeatService {
             log.info("Found {} existing seats for showtimeId: {}", seats.size(), showtimeId);
         }
 
-        // --- 모든 Showtime에 대해 A3, A4, A9, A10 좌석을 UNAVAILABLE (장애인석) 상태로 설정 ---
-        // 이 로직은 실제 운영 환경에서는 상영관의 고유한 좌석 배치도 정보를 DB에서 읽어와 처리해야 합니다.
-        // 현재는 테스트를 위해 모든 상영관의 레이아웃이 동일하다고 가정하고 하드코딩합니다.
         
-        List<Seat> seatsToUpdate = new ArrayList<>();
-
-        for (Seat seat : seats) {
-            String fullSeatName = seat.getFullSeatName();
-            
-            // 지정된 장애인석 위치인지 확인
-            boolean isPreferentialSeat = 
-                "A3".equals(fullSeatName) || "A4".equals(fullSeatName) || 
-                "A9".equals(fullSeatName) || "A10".equals(fullSeatName);
-
-            if (isPreferentialSeat) {
-                // 이미 UNAVAILABLE 상태가 아니라면 상태 변경
-                if (seat.getStatus() != SeatStatus.UNAVAILABLE) { 
-                    seat.setStatus(SeatStatus.UNAVAILABLE);
-                    seatsToUpdate.add(seat);
-                    log.info("Seat {} in showtimeId: {} is being set to UNAVAILABLE (Preferential Seat).", fullSeatName, showtimeId);
-                }
-            }
-        }
-
-        // 상태가 변경된 좌석이 있다면 DB에 저장
-        if (!seatsToUpdate.isEmpty()) {
-            seats = seatRepository.saveAll(seatsToUpdate);
-            log.info("{} seats had their status updated to UNAVAILABLE in DB for showtimeId: {}", seatsToUpdate.size(), showtimeId);
-        }
-        // --- 테스트용 코드 종료 ---
 
         // 최종 좌석 목록을 DTO로 변환하여 반환
         return seats.stream()
