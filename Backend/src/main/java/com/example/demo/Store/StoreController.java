@@ -144,7 +144,7 @@ public class StoreController {
         // 🎟️ 관람권 상품 → 쿠폰 발급 분기
         if (title.contains("일반관람권")) {
             coupon.setType("GENERAL_TICKET");
-            coupon.setDiscountAmount(14900);
+            coupon.setDiscountAmount(15000);
             coupon.setDescription(source + " 일반 관람권");
         } else if (title.contains("VIP 일반관람권")) {
             coupon.setType("GENERAL_TICKET");

@@ -24,7 +24,8 @@ public class ReservationController {
         private final CouponRepository couponRepo;
         private final PaymentRepository paymentRepo;
 
-        public ReservationController(ReservationRepository reservationRepo, CouponRepository couponRepo,PaymentRepository paymentRepo) {
+        public ReservationController(ReservationRepository reservationRepo, CouponRepository couponRepo,
+                        PaymentRepository paymentRepo) {
                 this.reservationRepo = reservationRepo;
                 this.couponRepo = couponRepo;
                 this.paymentRepo = paymentRepo;
@@ -150,6 +151,10 @@ public class ReservationController {
                         return ResponseEntity.badRequest().body("좌석 정보가 누락되었습니다.");
                 }
 
+                if (reservation.getOrderId() != null && reservationRepo.countByOrderId(reservation.getOrderId()) > 0) {
+                        return ResponseEntity.status(HttpStatus.CONFLICT).body("이미 예약된 주문입니다.");
+                }
+
                 int finalPrice = reservation.getTotalPrice();
 
                 // 🎟️ 쿠폰 처리
@@ -218,10 +223,11 @@ public class ReservationController {
                         // 💳 관련 결제 정보 환불 처리
                         String orderId = reservation.getOrderId();
                         paymentRepo.findByOrderId(orderId).ifPresent(payment -> {
-                            payment.setRefundstatus("CANCELED");
-                            payment.setApprovedAt(ZonedDateTime.now().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
-                            paymentRepo.save(payment);
-                            System.out.println("💳 결제 환불 처리 완료: " + orderId);
+                                payment.setRefundstatus("CANCELED");
+                                payment.setApprovedAt(
+                                                ZonedDateTime.now().format(DateTimeFormatter.ISO_OFFSET_DATE_TIME));
+                                paymentRepo.save(payment);
+                                System.out.println("💳 결제 환불 처리 완료: " + orderId);
                         });
 
                         return ResponseEntity.ok("예매가 환불되었습니다.");
