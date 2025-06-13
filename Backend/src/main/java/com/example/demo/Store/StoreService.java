@@ -26,12 +26,12 @@ public class StoreService {
 
     public Map<String, List<Store>> getGroupedByCategory() {
         return repo.findAll().stream()
-                   .collect(Collectors.groupingBy(Store::getCategory));
+                .collect(Collectors.groupingBy(Store::getCategory));
     }
 
     public Store findById(Long id) {
         return repo.findById(id)
-                   .orElseThrow(() -> new NoSuchElementException("해당 상품이 존재하지 않습니다. id=" + id));
+                .orElseThrow(() -> new NoSuchElementException("해당 상품이 존재하지 않습니다. id=" + id));
     }
 
     public void delete(Long id) {
@@ -40,15 +40,14 @@ public class StoreService {
 
     @Transactional
     public Store saveWithImage(
-        String category,
-        String title,
-        String subtitle,
-        String price,
-        String originalPrice,
-        String badge,
-        String badgeColor,
-        MultipartFile image
-    ) throws IOException {
+            String category,
+            String title,
+            String subtitle,
+            String price,
+            String originalPrice,
+            String badge,
+            String badgeColor,
+            MultipartFile image) throws IOException {
         System.out.println("🔥 [StoreService] saveWithImage() 호출됨");
 
         // 1. 확장자 및 파일명
@@ -88,15 +87,19 @@ public class StoreService {
     public void initDummyStoreItems() {
         if (repo.count() == 0) {
             List<Store> items = List.of(
-                new Store(null, "티켓", "일반관람권", "일반 관람권", "13000", null, "대표상품", "black", "/images/ticket.png"),
-                new Store(null, "티켓", "VIP 전용관람권", "Dolby Cinema 전용관람권", "18000", null, "추천", "#1e88e5", "/images/ticket2.png"),
-                new Store(null, "티켓", "더 부티크 관람권", "더 부티크 전용 관람권", "15000", "16000", null, null, "/images/ticket2.png"),
-                new Store(null, "티켓", "더 부티크 스위트 관람권", "더 부티크 스위트 전용관람권", "40000", null, "추천", "#1e88e5", "/images/ticket2.png"),
-                new Store(null, "팝콘/음료/콤보", "더블콤보", "팝콘(R) 2 + 탄산음료(R) 2", "13900", null, "BEST", "red", "/images/corn.png"),
-                new Store(null, "팝콘/음료/콤보", "러브콤보", "팝콘(L) 1 + 탄산음료(R) 2", "10900", "11900", "BEST", "red", "/images/lovecorn.png"),
-                new Store(null, "포인트몰", "1천원 할인쿠폰", "일반/VIP 사용가능", "900", "1000", null, null, "/images/coupon.png")
-            );
-        
+                    new Store(null, "티켓", "일반관람권", "일반 관람권", "14900", null, "대표상품", "black", "/images/ticket.png"),
+                    new Store(null, "티켓", "VIP 일반관람권", "2만원 할인권", "20000", null, "추천", "#1e88e5",
+                            "/images/ticket2.png"),
+                    new Store(null, "티켓", "더 부티크관람권", "3만원 할인권", "29000", "30000", null, null, "/images/ticket2.png"),
+                    new Store(null, "티켓", "더 부티크 스위트 관람권", "4만원 할인권", "40000", null, "추천", "#1e88e5",
+                            "/images/ticket2.png"),
+                    new Store(null, "팝콘/음료/콤보", "더블콤보", "팝콘(R) 2 + 탄산음료(R) 2", "13900", null, "BEST", "red",
+                            "/images/corn.png"),
+                    new Store(null, "팝콘/음료/콤보", "러브콤보", "팝콘(L) 1 + 탄산음료(R) 2", "10900", "11900", "BEST", "red",
+                            "/images/lovecorn.png"),
+                    new Store(null, "포인트몰", "1천원 할인쿠폰", "일반/VIP 사용가능", "900", "1000", null, null,
+                            "/images/coupon.png"));
+
             repo.saveAll(items);
             System.out.println("🎯 더미 데이터 초기화 완료");
         }

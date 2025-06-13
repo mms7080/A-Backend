@@ -141,16 +141,32 @@ public class StoreController {
         coupon.setUserId(userId); // 반드시 username
         coupon.setUsed(false);
 
-        if (title.contains("관람권")) {
+        // 🎟️ 관람권 상품 → 쿠폰 발급 분기
+        if (title.contains("일반관람권")) {
             coupon.setType("GENERAL_TICKET");
-            coupon.setDiscountAmount(14999);
+            coupon.setDiscountAmount(14900);
             coupon.setDescription(source + " 일반 관람권");
-        } else if (title.contains("할인")) {
+        } else if (title.contains("VIP 일반관람권")) {
+            coupon.setType("GENERAL_TICKET");
+            coupon.setDiscountAmount(20000);
+            coupon.setDescription(source + " VIP 일반 관람권");
+        } else if (title.contains("더 부티크관람권")) {
+            coupon.setType("GENERAL_TICKET");
+            coupon.setDiscountAmount(30000);
+            coupon.setDescription(source + " 더 부티크 관람권");
+        } else if (title.contains("스위트 관람권")) {
+            coupon.setType("GENERAL_TICKET");
+            coupon.setDiscountAmount(40000);
+            coupon.setDescription(source + " 더 부티크 스위트 관람권");
+
+            // 🎫 포인트몰 할인쿠폰
+        } else if (title.contains("1천원 할인쿠폰")) {
             coupon.setType("DISCOUNT");
             coupon.setDiscountAmount(1000);
-            coupon.setDescription(source + " 할인 쿠폰");
+            coupon.setDescription(source + " 1,000원 할인 쿠폰");
+
         } else {
-            return; // 쿠폰 발급 대상 아님
+            return; // 해당 없음 → 쿠폰 발급 X
         }
 
         couponRepo.save(coupon);
