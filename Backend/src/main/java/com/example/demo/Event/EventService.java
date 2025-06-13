@@ -1,10 +1,13 @@
 package com.example.demo.Event;
 
-import org.springframework.stereotype.Service;
-import jakarta.annotation.PostConstruct;
-
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
+
+import org.springframework.stereotype.Service;
+
+import jakarta.annotation.PostConstruct;
 
 @Service
 public class EventService {
@@ -60,10 +63,10 @@ public class EventService {
             new Event(null, "[토스페이] 5월 토스 결제 프로모션", "2025.05.10 ~ 2025.05.19", "제휴/할인", List.of("/images/event3.jpg")),
             new Event(null, "네이버페이로 결제하고 푸짐한 혜택받기", "2025.05.10 ~ 2025.05.19", "제휴/할인", List.of("/images/event4.jpg")),
 
-            new Event(null, "<소주전쟁> 100% 당첨 스낵전쟁 이벤트", "2025.05.24 ~ 2025.06.08", "Pick", List.of("/images/pick1.jpg", "/images/pick1.jpg")),
-            new Event(null, "포스터 증정 이벤트", "2025.06.01 ~ 2025.06.15", "Pick", List.of("/images/pick2.jpg")),
-            new Event(null, "코엑스 그랜드 리뉴얼", "2025.06.10 ~ 2025.07.01", "Pick", List.of("/images/pick3.jpg")),
-            new Event(null, "<그리드맨 유니버스> 포스터 증정 이벤트", "2025.06.15 ~ 2025.06.30", "Pick", List.of("/images/pick4.jpg")),
+            new Event(null, "<소주전쟁> 100% 당첨 스낵전쟁 이벤트", "2025.05.24 ~ 2100.06.08", "Pick", List.of("/images/pick1.jpg", "/images/pick1.jpg")),
+            new Event(null, "포스터 증정 이벤트", "2025.06.01 ~ 2100.06.15", "Pick", List.of("/images/pick2.jpg")),
+            new Event(null, "코엑스 그랜드 리뉴얼", "2025.06.10 ~ 2100.07.01", "Pick", List.of("/images/pick3.jpg")),
+            new Event(null, "<그리드맨 유니버스> 포스터 증정 이벤트", "2025.06.15 ~ 2100.06.30", "Pick", List.of("/images/pick4.jpg")),
 
             new Event(null, "[목동] MOVIE 콘서트", "2025.06.15 ~ 2025.06.30", "극장", List.of("/images/m1.jpg")),
             new Event(null, "[스타필드] 재즈 나잇", "2025.06.15 ~ 2025.06.30", "극장", List.of("/images/m2.jpg")),
