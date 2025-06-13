@@ -12,7 +12,6 @@ import lombok.NoArgsConstructor;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter; 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale; 
@@ -50,7 +49,7 @@ public class BookingResponseDto {
     // == 예매 좌석 및 인원 정보 ==
     private List<String> selectedSeatNames;
     private Map<CustomerCategory, Integer> customerCounts;
-    private List<PriceDetailDto> priceDetails;
+  
 
     // 결제 정보
     private BigDecimal totalPrice;
@@ -64,7 +63,7 @@ public class BookingResponseDto {
     private String customerName;
     private String customerEmail;
 
-    public BookingResponseDto(Booking booking, Map<CustomerCategory, BigDecimal> pricePolicy) {
+    public BookingResponseDto(Booking booking) {
         this.bookingId = booking.getId();
 
         Showtime showtimeEntity = booking.getShowtime();
@@ -109,26 +108,8 @@ public class BookingResponseDto {
         this.bookingStatus = (booking.getStatus() != null) ? booking.getStatus().name() : null;
         this.bookingTime = booking.getBookingTime();
 
-        // 가격 상세 내역 생성
-        this.priceDetails = new ArrayList<>();
-        if (booking.getCustomerCounts() != null && !booking.getCustomerCounts().isEmpty() && pricePolicy != null) {
-            booking.getCustomerCounts().forEach((category, count) -> {
-                if (count > 0) {
-                    BigDecimal unitPrice = pricePolicy.get(category);
-                    if (unitPrice != null) {
-                        this.priceDetails.add(new PriceDetailDto(
-                            getDisplayCategoryName(category),
-                            count,
-                            unitPrice,
-                            unitPrice.multiply(new BigDecimal(count))
-                        ));
-                    }
-                }
-            });
-        }
-
         this.paymentOrderId = String.valueOf(booking.getId());
-        this.paymentOrderName = generateOrderName(booking);
+       
         
         User user = booking.getUser();
         if (user != null) {
@@ -150,32 +131,12 @@ public class BookingResponseDto {
         return dateTime.format(timeFormatter);
     }
     
-    private String getDisplayCategoryName(CustomerCategory category) {
-        return switch (category) {
-            case ADULT -> "성인";
-            case YOUTH -> "청소년";
-            case SENIOR -> "경로";
-            case DISABLED -> "우대";
-            default -> category.name(); 
-        };
-    }
     
-    private String generateOrderName(Booking booking) {
-        String movieTitleDisplay = "영화 티켓"; // 기본값
-        if (booking.getShowtime() != null && booking.getShowtime().getMovie() != null) {
-            movieTitleDisplay = booking.getShowtime().getMovie().getTitle();
-        }
-        int seatCount = booking.getSelectedSeats() != null ? booking.getSelectedSeats().size() : 0;
-        if (seatCount > 0) {
-            return String.format("%s %d매", movieTitleDisplay, seatCount);
-        }
-        return movieTitleDisplay;
-    }
-
-    public static BookingResponseDto fromEntity(Booking booking, Map<CustomerCategory, BigDecimal> pricePolicy) {
+    
+    public static BookingResponseDto fromEntity(Booking booking) {
         if (booking == null) {
             return null;
         }
-        return new BookingResponseDto(booking, pricePolicy);
+        return new BookingResponseDto(booking);
     }
 }

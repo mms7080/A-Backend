@@ -38,6 +38,7 @@ public class SeatService {
         seats = seats.stream().filter(seat->seat.getFullSeatName().equalsIgnoreCase(seatName)).map(seat->{seat.setStatus(status); return seat;}).toList();
         if(seats.isEmpty()) throw new ResourceNotFoundException("해당 좌표의 좌석이 존재하지 않습니다.: " + seatName);
         seatRepository.saveAll(seats);
+        
         // 최종 좌석 목록을 DTO로 변환하여 반환
         return seats.stream()
                 .map(SeatDto::fromEntity)
@@ -79,7 +80,6 @@ public class SeatService {
             log.info("Found {} existing seats for showtimeId: {}", seats.size(), showtimeId);
         }
 
-        
 
         // 최종 좌석 목록을 DTO로 변환하여 반환
         return seats.stream()

@@ -26,7 +26,7 @@ public class BookingProcessService {
     private final ShowtimeRepository showtimeRepository;
     private final SeatRepository seatRepository;
     private final UserRepository userRepository;
-    private final PricePolicyService pricePolicyService;
+    
 
     
     @Transactional
@@ -50,41 +50,31 @@ public class BookingProcessService {
             }
         }
 
-        // 3. 인원 수 검증
-        // int totalCustomerCount = requestDto.getCustomerCounts().values().stream().mapToInt(Integer::intValue).sum();
-        // if (totalCustomerCount != selectedSeats.size()) {
-        //     throw new CustomBookingException("선택된 좌석 수와 총 인원 수가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
-        // }
-        // if (totalCustomerCount == 0 && !selectedSeats.isEmpty()) {
-        //      throw new CustomBookingException("인원을 선택하지 않고 좌석만 선택할 수 없습니다.", HttpStatus.BAD_REQUEST);
-        // }
-        // if (totalCustomerCount > 0 && selectedSeats.isEmpty()) {
-        //     throw new CustomBookingException("좌석을 선택하지 않고 인원만 선택할 수 없습니다.", HttpStatus.BAD_REQUEST);
-        // }
-        //  if (totalCustomerCount == 0 && selectedSeats.isEmpty()){
+        // 3. 인원 수와 좌석 수 일치 여부 검증 (주석 해제 및 로직 강화)
+        int totalCustomerCount = requestDto.getCustomerCounts().values().stream().mapToInt(Integer::intValue).sum();
+        if (totalCustomerCount != selectedSeats.size()) {
+            throw new CustomBookingException("선택된 좌석 수와 총 인원 수가 일치하지 않습니다.", HttpStatus.BAD_REQUEST);
+        }
 
-        //     throw new CustomBookingException("예매할 좌석 및 인원을 선택해주세요.", HttpStatus.BAD_REQUEST);
-        // }
-
-        // BigDecimal finalPrice = pricePolicyService.calculateTotalPrice(requestDto.getCustomerCounts(), requestDto.getCouponCode());
-
+        
         Booking booking = Booking.builder()
                 .user(user)
                 .showtime(showtime)
                 .customerCounts(requestDto.getCustomerCounts())
-                // .totalPrice(finalPrice)
+                .totalPrice(BigDecimal.ZERO)
                 .status(BookingStatus.PENDING_PAYMENT)
                 .build();
 
         for (Seat seat : selectedSeats) {
             booking.addSelectedSeat(seat);
-            seat.setStatus(SeatStatus.SElECTED);
+            seat.setStatus(SeatStatus.SELECTED);
         }
         seatRepository.saveAll(selectedSeats);
+        
         Booking savedBooking = bookingRepository.save(booking);
 
         // BookingResponseDto 생성 시 가격 정책 맵 전달
-        return BookingResponseDto.fromEntity(savedBooking, pricePolicyService.getAllPricePolicies());
+        return BookingResponseDto.fromEntity(savedBooking);
 
     }    
 }

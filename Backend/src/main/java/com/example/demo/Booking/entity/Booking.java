@@ -87,28 +87,4 @@ public class Booking {
         this.selectedSeats.add(seat);}
 
     
-    public void setCustomerCount(CustomerCategory category, int count) {
-        if (count < 0) {
-            throw new IllegalArgumentException("인원수는 0 이상이어야 합니다.");
-        }
-        if (count == 0) {
-            this.customerCounts.remove(category);
-        } else {
-            this.customerCounts.put(category, count);
-        }
-    }
-
-    
-    /**
-     * 예매에 연결된 결제 정보를 설정합니다.
-     * Payment 엔티티에 booking 필드가 없으므로, payment 객체에 booking을 설정하는 로직을 제거합니다.
-     * @param payment 결제 정보 객체
-     */
-    public void setPayment(Payment payment) {
-        this.payment = payment;
-        // 아래의 양방향 연관관계 설정 로직은 주석 처리 또는 제거된 상태여야 합니다.
-        // if (payment != null && payment.getBooking() != this) {
-        //     payment.setBooking(this);
-        // }
-    }
 }
