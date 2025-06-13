@@ -65,10 +65,10 @@ public class ShowtimeService {
         LocalDate today = LocalDate.now();
         String[] auditoriumNamesBase = {"1관", "2관", "3관", "Dolby 관", "IMAX 관"};
         LocalTime[] timeSlotsToUse = {
-            LocalTime.of(10, 0), 
-            LocalTime.of(13, 0),
+            LocalTime.of(23, 0), 
+            LocalTime.of(23, 30),
             LocalTime.of(16, 30), 
-            LocalTime.of(23, 0)
+            LocalTime.of(23, 50)
            
         };
 
@@ -97,8 +97,6 @@ public class ShowtimeService {
                         }
 
                         if (assignedAuditorium == null) {
-                            // log.warn("All auditoriums are busy for MovieId: {}, TheaterId: {}, Date: {}, Time: {}. Skipping this showtime slot.",
-                            //          movie.getId(), theater.getId(), currentDate, time);
                             continue;
                         }
 
@@ -132,10 +130,19 @@ public class ShowtimeService {
                 .orElseThrow(() -> new ResourceNotFoundException("해당 ID의 영화를 찾을 수 없습니다: " + movieId));
         Theater theater = theaterRepository.findById(theaterId)
                 .orElseThrow(() -> new ResourceNotFoundException("해당 ID의 극장을 찾을 수 없습니다: " + theaterId));
-        LocalDateTime startOfDay = date.atStartOfDay(); 
+        
+        // LocalDateTime startOfDay = date.atStartOfDay(); 
+        LocalDateTime startDateTime;
+        if(date.isEqual(LocalDate.now())){
+            startDateTime = LocalDateTime.now(); 
+        }else{
+            startDateTime = date.atStartOfDay();
+        }
+
         LocalDateTime endOfDay = date.atTime(LocalTime.MAX);  
+        
         List<Showtime> showtimes = showtimeRepository
-                .findByTheaterAndMovieAndStartTimeBetweenOrderByStartTimeAsc(theater, movie, startOfDay, endOfDay);
+                .findByTheaterAndMovieAndStartTimeBetweenOrderByStartTimeAsc(theater, movie, startDateTime, endOfDay);
         if (showtimes.isEmpty()) {
             log.info("No showtimes found for movieId: {}, theaterId: {}, date: {}", movieId, theaterId, date);
         }
