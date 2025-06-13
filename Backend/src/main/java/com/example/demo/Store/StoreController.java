@@ -178,4 +178,57 @@ public class StoreController {
         return ResponseEntity.ok("쿠폰 사용 처리 완료");
     }
 
+    // 장바구니 구매
+    @PostMapping("/purchase/cart/success")
+    public ResponseEntity<?> onCartPurchaseSuccess(@RequestBody Map<String, Object> payload) {
+        String username = payload.get("userId").toString();
+        String orderId = payload.get("orderId").toString();
+        String paymentKey = payload.get("paymentKey").toString();
+        int totalAmount = Integer.parseInt(payload.get("amount").toString());
+        List<Map<String, Object>> items = (List<Map<String, Object>>) payload.get("items");
+
+        Optional<User> userOpt = userRepo.findByUsername(username).stream().findFirst();
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.badRequest().body(Collections.singletonMap("error", "유저를 찾을 수 없습니다"));
+        }
+
+        User user = userOpt.get();
+        ZonedDateTime now = ZonedDateTime.now();
+        DateTimeFormatter formatter = DateTimeFormatter.ISO_OFFSET_DATE_TIME;
+
+        Map<String, Object> response = new HashMap<>();
+
+        // 첫 번째 상품 정보만 대표로 응답에 담기
+        if (!items.isEmpty()) {
+            Map<String, Object> firstItem = items.get(0);
+            response.put("orderName", firstItem.get("title"));
+            response.put("amount", totalAmount);
+            response.put("method", "스토어 장바구니");
+            response.put("orderId", orderId);
+            response.put("approvedAt", now.format(formatter));
+            response.put("cardCompany", "TossPayments");
+            response.put("cardNumber", "****-****-****-1234");
+        }
+
+        for (Map<String, Object> item : items) {
+            String title = item.get("title").toString();
+            int price = Integer.parseInt(item.get("price").toString());
+
+            Payment payment = new Payment();
+            payment.setPaymentKey(paymentKey + "-" + UUID.randomUUID());
+            payment.setOrderId(orderId + "-" + UUID.randomUUID());
+            payment.setAmount(price);
+            payment.setUserId(username);
+            payment.setOrderName(title);
+            payment.setStatus("DONE");
+            payment.setApprovedAt(now.format(formatter));
+            payment.setMethod("스토어 장바구니");
+
+            paymentRepo.save(payment);
+            issueCouponIfNeeded(title, username, "스토어 장바구니");
+        }
+
+        return ResponseEntity.ok(response);
+    }
+
 }
