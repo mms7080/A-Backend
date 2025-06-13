@@ -159,7 +159,7 @@ public class MovieDao {
         save(new Movie(null, 
             "28년 후", "28 Years Later", 
             "19", "2025.06.19", 
-            "태어나 처음 마주한 바이러스에 감염된 세상,충격을 넘어선 극강의 공포가 밀려온다! ", 
+            "태어나 처음 마주한 바이러스에 감염된 세상,충격을 넘어선 극강의 공포가 밀려온다! 28년 전 생물학 무기 연구소에서 세상을 재앙으로 몰아넣은 바이러스가 유출된 후, 일부 생존자들이 모여 철저히 격리된 채 살아가는 섬 ‘홀리 아일랜드", 
             115, "공포(호러), 드라마, 스릴러", 
             "대니 보일", "조디 코머, 애런 존슨, 랄프 파인즈, 잭 오코넬, 알피 윌리엄스", 
             9.8, 5300L, 
@@ -167,7 +167,7 @@ public class MovieDao {
             "/images/wide9.jpg",
             List.of("/images/stillCut9-1.jpg","/images/stillCut9-2.jpg"),
             "https://www.youtube.com/embed/iSyYE__waY4", 
-            "IMAX", 12.1, 1200L, 9, now
+            "IMAX", 20.2, 1200L, 9, now
         ));
         save(new Movie(null, 
             "드래곤 길들이기", "How to Train Your Dragon", 
@@ -180,7 +180,7 @@ public class MovieDao {
             "/images/wide10.jpg",
             List.of("/images/stillCut10-1.jpg","/images/stillCut10-2.jpg"),
             "https://www.youtube.com/embed/eyeXAgO7rp8",
-            "4DX", 11.0, 1100L, 10, now
+            "4DX", 17.3, 1100L, 10, now
         ));
         save(new Movie(null, 
             "F1 더 무비", "F1: The Movie", 
@@ -193,7 +193,7 @@ public class MovieDao {
             "/images/wide11.jpg",
             List.of("/images/stillCut11-1.jpg","/images/stillCut11-2.jpg"),
             "https://www.youtube.com/embed/d2VN6NNa9BE", 
-            "IMAX", 10.9, 1000L, 11, now
+            "IMAX", 18.9, 1000L, 11, now
         ));
         save(new Movie(null, 
             "하이파이브", "HI-FIVE", 
@@ -206,7 +206,7 @@ public class MovieDao {
             "/images/wide12.jpg",
             List.of("/images/stillCut12-1.jpg","/images/stillCut12-2.jpg"),
             "https://www.youtube.com/embed/MhBgXdJuYLg", 
-            "", 9.8, 900L, 12, now
+            "", 19.9, 900L, 12, now
         ));
     }
 }
