@@ -277,6 +277,28 @@ public class ReviewDao {
             List.of("shin1234"),
             "2025-05-04 00:00:00"
         ));
+
+        insert(new Review(
+            null,
+            9L,//28년후
+            "lovelytourist84",
+            "재미없어요.",
+            1,
+            1,
+            List.of("shin1234"),
+            "2025-05-03 00:00:00"
+        ));
+
+        insert(new Review(
+            null,
+            9L,//28년후
+            "mms7080",
+            "승부 너무 재밌어요!...",
+            9,
+            1,
+            List.of("shin1234"),
+            "2025-05-04 00:00:00"
+        ));
     }
 
 }
