@@ -4,6 +4,7 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -11,6 +12,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
 
+import com.example.demo.Payment.Payment;
 import com.example.demo.Payment.PaymentRepository;
 
 import jakarta.annotation.PostConstruct;
@@ -199,6 +201,21 @@ public class ReservationController {
                 try {
                         Reservation saved = reservationRepo.save(reservation);
                         System.out.println("✅ 예약 저장 완료: " + saved);
+
+                        Payment payment = new Payment();
+                        payment.setPaymentKey("RESERVATION-" + UUID.randomUUID());
+                        payment.setOrderId(saved.getOrderId());
+                        payment.setAmount(saved.getTotalPrice());
+                        payment.setUserId(saved.getUserId());
+                        payment.setOrderName("영화 예매");
+                        payment.setStatus("DONE");
+                        payment.setApprovedAt(saved.getApprovedAt());
+                        payment.setMethod("영화 예매");
+                        payment.setRefundstatus("CONFIRMED");
+
+                        paymentRepo.save(payment);
+                        System.out.println("✅ 예매 결제 정보 Payment 테이블 저장 완료");
+
                         return ResponseEntity.ok(saved);
                 } catch (Exception e) {
                         System.err.println("❌ 예약 저장 중 오류: " + e.getMessage());

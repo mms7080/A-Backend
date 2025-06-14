@@ -109,7 +109,7 @@ public class TossPaymentController {
             payment.setPaymentKey((String) res.get("paymentKey"));
             payment.setOrderId((String) res.get("orderId"));
             payment.setAmount(((Number) res.get("totalAmount")).intValue());
-            payment.setOrderName((String) res.get("orderName"));
+            payment.setOrderName((String) res.getOrDefault("orderName", "영화 예매"));
             payment.setApprovedAt((String) res.get("approvedAt"));
             payment.setStatus((String) res.get("status"));
             payment.setRefundstatus("CONFIRMED");
