@@ -9,7 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import jakarta.annotation.PostConstruct;
 
-@Component
+@Component("movieDao")
 public class MovieDao {
     @Autowired
     private MovieRepository repo;

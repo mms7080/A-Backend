@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 
-@Service
+@Service("theaterService")
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class TheaterService {
