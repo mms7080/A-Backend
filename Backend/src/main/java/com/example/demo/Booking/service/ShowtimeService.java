@@ -69,10 +69,10 @@ public class ShowtimeService {
         return;
     }
     // 테스트시 서버 빨리 키고 싶으면 영화관, 상영시간 데이터 주석처리하고 줄이면 빨리 켜짐
-    final int DAYS_TO_GENERATE = 2; // 2일치 데이터 생성
-    final String[] AUDITORIUM_NAMES = {"1관", "2관", "3관", "4관","5관","6관", "IMAX 관"};
-    final LocalTime[] TIME_SLOTS = {
-        LocalTime.of(9, 0), LocalTime.of(10, 30), LocalTime.of(12, 0), LocalTime.of(13, 45),
+    int DAYS_TO_GENERATE = 2; // 2일치 데이터 생성
+    String[] AUDITORIUM_NAMES = {"1관", "2관", "3관", /* "4관","5관","6관",*/ "IMAX 관"};
+    LocalTime[] TIME_SLOTS = {
+        // LocalTime.of(9, 0), LocalTime.of(10, 30), LocalTime.of(12, 0), LocalTime.of(13, 45),
         LocalTime.of(15, 30), LocalTime.of(17, 15), LocalTime.of(19, 0), LocalTime.of(21, 30),
         LocalTime.of(23, 55)
     };
