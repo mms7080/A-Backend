@@ -24,6 +24,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.demo.Booking.entity.Seat;
+import com.example.demo.Booking.entity.SeatStatus;
+import com.example.demo.Booking.entity.Showtime;
+
 
 @CrossOrigin(origins = "http://localhost:3000", allowCredentials = "true")
 @RestController
@@ -129,5 +133,32 @@ public class MovieController {
         dao.save(movie);
 
         return movie.getLikeNumber().toString();
+    }
+
+    @GetMapping("movie/reserveRate/{id}")
+    public double getReserveRate(@PathVariable Long id) {
+        var movie = dao.findById(id);
+        if(movie == null) return -1.0;
+
+        List<Showtime> showtimes = movie.getShowtimes();
+        if(showtimes == null || showtimes.isEmpty())
+            return 0.0;
+        
+
+        List<Seat> seats = new ArrayList<>();
+        for(Showtime showtime : showtimes) 
+            seats.addAll(showtime.getSeats());
+        
+        int totalSeats = seats.size();
+        if(totalSeats <= 0) return 0.0;
+
+        Long reservedSeats = seats.stream().filter(
+            t -> t.getStatus() == SeatStatus.RESERVED
+        ).count();
+
+        double reserveRate = (double) reservedSeats / totalSeats;
+        if(reserveRate > 0.0 && reserveRate < 0.05) return 0.1;
+        else if(reserveRate >= 99.95 && reserveRate < 100.0) return 99.9;
+        else return Math.round(reserveRate * 10) / 10;
     }
 }
