@@ -159,6 +159,6 @@ public class MovieController {
         double reserveRate = (double) reservedSeats / totalSeats;
         if(reserveRate > 0.0 && reserveRate < 0.05) return 0.1;
         else if(reserveRate >= 99.95 && reserveRate < 100.0) return 99.9;
-        else return Math.round(reserveRate * 10) / 10;
+        else return reserveRate;
     }
 }
