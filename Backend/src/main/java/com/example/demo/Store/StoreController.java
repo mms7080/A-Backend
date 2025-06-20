@@ -1,22 +1,39 @@
 package com.example.demo.Store;
 
+import java.io.IOException;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Optional;
+import java.util.Random;
+import java.util.UUID;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+
 import com.example.demo.Payment.Payment;
 import com.example.demo.Payment.PaymentRepository;
 import com.example.demo.Reservation.Coupon;
 import com.example.demo.Reservation.CouponRepository;
 import com.example.demo.User.User;
 import com.example.demo.User.UserRepository;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.io.IOException;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
 
 @RestController
 @RequestMapping("/store")
@@ -154,10 +171,10 @@ public class StoreController {
             coupon.setType("GENERAL_TICKET");
             coupon.setDiscountAmount(30000);
             coupon.setDescription(source + " 더 부티크 관람권");
-        } else if (title.contains("스위트 관람권")) {
+        } else if (title.contains("더 스위트관람권")) {
             coupon.setType("GENERAL_TICKET");
             coupon.setDiscountAmount(40000);
-            coupon.setDescription(source + " 더 부티크 스위트 관람권");
+            coupon.setDescription(source + " 더 스위트 관람권");
 
             // 🎫 포인트몰 할인쿠폰
         } else if (title.contains("1천원 할인쿠폰")) {
