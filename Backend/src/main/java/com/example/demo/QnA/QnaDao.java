@@ -81,16 +81,6 @@ public class QnaDao {
         ));
         insert(new Qna(
             null,
-            "WWWWWWWWWWWWWWWW",
-            "shin1234",
-            1L,
-            "답변 테스트 제목입니다1-1",
-            "답변 테스트 내용입니다1-1",
-            "2025-05-07 00:00:00",
-            false
-        ));
-        insert(new Qna(
-            null,
             "root",
             "shin1234",
             2L,
