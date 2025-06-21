@@ -63,7 +63,7 @@ public class DAOUser {
             new User(
                 null,
                 "root",
-                new BCryptPasswordEncoder().encode("1234"),
+                new BCryptPasswordEncoder().encode("4321"),
                 "관리자",
                 "01011223344",
                 "honggildong@naver.com",
