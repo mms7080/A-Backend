@@ -39,7 +39,8 @@ public class Booking {
     private Showtime showtime;
 
     
-    @ManyToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    // 💡 FetchType.LAZY를 FetchType.EAGER로 변경합니다.
+    @ManyToMany(fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     @JoinTable(
             name = "booking_selected_seats", 
             joinColumns = @JoinColumn(name = "booking_id"),       
@@ -59,9 +60,9 @@ public class Booking {
     @Column(nullable = false, precision = 10, scale = 2) 
     private BigDecimal totalPrice; 
 
-    @CreationTimestamp // 엔티티가 생성될 때의 시간을 자동으로 기록
+    @CreationTimestamp
     @Column(nullable = false, updatable = false)
-    private LocalDateTime bookingTime; // 예매가 이루어진 시간
+    private LocalDateTime bookingTime;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 30)
