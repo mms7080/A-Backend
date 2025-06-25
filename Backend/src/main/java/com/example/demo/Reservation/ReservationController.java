@@ -4,7 +4,6 @@ import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,7 +17,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.demo.Payment.Payment;
 import com.example.demo.Payment.PaymentRepository;
 
 import jakarta.annotation.PostConstruct;
@@ -208,19 +206,20 @@ public class ReservationController {
                         Reservation saved = reservationRepo.save(reservation);
                         System.out.println("✅ 예약 저장 완료: " + saved);
 
-                        Payment payment = new Payment();
-                        payment.setPaymentKey("RESERVATION-" + UUID.randomUUID());
-                        payment.setOrderId(saved.getOrderId());
-                        payment.setAmount(saved.getTotalPrice());
-                        payment.setUserId(saved.getUserId());
-                        payment.setOrderName("영화 예매");
-                        payment.setStatus("DONE");
-                        payment.setApprovedAt(saved.getApprovedAt());
-                        payment.setMethod("영화 예매");
-                        payment.setRefundstatus("CONFIRMED");
+                        /* 중복으로 결제되는 오류 때문에 주석처리함 */
+                        // Payment payment = new Payment();
+                        // payment.setPaymentKey("RESERVATION-" + UUID.randomUUID());
+                        // payment.setOrderId(saved.getOrderId());
+                        // payment.setAmount(saved.getTotalPrice());
+                        // payment.setUserId(saved.getUserId());
+                        // payment.setOrderName("영화 예매");
+                        // payment.setStatus("DONE");
+                        // payment.setApprovedAt(saved.getApprovedAt());
+                        // payment.setMethod("영화 예매");
+                        // payment.setRefundstatus("CONFIRMED");
 
-                        paymentRepo.save(payment);
-                        System.out.println("✅ 예매 결제 정보 Payment 테이블 저장 완료");
+                        // paymentRepo.save(payment);
+                        // System.out.println("✅ 예매 결제 정보 Payment 테이블 저장 완료");
 
                         return ResponseEntity.ok(saved);
                 } catch (Exception e) {
