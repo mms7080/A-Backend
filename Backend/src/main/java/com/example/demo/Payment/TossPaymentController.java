@@ -135,7 +135,11 @@ public class TossPaymentController {
 
             if ("reservation".equals(type)) {
                 try {
-                    Long bookingId = Long.parseLong(realOrderId);
+                    String bookingIdStr = realOrderId;
+                    if (realOrderId.startsWith("movie-")) {
+                        bookingIdStr = realOrderId.substring(6); // "movie-" 접두사 제거
+                    }
+                    Long bookingId = Long.parseLong(bookingIdStr);
                     Booking booking = bookingRepository.findById(bookingId)
                         .orElseThrow(() -> new RuntimeException("Booking not found with id: " + bookingId));
                     
@@ -176,44 +180,51 @@ public class TossPaymentController {
     }
 
     @Transactional
-    @PatchMapping("/refund/{paymentId}")
-    public ResponseEntity<?> deletePayment(@PathVariable Long paymentId) {
-        
-        // 1. paymentId로 Payment 정보 조회
-        Optional<Payment> optionalPayment = repository.findById(paymentId);
+    @PatchMapping("/refund/order/{orderId}") // paymentId 대신 orderId 사용
+    public ResponseEntity<?> refundPaymentByOrderId(@PathVariable String orderId) {
+
+        // 1. orderId로 Payment 정보 조회
+        Optional<Payment> optionalPayment = repository.findByOrderId(orderId);
         if (optionalPayment.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당 결제 내역이 존재하지 않습니다.");
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("해당 주문 내역이 존재하지 않습니다.");
         }
         Payment payment = optionalPayment.get();
 
-        // 2. Payment와 연결된 Booking 정보 조회
-        Optional<Booking> optionalBooking = bookingRepository.findByPaymentId(payment.getId());
-        if(optionalBooking.isPresent()){
-            Booking booking = optionalBooking.get();
-            booking.setStatus(BookingStatus.CANCELLED_BY_USER);
+        // 2. Payment와 연결된 Booking 정보 조회 및 상태 변경
+        if (orderId.startsWith("movie-")) {
+            try {
+                Long bookingId = Long.parseLong(orderId.substring(6));
+                Optional<Booking> optionalBooking = bookingRepository.findById(bookingId);
+                if(optionalBooking.isPresent()){
+                    Booking booking = optionalBooking.get();
+                    booking.setStatus(BookingStatus.CANCELLED_BY_USER);
 
-            // 3. 연결된 좌석 상태 변경
-            if (booking.getSelectedSeats() != null && !booking.getSelectedSeats().isEmpty()) {
-                List<Long> seatIds = booking.getSelectedSeats().stream()
-                                            .map(Seat::getId)
-                                            .collect(Collectors.toList());
-                if (!seatIds.isEmpty()) {
-                    seatRepository.updateSeatStatusByIds(seatIds, SeatStatus.AVAILABLE);
-                    System.out.println("✅ [Booking] 좌석 상태 변경 완료: " + seatIds);
+                    // 3. 연결된 좌석 상태 변경
+                    if (booking.getSelectedSeats() != null && !booking.getSelectedSeats().isEmpty()) {
+                        List<Long> seatIds = booking.getSelectedSeats().stream()
+                                                    .map(Seat::getId)
+                                                    .collect(Collectors.toList());
+                        if (!seatIds.isEmpty()) {
+                            seatRepository.updateSeatStatusByIds(seatIds, SeatStatus.AVAILABLE);
+                            System.out.println("✅ [Booking] 좌석 상태 변경 완료: " + seatIds);
+                        }
+                    }
+                    bookingRepository.save(booking);
+                    System.out.println("💳 [Booking] 예매 환불 처리 완료: " + booking.getId());
+                } else {
+                    System.out.println("ℹ️ orderId " + orderId + "에 연결된 Booking 정보가 없습니다.");
                 }
+            } catch (NumberFormatException e) {
+                System.err.println("❌ Order ID is not a valid Booking ID: " + orderId);
             }
-            bookingRepository.save(booking);
-            System.out.println("💳 [Booking] 예매 환불 처리 완료: " + booking.getId());
-        } else {
-            System.out.println("ℹ️ paymentId " + paymentId + "에 연결된 Booking 정보가 없습니다.");
         }
-        
+
         // 4. Payment 상태 변경
         payment.setRefundstatus("CANCELED");
         repository.save(payment);
         System.out.println("💳 [Payment] 결제 환불 처리 완료: " + payment.getId());
 
-        // 5. 레거시 Reservation 시스템 상태 변경
+        // 5. 레거시 Reservation 시스템 상태 변경 (필요시)
         reservationRepo.findByOrderId(payment.getOrderId()).ifPresent(reservation -> {
             reservation.setStatus("CANCELED");
             reservationRepo.save(reservation);
