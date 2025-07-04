@@ -1,35 +1,52 @@
 package com.example.demo.Payment;
 
+import java.math.BigDecimal;
+import java.nio.charset.StandardCharsets;
+import java.time.LocalDateTime;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter; // 추가
+import java.util.Arrays; // 추가
+import java.util.Base64;
+import java.util.HashMap;
+import java.util.List; // 추가
+import java.util.Map; // 추가
+import java.util.Optional; // 추가
+import java.util.stream.Collectors; // 추가
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.PatchMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody; // 추가
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.client.RestTemplate;
+
 import com.example.demo.Booking.entity.Booking;
 import com.example.demo.Booking.entity.BookingStatus;
 import com.example.demo.Booking.entity.Seat;
 import com.example.demo.Booking.entity.SeatStatus;
-import com.example.demo.Booking.entity.Showtime; // 추가
-import com.example.demo.Booking.entity.Theater; // 추가
+import com.example.demo.Booking.entity.Showtime;
+import com.example.demo.Booking.entity.Theater;
 import com.example.demo.Booking.repository.BookingRepository;
 import com.example.demo.Booking.repository.SeatRepository;
-import com.example.demo.Booking.repository.ShowtimeRepository; // 추가
-import com.example.demo.Booking.repository.TheaterRepository; // 추가
-import com.example.demo.Movie.Movie; // 추가
-import com.example.demo.Movie.MovieRepository; // 추가
-import com.example.demo.Payment.EmailService;
+import com.example.demo.Booking.repository.ShowtimeRepository;
+import com.example.demo.Booking.repository.TheaterRepository;
+import com.example.demo.Movie.Movie;
+import com.example.demo.Movie.MovieRepository;
 import com.example.demo.Reservation.ReservationRepository;
 import com.example.demo.User.UserService;
+
 import jakarta.annotation.PostConstruct;
 import lombok.Data;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.*;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
-
-import java.math.BigDecimal;
-import java.nio.charset.StandardCharsets;
-import java.time.LocalDateTime; // 추가
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.*;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/payments")
