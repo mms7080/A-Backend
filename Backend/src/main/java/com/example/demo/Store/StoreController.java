@@ -137,6 +137,7 @@ public class StoreController {
     public ResponseEntity<?> onStorePurchaseSuccess(@RequestBody Map<String, String> payload) {
         String username = payload.get("username"); // ✅ 키 이름 수정
         String itemTitle = payload.get("title");
+        Integer qty = Integer.parseInt(payload.get("qty"));
 
         if (username == null || itemTitle == null) {
             return ResponseEntity.badRequest().body("필수 정보 누락");
@@ -148,7 +149,7 @@ public class StoreController {
             return ResponseEntity.badRequest().body("유저를 찾을 수 없습니다");
         }
 
-        issueCouponIfNeeded(itemTitle, username, "스토어 구매");
+        for(int i=0;i<qty;i++)issueCouponIfNeeded(itemTitle, username, "스토어 구매");
         return ResponseEntity.ok("쿠폰 발급 완료");
     }
 
@@ -246,11 +247,12 @@ public class StoreController {
         for (Map<String, Object> item : items) {
             String title = item.get("title").toString();
             int price = Integer.parseInt(item.get("price").toString());
+            int quantity = Integer.parseInt(item.get("quantity").toString());
 
             Payment payment = new Payment();
             payment.setPaymentKey(paymentKey + "-" + UUID.randomUUID());
             payment.setOrderId(orderId + "-" + UUID.randomUUID());
-            payment.setAmount(price);
+            payment.setAmount(price*quantity);
             payment.setUserId(username);
             payment.setOrderName(title);
             payment.setStatus("DONE");
@@ -258,7 +260,7 @@ public class StoreController {
             payment.setMethod("스토어 장바구니");
 
             paymentRepo.save(payment);
-            issueCouponIfNeeded(title, username, "스토어 장바구니");
+            for(int i=0;i<quantity;i++)issueCouponIfNeeded(title, username, "스토어 장바구니");
         }
 
         return ResponseEntity.ok(response);
