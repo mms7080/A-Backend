@@ -94,11 +94,11 @@ public class StoreService {
     public void initDummyStoreItems() {
         if (repo.count() == 0) {
             List<Store> items = List.of(
-                    new Store(null, "티켓", "일반관람권", "일반 관람권", "15000", null, "대표상품", "black", "/images/ticket.png"),
-                    new Store(null, "티켓", "VIP 일반관람권", "2만원 할인권", "20000", null, "추천", "#1e88e5",
+                    new Store(null, "티켓", "일반관람권", "일반 관람권", "14000", null, "대표상품", "black", "/images/ticket.png"),
+                    new Store(null, "티켓", "VIP 일반관람권", "2만원 할인권", "18500", null, "추천", "#1e88e5",
                             "/images/ticket2.png"),
-                    new Store(null, "티켓", "더 부티크관람권", "3만원 할인권", "29000", "30000", null, null, "/images/ticket2.png"),
-                    new Store(null, "티켓", "더 스위트관람권", "4만원 할인권", "40000", null, "추천", "#1e88e5",
+                    new Store(null, "티켓", "더 부티크관람권", "3만원 할인권", "28000", "30000", null, null, "/images/ticket2.png"),
+                    new Store(null, "티켓", "더 스위트관람권", "4만원 할인권", "37000", null, "추천", "#1e88e5",
                             "/images/ticket2.png"),
                     new Store(null, "팝콘/음료/콤보", "더블콤보", "팝콘(R) 2 + 탄산음료(R) 2", "13900", null, "BEST", "red",
                             "/images/corn.png"),
