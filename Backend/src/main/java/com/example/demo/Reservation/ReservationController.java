@@ -21,16 +21,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-// 필요한 모든 클래스 import
 import com.example.demo.Booking.entity.BookingStatus;
 import com.example.demo.Booking.entity.Seat;
 import com.example.demo.Booking.entity.SeatStatus;
-import com.example.demo.Booking.repository.ShowtimeRepository;
-import com.example.demo.Booking.repository.TheaterRepository;
-import com.example.demo.Movie.MovieRepository;
-import com.example.demo.Booking.repository.ShowtimeRepository;
-import com.example.demo.Booking.repository.TheaterRepository;
-import com.example.demo.Movie.MovieRepository;
 import com.example.demo.Booking.entity.Showtime;
 import com.example.demo.Booking.entity.Theater;
 import com.example.demo.Booking.repository.BookingRepository;
