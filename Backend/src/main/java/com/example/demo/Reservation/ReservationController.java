@@ -289,5 +289,3 @@ public class ReservationController {
         }).orElseGet(() -> ResponseEntity.status(HttpStatus.NOT_FOUND).body("예매를 찾을 수 없습니다."));
     }
 }
-
-
